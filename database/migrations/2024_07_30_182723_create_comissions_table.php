@@ -19,6 +19,7 @@ class CreateComissionsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('comissions');
+        Schema::dropIfExists('products');
     }
 }
 
