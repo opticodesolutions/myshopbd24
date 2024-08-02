@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,6 +13,8 @@ class Media extends Model
         'path',
         'type',
     ];
+
+    protected $table = 'medias'; // Explicitly define the table name
 
     public function products()
     {
