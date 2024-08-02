@@ -11,7 +11,9 @@ class MediaController extends Controller
     public function index()
     {
         $medias = Media::all();
-        return view('medias.index', compact('medias'));
+        return response()->json($medias);
+
+       // return view('medias.index', compact('medias'));
     }
 
     public function create()
