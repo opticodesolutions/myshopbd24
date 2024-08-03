@@ -2,7 +2,25 @@
 
 namespace App\Http;
 
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Http\Middleware\TrustHosts;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Http\Middleware\TrustProxies;
+use Illuminate\Auth\Middleware\RequirePassword;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Routing\Middleware\ValidateSignature;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
 
 class Kernel extends HttpKernel
 {
