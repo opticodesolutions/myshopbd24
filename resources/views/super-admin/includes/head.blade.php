@@ -10,7 +10,7 @@
 
 	<link rel="canonical" href="pages-blank-2.html" />
 
-	<title>Blank Page | AdminKit Demo</title>
+	<title>MyShopBD24.com | Admin</title>
 
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -21,6 +21,7 @@
 	<!-- BEGIN SETTINGS -->
 	<!-- Remove this after purchasing -->
 	<link class="js-stylesheet" href="{{ asset('backend/css/light.css') }}" rel="stylesheet">
+
 
     <!-- IziToast CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">

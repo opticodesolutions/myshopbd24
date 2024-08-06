@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Media;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
     {
         $products = Product::with(['category', 'brand', 'media'])->get();
 
-       return view('super-admin.pages.products.list', compact('products'));
+       return view('super-admin.pages.products.index', compact('products'));
     }
 
     public function create()
@@ -49,11 +50,15 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        // Fetch the related brands, categories, and media for the dropdowns
         $brands = Brand::all();
+        $categories = Category::all();
         $medias = Media::all();
-        return view('products.edit', compact('product', 'categories', 'brands', 'medias'));
+
+
+        return view('super-admin.pages.products.edit', compact('product', 'brands', 'categories', 'medias'));
     }
+
 
     public function update(Request $request, Product $product)
     {
