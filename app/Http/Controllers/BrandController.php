@@ -10,13 +10,13 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::all();
-        return view('brands.index', compact('brands'));
+        $brands = Brand::with('user')->get();
+        return view('super-admin.pages.brands.index', compact('brands'));
     }
 
     public function create()
     {
-        return view('brands.create');
+        return view('super-admin.pages.brands.create');
     }
 
     public function store(Request $request)
@@ -33,12 +33,12 @@ class BrandController extends Controller
 
     public function show(Brand $brand)
     {
-        return view('brands.show', compact('brand'));
+        return view('super-admin.pages.brands.show', compact('brand'));
     }
 
     public function edit(Brand $brand)
     {
-        return view('brands.edit', compact('brand'));
+        return view('super-admin.pages.brands.edit', compact('brand'));
     }
 
     public function update(Request $request, Brand $brand)
