@@ -1,9 +1,8 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
-        <a class='sidebar-brand' href='index.html'>
+        <a class='sidebar-brand' href='{{ url('super-admin') }}'>
             <span class="sidebar-brand-text align-middle">
-                AdminKit
-                <sup><small class="badge bg-primary text-uppercase">Pro</small></sup>
+                My Shop Bd24 SuperAdmin
             </span>
             <svg class="sidebar-brand-icon align-middle" width="32px" height="32px" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.5"
                 stroke-linecap="square" stroke-linejoin="miter" color="#FFFFFF" style="margin-left: -3px">
@@ -43,15 +42,40 @@
                 Pages
             </li>
             <li class="sidebar-item">
-                <a data-bs-target="#dashboards" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboards</span>
+                <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Product's</span>
                 </a>
-                <ul id="dashboards" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                    <li class="sidebar-item"><a class='sidebar-link' href='index.html'>Analytics</a></li>
-                    <li class="sidebar-item"><a class='sidebar-link' href='dashboard-ecommerce.html'>E-Commerce <span
-                                class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                    <li class="sidebar-item"><a class='sidebar-link' href='dashboard-crypto.html'>Crypto <span
-                                class="sidebar-badge badge bg-primary">Pro</span></a></li>
+                <ul id="product" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('products.create') }}'>Create Product</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('products.index') }}'>List Product</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#category" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Categories</span>
+                </a>
+                <ul id="category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('categories.create') }}">Create Category</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('categories.index') }}">List Categories</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#Brand" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Brand's</span>
+                </a>
+                <ul id="Brand" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('brands.create') }}'>Create Brand</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('brands.index') }}'>List Brand's</a>
+                    </li>
                 </ul>
             </li>
 

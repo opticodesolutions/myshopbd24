@@ -21,6 +21,10 @@
 	<!-- BEGIN SETTINGS -->
 	<!-- Remove this after purchasing -->
 	<link class="js-stylesheet" href="{{ asset('backend/css/light.css') }}" rel="stylesheet">
+
+    <!-- IziToast CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+
 	<script src="{{ asset('backend/js/settings.js') }}"></script>
 	<style>
 		body {

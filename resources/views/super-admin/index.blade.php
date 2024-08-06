@@ -17,7 +17,32 @@
             @include('super-admin.includes.footer')
 		</div>
 	</div>
-	<script src="{{ asset('backend/js/app.js') }}"></script>
+
+    <!-- IziToast -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                iziToast.success({
+                    title: 'Success',
+                    message: "{{ session('success') }}",
+                    position: 'topRight'
+                });
+            @endif
+
+            @if (session('error'))
+                iziToast.error({
+                    title: 'Error',
+                    message: "{{ session('error') }}",
+                    position: 'topRight'
+                });
+            @endif
+        });
+    </script>
+
+    <!-- IziToast JS -->
+<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+
+<script src="{{ asset('backend/js/app.js') }}"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(function(){

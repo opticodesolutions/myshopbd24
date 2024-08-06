@@ -9,7 +9,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ComissionController;
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SuperAdminController;
 
 
@@ -25,7 +25,7 @@ Route::post('/signUp', [AuthController::class, 'signUpProcess'])->name('signUpPr
 Route::resource('products', ProductController::class);
 
 // Comission routes
-Route::resource('commissions', ComissionController::class);
+Route::resource('commissions', CommissionController::class);
 
 // Brand routes
 Route::resource('brands', BrandController::class);
