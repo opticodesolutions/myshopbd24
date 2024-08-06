@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Models\Product;
@@ -19,3 +20,4 @@ class Commission extends Model
         return $this->belongsTo(Product::class);
     }
 }
+
