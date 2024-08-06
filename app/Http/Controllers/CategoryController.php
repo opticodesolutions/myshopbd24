@@ -10,13 +10,13 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        $categories = Category::with('user')->get();
+        return view('super-admin.pages.categories.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('super-admin.pages.categories.create');
     }
 
     public function store(Request $request)
@@ -33,12 +33,12 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return view('categories.show', compact('category'));
+        return view('super-admin.pages.categories.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('super-admin.pages.categories.edit', compact('category'));
     }
 
     public function update(Request $request, Category $category)
