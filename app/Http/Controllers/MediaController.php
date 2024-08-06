@@ -4,63 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
-    public function index()
-    {
-        $medias = Media::all();
-        return response()->json($medias);
 
-       // return view('medias.index', compact('medias'));
-    }
-
-    public function create()
+    public static function store(UploadedFile $file, string $path, string $type = null): Media
     {
-        return view('medias.create');
-    }
+        $path = Storage::put('/' . trim($path, '/'), $file, 'public');
+        $extension = $file->extension();
+        if (!$type) {
+            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'image' : $extension;
+        }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'src' => 'required',
-            'path' => 'required',
-            'type' => 'required',
+        return Media::create([
+            'type' => $type,
+            'src' => $path,
+            'path' => $path,
         ]);
-
-        Media::create($request->all());
-
-        return redirect()->route('medias.index')->with('success', 'Media created successfully.');
     }
 
-    public function show(Media $media)
+    public static function update(UploadedFile $file, string $path, string $type = null, Media $media): Media
     {
-        return view('medias.show', compact('media'));
-    }
+        $path = Storage::put('/' . trim($path, '/'), $file, 'public');
+        $extension = $file->extension();
+        if (!$type) {
+            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'image' : $extension;
+        }
 
-    public function edit(Media $media)
-    {
-        return view('medias.edit', compact('media'));
-    }
+        if (Storage::exists($media->src)) {
+            Storage::delete($media->src);
+        }
 
-    public function update(Request $request, Media $media)
-    {
-        $request->validate([
-            'src' => 'required',
-            'path' => 'required',
-            'type' => 'required',
+        $media->update([
+            'type' => $type,
+            'src' => $path,
+            'path' => $path,
         ]);
-
-        $media->update($request->all());
-
-        return redirect()->route('medias.index')->with('success', 'Media updated successfully.');
+        return $media;
     }
 
-    public function destroy(Media $media)
-    {
-        $media->delete();
 
-        return redirect()->route('medias.index')->with('success', 'Media deleted successfully.');
-    }
+    
 }

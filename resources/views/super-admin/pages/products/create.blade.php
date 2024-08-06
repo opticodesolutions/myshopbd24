@@ -28,9 +28,8 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('products.store') }}">
+                        <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                             @csrf
-
                             <div class="row">
                                 <div class="col-12 col-xl-6">
                                     <div class="mb-3">
@@ -79,16 +78,10 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Image</label>
-                                        <select class="form-control" id="imageSelect" name="image" required>
-                                            <option value="" disabled selected>Select Image</option>
-                                            @foreach($medias as $media)
-                                                <option value="{{ $media->id }}" data-src="{{ $media->src }}">{{ $media->src }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="file" class="form-control" name="image" accept="image/*" />
                                     </div>
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-primary">Create Product</button>
                         </form>
                     </div>
