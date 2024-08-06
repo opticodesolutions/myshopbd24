@@ -26,16 +26,22 @@ class MediaController extends Controller
         ]);
     }
 
-    public static function update(UploadedFile $file, string $path, string $type = null, Media $media): Media
+    public static function update(?UploadedFile $file, string $path, string $type = null, ?Media $media = null): ?Media
     {
+        if (!$file || !$media) {
+            return $media; // Return the existing media if no file or media object is provided
+        }
+
+        // Delete the old image if it exists
+        if (Storage::exists($media->src)) {
+            Storage::delete($media->src);
+        }
+
+        // Store the new image
         $path = Storage::put('/' . trim($path, '/'), $file, 'public');
         $extension = $file->extension();
         if (!$type) {
             $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'image' : $extension;
-        }
-
-        if (Storage::exists($media->src)) {
-            Storage::delete($media->src);
         }
 
         $media->update([
@@ -43,9 +49,10 @@ class MediaController extends Controller
             'src' => $path,
             'path' => $path,
         ]);
+
         return $media;
     }
 
 
-    
+
 }
