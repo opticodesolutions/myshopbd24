@@ -13,8 +13,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with(['category', 'brand', 'media'])->get();
-        return response()->json($products);
-       // return view('products.index', compact('products'));
+
+       return view('super-admin.pages.products.list', compact('products'));
     }
 
     public function create()
@@ -22,7 +22,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $medias = Media::all();
-        return view('products.create', compact('categories', 'brands', 'medias'));
+        return view('super-admin.pages.products.create', compact('categories', 'brands', 'medias'));
     }
 
     public function store(Request $request)
