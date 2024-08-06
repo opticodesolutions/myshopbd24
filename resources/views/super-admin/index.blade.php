@@ -38,6 +38,7 @@
             @endif
         });
     </script>
+    </script>
 
     <!-- IziToast JS -->
 <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
