@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
-use App\Models\Media;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Media;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
     public function index()
     {
         $products = Product::with(['category', 'brand', 'media'])->get();
-
-       return view('super-admin.pages.products.index', compact('products'));
+        return response()->json($products);
+       // return view('products.index', compact('products'));
     }
 
     public function create()
@@ -23,7 +22,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $medias = Media::all();
-        return view('super-admin.pages.products.create', compact('categories', 'brands', 'medias'));
+        return view('products.create', compact('categories', 'brands', 'medias'));
     }
 
     public function store(Request $request)
@@ -50,15 +49,11 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // Fetch the related brands, categories, and media for the dropdowns
-        $brands = Brand::all();
         $categories = Category::all();
+        $brands = Brand::all();
         $medias = Media::all();
-
-
-        return view('super-admin.pages.products.edit', compact('product', 'brands', 'categories', 'medias'));
+        return view('products.edit', compact('product', 'categories', 'brands', 'medias'));
     }
-
 
     public function update(Request $request, Product $product)
     {
