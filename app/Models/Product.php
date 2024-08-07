@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\Brand;
 use App\Models\Media;
 use App\Models\Category;
+use App\Models\Commission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -40,6 +41,13 @@ class Product extends Model
 
     public function commissions()
     {
+        //Just Product's Commissions
         return $this->hasMany(Commission::class);
     }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
 }

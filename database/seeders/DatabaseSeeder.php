@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
             CommissionSeeder::class,
+            SaleSeeder::class,
+            CustomerSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }
