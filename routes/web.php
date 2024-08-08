@@ -11,11 +11,14 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
 
 
+
+Route::get('/', [FrontendController::class, 'index']);
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
