@@ -73,7 +73,9 @@ class ProductController extends Controller
     {
         $product = Product::with(['category', 'brand', 'media','commissions'])->find($id);
         //return json_encode($product);
-        return view('super-admin.pages.products.show', compact('product'));
+        // return view('super-admin.pages.products.show', compact('product'));singleProduct.blade
+        return view('frontend.pages.products.show', compact('product'));
+
     }
 
     public function edit(Product $id)
