@@ -18,7 +18,7 @@ use App\Http\Controllers\TransactionController;
 
 
 
-Route::get('/', [FrontendController::class, 'index']);
+Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');

@@ -7,29 +7,17 @@
                 <div class="col-6">
                    <!-- list -->
                    <ul class="nav flex-column">
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Vegetables & Fruits</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Breakfast & instant food</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Bakery & Biscuits</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Atta, rice & dal</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Sauces & spreads</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Organic & gourmet</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Baby care</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Cleaning essentials</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Personal care</a></li>
+                      @foreach($categories as $category)
+                      <li class="nav-item mb-2"><a href="#!" class="nav-link">{{ $category->name }}</a></li>
+                      @endforeach
                    </ul>
                 </div>
                 <div class="col-6">
                    <!-- list -->
                    <ul class="nav flex-column">
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Dairy, bread & eggs</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Cold drinks & juices</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Tea, coffee & drinks</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Masala, oil & more</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Chicken, meat & fish</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Paan corner</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Pharma & wellness</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Home & office</a></li>
-                      <li class="nav-item mb-2"><a href="#!" class="nav-link">Pet care</a></li>
+                    @foreach($categories as $category)
+                    <li class="nav-item mb-2"><a href="#!" class="nav-link">{{ $category->name }}</a></li>
+                    @endforeach
                    </ul>
                 </div>
              </div>

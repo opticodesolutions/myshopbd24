@@ -80,11 +80,11 @@
        <div class="container">
           <div class="row w-100 align-items-center gx-lg-2 gx-0">
              <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
-                <a class="navbar-brand d-none d-lg-block" href="index.html">
+                <a class="navbar-brand d-none d-lg-block" href="{{ route('home') }}">
                    <img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}" alt="eCommerce HTML Template" />
                 </a>
                 <div class="d-flex justify-content-between w-100 d-lg-none">
-                   <a class="navbar-brand" href="index.html">
+                   <a class="navbar-brand" href="{{ route('home') }}">
                       <img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}" alt="eCommerce HTML Template" />
                    </a>
                 </div>
@@ -275,15 +275,11 @@
                    </a>
                    <div class="collapse mt-2" id="collapseExample">
                       <div class="card card-body">
-                         <ul class="mb-0 list-unstyled">
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Dairy, Bread & Eggs</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Snacks & Munchies</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Fruits & Vegetables</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Cold Drinks & Juices</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Breakfast & Instant Food</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Bakery & Biscuits</a></li>
-                            <li><a class="dropdown-item" href="pages/shop-grid.html">Chicken, Meat & Fish</a></li>
-                         </ul>
+                        <ul class="mb-0 list-unstyled">
+                            @foreach($categories as $category)
+                                <li><a class="dropdown-item" href="#">{{ $category->name }}</a></li>
+                            @endforeach
+                        </ul>
                       </div>
                    </div>
                 </div>
@@ -310,13 +306,9 @@
                       All Departments
                    </button>
                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Dairy, Bread & Eggs</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Snacks & Munchies</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Fruits & Vegetables</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Cold Drinks & Juices</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Breakfast & Instant Food</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Bakery & Biscuits</a></li>
-                      <li><a class="dropdown-item" href="pages/shop-grid.html">Chicken, Meat & Fish</a></li>
+                         @foreach($categories as $category)
+                             <li><a class="dropdown-item" href="#">{{ $category->name }}</a></li>
+                        @endforeach
                    </ul>
                 </div>
                 <div>
