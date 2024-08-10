@@ -11,12 +11,11 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ensure that these IDs exist in the respective tables
-        $categoryId = Category::first()->id; // Replace with actual ID or method to get an ID
-        $brandId = Brand::first()->id;       // Replace with actual ID or method to get an ID
-        $mediaId = Media::first()->id;       // Replace with actual ID or method to get an ID
-
-        Product::create([
+        $categoryId = Category::first()->id;
+        $brandId = Brand::first()->id; 
+        $mediaId = Media::first()->id;      
+        
+       $products = Product::create([
             'product_code' => 1001,
             'name' => 'Product 1',
             'price' => 99.99,
@@ -25,9 +24,10 @@ class ProductSeeder extends Seeder
             'category_id' => $categoryId,
             'brand_id' => $brandId,
             'stock' => 50,
-            'image' => $mediaId,
         ]);
 
-        // Add more products as needed
+        $products->images()->attach($mediaId);
+
+
     }
 }

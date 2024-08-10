@@ -34,6 +34,7 @@
                             @method('PUT')
                             <div class="row">
                                 <div class="col-12 col-xl-6">
+                                    <!-- Existing product fields -->
                                     <div class="mb-3">
                                         <label class="form-label">Product Code</label>
                                         <input type="text" class="form-control" name="product_code" value="{{ old('product_code', $product->product_code) }}" placeholder="Product Code" required />
@@ -59,7 +60,9 @@
                                         <textarea class="form-control" name="description" placeholder="Description">{{ old('description', $product->description) }}</textarea>
                                     </div>
                                 </div>
+
                                 <div class="col-12 col-xl-6">
+                                    <!-- Category and Brand fields -->
                                     <div class="mb-3">
                                         <label class="form-label">Category</label>
                                         <select class="form-control" name="category_id" required>
@@ -78,11 +81,28 @@
                                             @endforeach
                                         </select>
                                     </div>
+
+                                    <!-- Image Upload Section -->
                                     <div class="mb-3">
-                                        <label class="form-label">Image</label>
-                                        <input type="file" class="form-control" name="image" accept="image/*" />
-                                        @if($product->media)
-                                            <img src="{{ asset('storage/' . $product->media->src) }}" alt="Product Image" class="img-thumbnail mt-2" style="max-width: 150px;">
+                                        <label class="form-label">Images</label>
+                                        <div id="image-input-container">
+                                            <input type="file" class="form-control" name="image[]" accept="image/*" />
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addImageInput()">Add Another Image</button>
+
+                                        <!-- Display existing images -->
+                                        @if($medias->isNotEmpty())
+                                            <div class="mt-3">
+                                                <label class="form-label">Current Images</label>
+                                                <div class="row">
+                                                    @foreach($medias as $media)
+                                                        <div class="col-3">
+                                                            <img src="{{ asset('storage/' . $media->media->src) }}" alt="Product Image" class="img-thumbnail" style="max-width: 150px;">
+                                                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeImage({{ $media->id }})">Remove</button>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -97,3 +117,21 @@
     </div>
 </main>
 @endsection
+
+<script>
+    function addImageInput() {
+        const container = document.getElementById('image-input-container');
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.className = 'form-control mt-2';
+        input.name = 'image[]';
+        input.accept = 'image/*';
+        container.appendChild(input);
+    }
+
+    function removeImage(imageId) {
+        if(confirm('Are you sure you want to remove this image?')) {
+            console.log('Remove image with ID:', imageId);
+        }
+    }
+</script>

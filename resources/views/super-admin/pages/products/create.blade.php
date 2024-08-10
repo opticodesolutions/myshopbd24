@@ -32,7 +32,7 @@
                                 <div class="col-12 col-xl-6">
                                     <div class="mb-3">
                                         <label class="form-label">Product Code</label>
-                                        <input type="text" class="form-control" name="product_code" placeholder="Product Code" required />
+                                        <input type="number" class="form-control" name="product_code" placeholder="Product Code" required />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Product Name</label>
@@ -40,11 +40,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Price</label>
-                                        <input type="text" class="form-control" name="price" placeholder="Price" required />
+                                        <input type="number" class="form-control" name="price" placeholder="Price" required />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Discount Price</label>
-                                        <input type="text" class="form-control" name="discount_price" placeholder="Discount Price" />
+                                        <input type="number" class="form-control" name="discount_price" placeholder="Discount Price" />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Stock</label>
@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+                                        <textarea class="form-control" name="description" rows="3" placeholder="Description"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-xl-6">
@@ -75,8 +75,15 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Image</label>
-                                        <input type="file" class="form-control" name="image" accept="image/*" />
+                                        <label class="form-label">Images</label>
+                                        <div id="image-input-container">
+                                            <div class="image-input mb-2">
+                                                <input type="file" class="form-control" name="image[]" accept="image/*" onchange="previewImage(event, 0)" required />
+                                                <img id="preview-0" src="#" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 150px;" />
+                                                <button type="button" class="btn btn-danger mt-2 remove-image-button" onclick="removeImageInput(this)">Remove</button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" id="add-image-button">Add Another Image</button>
                                     </div>
                                 </div>
                             </div>
@@ -89,4 +96,35 @@
 
     </div>
 </main>
+
+<script>
+    let imageCount = 1;
+
+    function previewImage(event, index) {
+        let reader = new FileReader();
+        reader.onload = function(){
+            let output = document.getElementById('preview-' + index);
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    document.getElementById('add-image-button').addEventListener('click', function() {
+        let container = document.getElementById('image-input-container');
+        let newImageInput = document.createElement('div');
+        newImageInput.classList.add('image-input', 'mb-2');
+        newImageInput.innerHTML = `
+            <input type="file" class="form-control" name="image[]" accept="image/*" onchange="previewImage(event, ${imageCount})" required />
+            <img id="preview-${imageCount}" src="#" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 150px;" />
+            <button type="button" class="btn btn-danger mt-2 remove-image-button" onclick="removeImageInput(this)">Remove</button>
+        `;
+        container.appendChild(newImageInput);
+        imageCount++;
+    });
+
+    function removeImageInput(button) {
+        button.closest('.image-input').remove();
+    }
+</script>
 @endsection

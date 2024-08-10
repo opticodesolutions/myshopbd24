@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Media;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
@@ -17,9 +18,9 @@ class ProductController extends Controller
     private $path = 'images/products/';
     public function index()
     {
-        $products = Product::with(['category', 'brand', 'media'])->get();
+        $products = Product::with(['category', 'brand'])->get();
 
-       return view('super-admin.pages.products.index', compact('products'));
+        return view('super-admin.pages.products.index', compact('products'));
     }
 
     public function create()
@@ -32,98 +33,91 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        try {
-            // Ensure the image is present and valid
-            if ($request->hasFile('image')) {
-                // Store the image and get the Media object
+        $product = Product::create([
+            'product_code' => $request->product_code,
+            'name' => $request->name,
+            'price' => $request->price,
+            'discount_price' => $request->discount_price,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'brand_id' => $request->brand_id,
+            'stock' => $request->stock,
+        ]);
+
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $imageFile) {
                 $image = MediaController::store(
-                    $request->file('image'), // Get the UploadedFile instance
-                    'images/products', // Path to store the image
-                    'image'
+                    $imageFile,
+                    $this->path,
+                    'Image'
                 );
-            } else {
-                // Handle the case where no image is provided if necessary
-                $image = null;
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_id' => $image->id,
+                ]);
             }
-
-            // Create the new product
-            Product::create([
-                'product_code' => $request->product_code,
-                'name' => $request->name,
-                'price' => $request->price,
-                'category_id' => $request->category_id,
-                'brand_id' => $request->brand_id,
-                'stock' => $request->stock,
-                'image' => $image ? $image->id : null // Use image ID if available
-            ]);
-
-            // Redirect with success message
-            return redirect()->route('products.index')->with('success', 'Product created successfully.');
-        } catch (\Exception $e) {
-            // Log the error message
-            Log::error("Failed to create product: " . $e->getMessage());
-
-            // Redirect back to the create page with an error message
-            return redirect()->route('products.create')->with('error', $e->getMessage());
         }
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully with images.');
     }
 
 
-    public function show($id)
+
+    public function show(Product $product)
     {
-        $product = Product::with(['category', 'brand', 'media','commissions'])->find($id);
+        $product = $product->load(['category', 'brand', 'images.media', 'commissions', 'sales']);
         $categories = Category::all();
-
-        //return json_encode($product);
-        // return view('super-admin.pages.products.show', compact('product'));singleProduct.blade
         return view('frontend.pages.products.show', compact('product', 'categories'));
-
     }
 
-    public function edit(Product $id)
+
+    public function edit(Product $product)
     {
         $categories = Category::all();
         $brands = Brand::all();
-        $medias = Media::all();
+        $medias = $product->images()->with('media')->get();
         return view('super-admin.pages.products.edit', compact('product', 'categories', 'brands', 'medias'));
     }
 
-    public function update(ProductRequest $request, Product $product)
-{
-    $validated = $request->validated();
 
-    if ($request->hasFile('image')) {
-        // Delete old image if it exists
-        if ($product->image) {
-            $oldImage = Media::find($product->image);
-            if ($oldImage) {
-                Storage::disk('public')->delete($oldImage->src);
-                $oldImage->delete();
+    public function update(ProductRequest $request, Product $product)
+    {
+        $validated = $request->validated();
+
+        $product->update([
+            'product_code' => $validated['product_code'],
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
+            'stock' => $validated['stock'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $file) {
+                $image = Media::store($file, $this->path, 'image');
+
+                $product->images()->create([
+                    'media_id' => $image->id,
+                ]);
             }
         }
 
-        // Store new image
-        $file = $request->file('image');
-        $image = Media::store($file, $this->path, 'image');
+        if ($request->has('remove_images')) {
+            foreach ($request->remove_images as $imageId) {
+                $productImage = ProductImage::find($imageId);
+                if ($productImage) {
+                    Storage::disk('public')->delete($productImage->media->src);
+                    $productImage->media->delete();
+                    $productImage->delete();
+                }
+            }
+        }
 
-        // Update product with new image ID
-        $product->update([
-            'image' => $image->id,
-        ]);
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
-    // Update other product details
-    $product->update([
-        'product_code' => $validated['product_code'],
-        'name' => $validated['name'],
-        'price' => $validated['price'],
-        'category_id' => $validated['category_id'],
-        'brand_id' => $validated['brand_id'],
-        'stock' => $validated['stock'],
-    ]);
-
-    return redirect()->route('products.index')->with('success', 'Product updated successfully.');
-}
 
 
 

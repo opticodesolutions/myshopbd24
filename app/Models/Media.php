@@ -16,15 +16,14 @@ class Media extends Model
         'type',
     ];
 
-    protected $table = 'medias'; // Explicitly define the table name
-
-    public function products()
-    {
-        return $this->hasMany(Product::class, 'image');
-    }
-
+    protected $table = 'medias';
     public function users()
     {
         return $this->hasMany(User::class, 'image');
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }

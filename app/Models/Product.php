@@ -5,8 +5,10 @@ use App\Models\Brand;
 use App\Models\Media;
 use App\Models\Category;
 use App\Models\Commission;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -34,14 +36,13 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function media()
+    public function images()
     {
-        return $this->belongsTo(Media::class, 'image');
+        return $this->hasMany(ProductImage::class);
     }
 
     public function commissions()
     {
-        //Just Product's Commissions
         return $this->hasMany(Commission::class);
     }
 
