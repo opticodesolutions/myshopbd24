@@ -11,6 +11,10 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->nullable();
+            $table->string('description')->nullable();
+            $table->foreignId('media_id')->nullable()->constrained('medias')->onDelete('set null');
+            $table->boolean('is_active')->default(1);
             $table->foreignId('create_by')
                 ->constrained('users')
                 ->onDelete('cascade');

@@ -26,4 +26,9 @@ class Media extends Model
     {
         return $this->hasMany(ProductImage::class);
     }
+
+    public function categorys()
+    {
+        return $this->hasMany(Category::class, 'image');
+    }
 }

@@ -26,4 +26,9 @@ class Category extends Model
 
     }
 
+    public function media()
+    {
+        return $this->belongsTo(Media::class);
+    }
+
 }
