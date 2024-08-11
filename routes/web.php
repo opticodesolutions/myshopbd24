@@ -23,13 +23,15 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginProcess'])->name('loginProcess');
-Route::get('/signUp', [AuthController::class, 'signUp'])->name('signUp');
-Route::post('/signUp', [AuthController::class, 'signUpProcess'])->name('signUpProcess');
+Route::get('/register', [AuthController::class, 'signUp'])->name('register');
+Route::post('/register', [AuthController::class, 'signUpProcess'])->name('registerProcess');
 
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin|user']], function () {
-    Route::get('/super-admin', [SuperAdminController::class, 'index']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/super-admin', [SuperAdminController::class, 'index'])->name('super-admin');
+
     // Product routes
     Route::resource('products', ProductController::class);
     // Comission routes

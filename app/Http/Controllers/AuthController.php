@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegistrationRequest;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -25,11 +27,7 @@ class AuthController extends Controller
 
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
-
-            // Get the authenticated user
             $user = auth()->user();
-
-            // Redirect based on user role
             if ($user->hasRole('super-admin')) {
                 return redirect('/super-admin');
             } elseif ($user->hasRole('admin')) {
@@ -39,8 +37,6 @@ class AuthController extends Controller
             } elseif ($user->hasRole('user')) {
                 return redirect('/user');
             }
-
-            // Default redirect if no role matches
             return redirect('/home');
         }
 
@@ -54,24 +50,27 @@ class AuthController extends Controller
         return view('auth.signUp');
     }
 
-    public function signUpProcess(Request $request)
+    public function signUpProcess(RegistrationRequest $request)
     {
-        $credentials = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['required', 'string', 'in:super-admin,admin,agent,user'], // Ensure role is valid
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
-        // Assign role to the user
         $user->assignRole($request->role);
-
+        $referBy = Customer::where('refer_code', $request->refer_code)->first();
+        $user->customer()->create([
+            'refer_code' => $request->refer_code ?? null,
+            'refer_by' => $referBy->user_id ?? null
+        ]);
         return redirect('/login')->with('status', 'Registration successful! Please log in.');
+    }
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
     }
 }

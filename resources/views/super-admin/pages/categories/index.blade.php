@@ -1,4 +1,6 @@
 @extends('super-admin.index')
+
+@section('title', 'List of Category')
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">

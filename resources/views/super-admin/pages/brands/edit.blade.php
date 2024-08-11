@@ -1,5 +1,6 @@
 @extends('super-admin.index')
 
+@section('title', 'Edit Brand')
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">

@@ -26,33 +26,23 @@ class MediaController extends Controller
         ]);
     }
 
-    public static function update(?UploadedFile $file, string $path, string $type = null, ?Media $media = null): ?Media
+    public static function update(UploadedFile $file, Media $media, string $path, string $type = null): Media
     {
-        if (!$file || !$media) {
-            return $media; // Return the existing media if no file or media object is provided
+        if ($media && Storage::disk('public')->exists($media->path)) {
+            Storage::disk('public')->delete($media->path);
         }
 
-        // Delete the old image if it exists
-        if (Storage::exists($media->src)) {
-            Storage::delete($media->src);
-        }
-
-        // Store the new image
-        $path = Storage::put('/' . trim($path, '/'), $file, 'public');
+        $newPath = Storage::put('/' . trim($path, '/'), $file, 'public');
         $extension = $file->extension();
         if (!$type) {
             $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'image' : $extension;
         }
-
         $media->update([
             'type' => $type,
-            'src' => $path,
-            'path' => $path,
+            'src' => $newPath,
+            'path' => $newPath,
         ]);
 
         return $media;
     }
-
-
-
 }

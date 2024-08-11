@@ -46,10 +46,10 @@ class Customer extends Model
         return $this->hasMany(Transaction::class, 'user_id', 'user_id');
     }
 
-    public function withdrawals()
-    {
-        return $this->hasMany(Withdrawal::class, 'user_id', 'user_id');
-    }
+    // public function withdrawals()
+    // {
+    //     return $this->hasMany(Withdrawal::class, 'user_id', 'user_id');
+    // }
 
     public function calculateCommissions($product)
     {

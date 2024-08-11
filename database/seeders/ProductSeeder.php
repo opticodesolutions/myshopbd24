@@ -26,8 +26,8 @@ class ProductSeeder extends Seeder
             'stock' => 50,
         ]);
 
-        $products->images()->attach($mediaId);
-
-
+        $products->images()->create([
+            'image_id' => $mediaId,
+        ]);
     }
 }
