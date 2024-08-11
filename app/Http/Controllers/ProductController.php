@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         $products = Product::with(['category', 'brand'])->get();
 
-        return view('super-admin.pages.products.index', compact('products'));
+        return view('super-admin.products.index', compact('products'));
     }
 
     public function create()
@@ -28,7 +28,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $medias = Media::all();
-        return view('super-admin.pages.products.create', compact('categories', 'brands', 'medias'));
+        return view('super-admin.products.create', compact('categories', 'brands', 'medias'));
     }
 
     public function store(ProductRequest $request)
@@ -77,7 +77,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $medias = $product->images()->with('media')->get();
-        return view('super-admin.pages.products.edit', compact('product', 'categories', 'brands', 'medias'));
+        return view('super-admin.products.edit', compact('product', 'categories', 'brands', 'medias'));
     }
 
 

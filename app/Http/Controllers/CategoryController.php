@@ -17,12 +17,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('user')->get();
-        return view('super-admin.pages.categories.index', compact('categories'));
+        return view('super-admin.categories.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('super-admin.pages.categories.create');
+        return view('super-admin.categories.create');
     }
 
     public function store(CategoryRequest $request)
@@ -52,12 +52,12 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return view('super-admin.pages.categories.show', compact('category'));
+        return view('super-admin.categories.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
-        return view('super-admin.pages.categories.edit', compact('category'));
+        return view('super-admin.categories.edit', compact('category'));
     }
 
     public function update(CategoryRequest $request, Category $category)

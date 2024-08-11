@@ -3,23 +3,18 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
-    @include('super-admin.includes.head')
+    @include('includes.head')
 </head>
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
     <div class="wrapper">
-        @include('super-admin.includes.sidebar')
-
+        @include('includes.sidebar')
         <div class="main">
-
-            @include('super-admin.includes.topbar')
-
+            @include('includes.topbar')
             @yield('content')
-
-            @include('super-admin.includes.footer')
+            @include('includes.footer')
         </div>
     </div>
-
     <!-- IziToast -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {

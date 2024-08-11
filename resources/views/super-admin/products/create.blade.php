@@ -1,4 +1,4 @@
-@extends('super-admin.index')
+@extends('layout.app')
 @section('title', 'Create Product')
 @section('content')
 <main class="content">

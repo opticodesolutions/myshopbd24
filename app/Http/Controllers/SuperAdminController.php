@@ -9,6 +9,6 @@ class SuperAdminController extends Controller
 {
     public function index()
     {
-        return view('super-admin.pages.home');
+        return view('super-admin.home.index');
     }
 }
