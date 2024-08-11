@@ -81,9 +81,18 @@ class ProductController extends Controller
     }
 
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'product_code' => 'required',
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'category_id' => 'required',
+            'brand_id' => 'required',
+            'stock' => 'required|integer',  
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',   
+            'remove_images' => 'array',
+        ]);
 
         $product->update([
             'product_code' => $validated['product_code'],
