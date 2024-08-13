@@ -58,10 +58,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $user->assignRole($request->role);
-        $referBy = Customer::where('refer_code', $request->refer_code)->first();
+        // $refer_code = Customer::where('refer_code', $request->refer_code)->first();
         $user->customer()->create([
-            'refer_code' => $request->refer_code ?? null,
-            'refer_by' => $referBy->user_id ?? null
+            //rendom refer code
+            'refer_code' => "REF".rand(1000,9999) ?? null,
+            'refer_by' => $request->refer_code ?? null
         ]);
         return redirect('/login')->with('status', 'Registration successful! Please log in.');
     }

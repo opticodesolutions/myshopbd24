@@ -10,7 +10,13 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        return Transaction::all();
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
+            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'commission')->get();
+        }else{
+            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'commission')->where('user_id', $user->id)->get();
+        }
+        return view('commissions.index', compact('commissions'));
     }
 
     public function show($id)

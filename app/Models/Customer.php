@@ -83,7 +83,7 @@ class Customer extends Model
             // echo "User {$current_user->user->name} (level {$level}) receives {$commission} commission.\n";
 
             $commissionsDistributed[$index] = [
-                'user_id' => $current_user->id,
+                'user_id' => $current_user->user_id,
                 'commission' => $commission
             ];
 

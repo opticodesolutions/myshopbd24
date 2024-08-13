@@ -72,6 +72,7 @@ class ProductController extends Controller
     }
 
 
+
     public function edit(Product $product)
     {
         $categories = Category::all();
@@ -89,8 +90,8 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required',
             'brand_id' => 'required',
-            'stock' => 'required|integer',  
-            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',   
+            'stock' => 'required|integer',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'remove_images' => 'array',
         ]);
 
@@ -105,7 +106,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $file) {
-                $image = Media::store($file, $this->path, 'image');
+                $image = MediaController::store($file, $this->path, 'image');
 
                 $product->images()->create([
                     'media_id' => $image->id,

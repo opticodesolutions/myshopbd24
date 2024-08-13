@@ -14,7 +14,13 @@ class SaleController extends Controller
 {
     public function index()
     {
-        return Sale::with('user', 'product')->get();
+        $user = auth()->user();
+            if ($user->hasRole('super-admin')) {
+                $sales = Sale::with('user', 'product','commission')->get();
+            }else{
+                $sales = Sale::with('user', 'product','commission')->where('user_id', $user->id)->get();
+            }
+        return view('sales.index', compact('sales'));
     }
 
     public function show($id)
@@ -54,7 +60,7 @@ class SaleController extends Controller
 
         // Create the sale record with the total commission for the primary user
         $sale = Sale::create([
-            'user_id' => $customer->id, // The primary user for whom the commission is calculated
+            'user_id' => $customer->user_id, // The primary user for whom the commission is calculated
             'product_id' => $product->id,
             'product_price' => $request->product_price,
             'commission' => $commissionsDistributed[0]['commission'] ?? 0, // Commission for the primary user
@@ -79,12 +85,12 @@ class SaleController extends Controller
     }
 
 
-    public function update(Request $request, $id)
-    {
-        $sale = Sale::findOrFail($id);
-        $sale->update($request->all());
-        return response()->json($sale, 200);
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     $sale = Sale::findOrFail($id);
+    //     $sale->update($request->all());
+    //     return response()->json($sale, 200);
+    // }
 
     public function destroy($id)
     {

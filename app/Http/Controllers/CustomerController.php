@@ -10,8 +10,19 @@ class CustomerController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+        $customer = Customer::where('user_id', $user->id)->first();
 
-        return Customer::with(['user', 'sale','parent'])->get();
+        $customers = Customer::with([
+            'user',
+            'children.user',
+            'children.children.user',
+            'children.children.children.user', // Load up to 3 levels of children
+        ])
+            ->where('refer_by', $customer->refer_code)
+            ->get();
+        // return $customers;
+         return view('customers.index', compact('customers'));
     }
 
     public function show($id)

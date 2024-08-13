@@ -43,7 +43,12 @@ class Product extends Model
 
     public function commissions()
     {
-        return $this->hasMany(Commission::class);
+        return $this->belongsTo(Commission::class);
+    }
+
+    public function commission_price()
+    {
+        return $this->hasOne(Commission::class, 'product_id', 'product_id');
     }
 
     public function sales()

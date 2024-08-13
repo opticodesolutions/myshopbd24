@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -26,24 +27,41 @@ Route::post('/login', [AuthController::class, 'loginProcess'])->name('loginProce
 Route::get('/register', [AuthController::class, 'signUp'])->name('register');
 Route::post('/register', [AuthController::class, 'signUpProcess'])->name('registerProcess');
 
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
+
+
+
+
+
+
 
 // Super Admin Routes
-Route::group(['middleware' => ['role:super-admin|user']], function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/super-admin', [SuperAdminController::class, 'index'])->name('super-admin');
-
     // Product routes
     Route::resource('products', ProductController::class);
     // Comission routes
     Route::resource('commissions', CommissionController::class);
+    Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
+
     // Brand routes
     Route::resource('brands', BrandController::class);
     // Category routes
     Route::resource('categories', CategoryController::class);
     // Media routes
     Route::resource('medias', MediaController::class);
-    Route::resource('sales', SaleController::class);
+    // Sales routes
+    // Transaction routes
     Route::resource('transactions', TransactionController::class);
+    // Payment routes
+    Route::get('admin/payments/topup', [PaymentController::class, 'topupList'])->name('admin.payments.topup.index');
+    Route::get('admin/payments/withdraw', [PaymentController::class, 'withdrawList'])->name('admin.payments.withdraw.index');
+    Route::post('payments/update-status/{id}', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
+
+    // Customer routes
     Route::resource('customers', CustomerController::class);
 });
 
@@ -56,10 +74,20 @@ Route::group(['middleware' => ['role:admin']], function () {
 Route::group(['middleware' => ['role:agent']], function () {
     Route::get('/agent', [AgentController::class, 'index']);
 });
+Route::resource('sales', SaleController::class);
+Route::resource('customers', CustomerController::class);
 
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
-    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user', [UserController::class, 'index'])->name('user');
+
+    // Payment Routes
+    Route::get('payments/topup', [PaymentController::class, 'topupIndex'])->name('payments.topup.index');
+    Route::get('payments/withdraw', [PaymentController::class, 'withdrawIndex'])->name('payments.withdraw.index');
+    Route::get('payments/topup/create', [PaymentController::class, 'createTopup'])->name('payments.topup.create');
+    Route::get('payments/withdraw/create', [PaymentController::class, 'createWithdraw'])->name('payments.withdraw.create');
+    Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
+
     // Route::resource('products', ProductController::class);
     // // Comission routes
     // Route::resource('commissions', CommissionController::class);
@@ -70,6 +98,6 @@ Route::group(['middleware' => ['role:user']], function () {
     // // Media routes
     // Route::resource('medias', MediaController::class);
     // Route::resource('sales', SaleController::class);
-    // Route::resource('transactions', TransactionController::class);
-   // Route::resource('customers', CustomerController::class);
+    Route::get('purchase/commission', [TransactionController::class, 'index'])->name('purchase.commission');
+
 });
