@@ -16,7 +16,16 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
+use Illuminate\Support\Facades\Artisan;
 
+Route::get('/link', function () {
+    try {
+        Artisan::call('storage:link');
+        return "The storage link has been created successfully.";
+    } catch (\Exception $e) {
+        return "Failed to create the storage link: " . $e->getMessage();
+    }
+});
 
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
