@@ -54,7 +54,10 @@ class Customer extends Model
     public function calculateCommissions($product)
     {
         $salesAmount = $product->discount_price;
-        $totalCommission = $salesAmount * ($product->commissions->sum('amount') ?: 0.00);
+        $procom = Commission::where('product_id', $product->id)->first();
+
+        $commissionRate = $procom ->amount;
+        $totalCommission = $salesAmount * $commissionRate;
 
         $commissionDistribution = [
             [1.00],                    // Level 3 sells

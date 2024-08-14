@@ -39,6 +39,7 @@ class SaleController extends Controller
         $product = Product::with('commissions')->findOrFail($request->product_id);
 
 
+
         $user = User::findOrFail($request->user_id);
 
         // Assuming Customer model is linked to User model

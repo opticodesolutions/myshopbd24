@@ -28,21 +28,21 @@ Route::get('/register', [AuthController::class, 'signUp'])->name('register');
 Route::post('/register', [AuthController::class, 'signUpProcess'])->name('registerProcess');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-
-
-
-
-
-
+Route::resource('products', ProductController::class);
 
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/super-admin', [SuperAdminController::class, 'index'])->name('super-admin');
+
+    // User routes
+    Route::get('admin/all-customers', [UserController::class, 'customers'])->name('admin.customers.index');
+    Route::get('admin/all-agents', [UserController::class, 'agents'])->name('admin.agents.index');
+    Route::get('admin/all-users', [UserController::class, 'all_users'])->name('admin.users.index');
+
+
+
     // Product routes
-    Route::resource('products', ProductController::class);
     // Comission routes
     Route::resource('commissions', CommissionController::class);
     Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
@@ -88,7 +88,6 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('payments/withdraw/create', [PaymentController::class, 'createWithdraw'])->name('payments.withdraw.create');
     Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
 
-    // Route::resource('products', ProductController::class);
     // // Comission routes
     // Route::resource('commissions', CommissionController::class);
     // // Brand routes

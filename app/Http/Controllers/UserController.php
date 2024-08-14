@@ -57,5 +57,40 @@ class UserController extends Controller
             'Total_topup_amount'
         ));
     }
+    public function all_users()
+    {
+        $customers = Customer::with(['user'])->get();
+
+        return view ('super-admin.users.index', compact('customers'));
+    }
+
+
+    public function customers()
+    {
+        $role = 'user'; // Role for which customers should be fetched
+
+        // Fetch customers where the associated user has the specified role
+        $customers = Customer::whereHas('user', function($query) use ($role) {
+            $query->whereHas('roles', function($query) use ($role) {
+                $query->where('name', $role); // Check the role name
+            });
+        })->with('user')->get();
+
+        return view ('super-admin.users.index', compact('customers'));
+    }
+
+    public function agents()
+    {
+        $role = 'agent'; // Role for which customers should be fetched
+
+        // Fetch customers where the associated user has the specified role
+        $customers = Customer::whereHas('user', function($query) use ($role) {
+            $query->whereHas('roles', function($query) use ($role) {
+                $query->where('name', $role); // Check the role name
+            });
+        })->with('user')->get();
+
+        return view ('super-admin.users.index', compact('customers'));
+    }
 
 }

@@ -107,6 +107,23 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item">
+                    <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">User</span>
+                    </a>
+                    <ul id="user" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a class='sidebar-link' href='{{ route('admin.users.index') }}'>All Users's</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class='sidebar-link' href='{{ route('admin.customers.index') }}'>Customer's</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class='sidebar-link' href='{{ route('admin.agents.index') }}'>Agent's</a>
+                        </li>
+                    </ul>
+                </li>
+
             @endif
 
             @if($role == 'user')

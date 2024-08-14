@@ -48,7 +48,7 @@ class Product extends Model
 
     public function commission_price()
     {
-        return $this->hasOne(Commission::class, 'product_id', 'product_id');
+        return $this->hasOne(Commission::class, 'product_id', 'id');
     }
 
     public function sales()
