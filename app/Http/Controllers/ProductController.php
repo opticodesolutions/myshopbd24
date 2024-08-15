@@ -84,6 +84,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // Validate request data
         $validated = $request->validate([
             'product_code' => 'required',
             'name' => 'required',
@@ -94,7 +95,8 @@ class ProductController extends Controller
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'remove_images' => 'array',
         ]);
-
+    
+        // Update product details
         $product->update([
             'product_code' => $validated['product_code'],
             'name' => $validated['name'],
@@ -103,30 +105,37 @@ class ProductController extends Controller
             'brand_id' => $validated['brand_id'],
             'stock' => $validated['stock'],
         ]);
-
-        if ($request->hasFile('image')) {
-            foreach ($request->file('image') as $file) {
-                $image = MediaController::store($file, $this->path, 'image');
-
-                $product->images()->create([
-                    'media_id' => $image->id,
-                ]);
-            }
-        }
-
+    
+        // Handle image removal
         if ($request->has('remove_images')) {
             foreach ($request->remove_images as $imageId) {
                 $productImage = ProductImage::find($imageId);
                 if ($productImage) {
                     Storage::disk('public')->delete($productImage->media->src);
-                    $productImage->media->delete();
-                    $productImage->delete();
+                    $productImage->media->delete(); 
+                    $productImage->delete(); 
                 }
             }
         }
+    
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $imageFile) {
+                $image = MediaController::store(
+                    $imageFile,
+                    $this->path,
+                    'Image'
+                );
 
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_id' => $image->id,
+                ]);
+            }
+        }
+    
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
+    
 
 
 
