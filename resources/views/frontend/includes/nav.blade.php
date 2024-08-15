@@ -41,7 +41,7 @@
                     </form>
                 </div>
                 <div class="col-lg-2 col-xxl-2 text-end col-md-6 col-7">
-                    <div class="list-inline">
+                    {{-- <div class="list-inline">
                         <div class="list-inline-item me-5">
                             <a href="pages/shop-wishlist.html" class="text-muted position-relative">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -85,7 +85,7 @@
                                     <span class="visually-hidden">unread messages</span>
                                 </span>
                             </a>
-                        </div>
+                        </div> --}}
                         <div class="list-inline-item d-inline-block d-lg-none">
                             <!-- Button -->
                             <button class="navbar-toggler collapsed" type="button" data-bs-toggle="offcanvas"
