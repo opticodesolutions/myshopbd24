@@ -146,4 +146,10 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+
+    public function getProductByCategory($id)
+    {
+        $products = Product::where('category_id', $id)->get();
+        return response()->json($products);
+    }
 }

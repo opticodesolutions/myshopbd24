@@ -49,7 +49,7 @@
                                     <div class="card card-product mb-lg-4">
                                         <div class="card-body text-center py-8">
                                             <!-- img -->
-                                            <img src="{{ $cat->media->src }}" alt="{{ $cat->name }}" class="mb-3 img-fluid" />
+                                            <img src="{{ Storage::url($cat?->media?->src) }}" alt="{{ $cat->name }}" class="mb-3 img-fluid" />
 
                                             <div class="text-truncate">{{ $cat->name }}</div>
                                         </div>
@@ -118,11 +118,10 @@
                                                 <span class="badge bg-danger">Sale</span>
                                             </div>
                                         @endif
-
                                         <!-- Product Image -->
                                         @if($product->images->isNotEmpty())
                                             <a href="{{ route('products.show', $product->id) }}">
-                                                <img src="{{ asset($product->images->first()->media->src) }}" alt="{{ $product->name }}" class="mb-3 img-fluid" />
+                                                <img src="{{ Storage::url($product->images->first()->media->src) }}" alt="{{ $product->name }}" class="mb-3 img-fluid" />
                                             </a>
                                         @else
                                             <a href="{{ route('products.show', $product->id) }}">
@@ -132,7 +131,7 @@
 
                                         <!-- Product Actions -->
                                         <div class="card-product-action">
-                                            <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            {{-- <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Quick View"></i>
                                             </a>
                                             <a href="#!" class="btn-action" data-bs-toggle="tooltip" data-bs-html="true" title="Wishlist">
@@ -140,7 +139,7 @@
                                             </a>
                                             <a href="#!" class="btn-action" data-bs-toggle="tooltip" data-bs-html="true" title="Compare">
                                                 <i class="bi bi-arrow-left-right"></i>
-                                            </a>
+                                            </a> --}}
                                         </div>
                                     </div>
 
@@ -179,22 +178,8 @@
                                             @endif
                                         </div>
                                         <div>
-                                            <a href="#!" class="btn btn-primary btn-sm">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="16"
-                                                    height="16"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    class="feather feather-plus">
-                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                </svg>
-                                                Add
+                                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary btn-sm">
+                                                View
                                             </a>
                                         </div>
                                     </div>
