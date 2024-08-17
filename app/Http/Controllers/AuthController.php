@@ -13,8 +13,27 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    public function role_check(){
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user->hasRole('super-admin')) {
+                return redirect('/super-admin');
+            } elseif ($user->hasRole('admin')) {
+                return redirect('/admin');
+            } elseif ($user->hasRole('agent')) {
+                return redirect('/agent');
+            } elseif ($user->hasRole('user')) {
+                return redirect('/user');
+            }
+        }
+    }
+
     public function login()
     {
+        $redirect = $this->role_check();
+        if ($redirect) {
+            return $redirect->with('error', 'Already logged in');
+        }
         return view('auth.login');
     }
 
@@ -29,22 +48,20 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = auth()->user();
             if ($user->hasRole('super-admin')) {
-                return redirect('/super-admin');
+                return redirect('/super-admin')->with('success', 'Login successful!');
             } elseif ($user->hasRole('admin')) {
-                return redirect('/admin');
+                return redirect('/admin')->with('success', 'Login successful!');
             } elseif ($user->hasRole('agent')) {
-                return redirect('/agent');
+                return redirect('/agent')->with('success', 'Login successful!');
             } elseif ($user->hasRole('user')) {
-                return redirect('/user');
+                return redirect('/user')->with('success', 'Login successful!');
             }
-            return redirect('/home');
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
-
     public function signUp()
     {
         return view('auth.signUp');
