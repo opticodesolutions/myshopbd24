@@ -27,7 +27,15 @@ class CustomerController extends Controller
 
     public function show($id)
     {
-        return Customer::findOrFail($id)->with(['user','parent'])->get();
+        $data = Customer::findOrFail($id)->with(['user','parent'])->get();
+        return view('customers.show', compact('data'));
+    }
+
+    public function my_info()
+    {
+        $user = auth()->user();
+        $data =Customer::where('user_id', $user->id)->with(['user','parent'])->get();
+        return view('customers.my-info', compact('data'));
     }
 
     public function store(Request $request)

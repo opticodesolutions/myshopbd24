@@ -107,5 +107,6 @@ Route::group(['middleware' => ['role:user']], function () {
     // Route::resource('medias', MediaController::class);
     // Route::resource('sales', SaleController::class);
     Route::get('purchase/commission', [TransactionController::class, 'index'])->name('purchase.commission');
+    Route::get('user_info', [CustomerController::class, 'my_info'])->name('user_info');
 
 });
