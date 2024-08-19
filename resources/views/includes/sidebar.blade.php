@@ -130,6 +130,86 @@
             <li class="sidebar-header pt-0">
                 Main
             </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#Profile" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Profile</span>
+                </a>
+                <ul id="Profile" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Profile">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('personal.info') }}'>Personal Info</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('profile.kyc') }}'>Profile KYC</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('password.change') }}'>Password Change</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('joining.invoice') }}'>Joining Invoice</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#Income" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Income</span>
+                </a>
+                <ul id="Income" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Income">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>Purchase Income</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Sales Income</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Refer Income</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Insentive Income</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Total Income</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#Team" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Team Information</span>
+                </a>
+                <ul id="Team" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Team">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>Genaration List</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Rafael Information</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Insentive Information</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a data-bs-target="#Payment" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Payment Information</span>
+                </a>
+                <ul id="Payment" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Payment">
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>Can Transfer</a></li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>withdorw</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a class='sidebar-link' href='#'>Support</a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Balance List</a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class='sidebar-link' href='{{ route('logout') }}'>Log out</a>
+            </li>
+
+
             <li class="sidebar-item">
                 <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">TopUp</span>

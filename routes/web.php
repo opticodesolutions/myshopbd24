@@ -107,6 +107,14 @@ Route::group(['middleware' => ['role:user']], function () {
     // Route::resource('medias', MediaController::class);
     // Route::resource('sales', SaleController::class);
     Route::get('purchase/commission', [TransactionController::class, 'index'])->name('purchase.commission');
-    Route::get('user_info', [CustomerController::class, 'my_info'])->name('user_info');
+    Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
+
+    Route::get('user/profile', [CustomerController::class, 'my_info'])->name('user/profile');
+
+    Route::get('personal/info', [CustomerController::class, 'personal_info'])->name('personal.info');
+    Route::get('profile/kyc', [CustomerController::class, 'profile_kyc'])->name('profile.kyc');
+    Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
+    Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
+
 
 });

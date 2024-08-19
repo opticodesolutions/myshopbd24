@@ -23,6 +23,16 @@ class SaleController extends Controller
         return view('sales.index', compact('sales'));
     }
 
+    public function refer_commissions()
+    {
+        $user = auth()->user();
+        $refer_code = $user->customer->refer_code;
+        $refers = Customer::where('refer_by', $refer_code)->user_id;
+        $my_reffer_sall_id = Sale::where('user_id', $user->id)->pluck('id');
+        return $refer_code;
+
+    }
+
     public function show($id)
     {
         return Sale::findOrFail($id);

@@ -19,6 +19,15 @@ class TransactionController extends Controller
         return view('commissions.index', compact('commissions'));
     }
 
+    public function refer_commissions()
+    {
+        $user = auth()->user();
+        $refer_code = $user->customer->refer_code;
+        $refers = Customer::where('refer_by', $refer_code)->get();
+
+        return $refer_code;
+    }
+
     public function show($id)
     {
         return Transaction::findOrFail($id);

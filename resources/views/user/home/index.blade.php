@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6 col-xl-3">
+            {{-- <div class="col-sm-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-sm-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3">
+            {{-- <div class="col-sm-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -92,7 +92,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-sm-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
@@ -107,27 +107,6 @@
                             </div>
                         </div>
                         <h1 class="mt-1 mb-3">{{ number_format($Total_commission_transaction, 2) }}</h1>
-                        <div class="mb-0">
-                            <span class="badge badge-success-light">3.65%</span>
-                            <span class="text-muted">Since last week</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col mt-0">
-                                <h5 class="card-title">Total Withdraw </h5>
-                            </div>
-                            <div class="col-auto">
-                                <div class="stat text-primary">
-                                    <i class="align-middle" data-feather="dollar-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">{{ number_format($Total_withdrawn_amount, 2) }}</h1>
                         <div class="mb-0">
                             <span class="badge badge-success-light">3.65%</span>
                             <span class="text-muted">Since last week</span>
@@ -161,7 +140,29 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-0">
-                                <h5 class="card-title">Balance</h5>
+                                <h5 class="card-title">Total Withdraw </h5>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stat text-primary">
+                                    <i class="align-middle" data-feather="dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h1 class="mt-1 mb-3">{{ number_format($Total_withdrawn_amount, 2) }}</h1>
+                        <div class="mb-0">
+                            <span class="badge badge-success-light">3.65%</span>
+                            <span class="text-muted">Since last week</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col mt-0">
+                                <h5 class="card-title">Current Balance</h5>
                             </div>
                             <div class="col-auto">
                                 <div class="stat text-primary">

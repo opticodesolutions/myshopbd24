@@ -25,6 +25,31 @@ class CustomerController extends Controller
          return view('customers.index', compact('customers'));
     }
 
+    public function personal_info()
+    {
+        $user = auth()->user();
+        $data = Customer::where('user_id', $user->id)->with(['user'])->first();
+        $parent = Customer::where('refer_code', $data->refer_by)->with(['user'])->first();
+        return view('customers.personal_info',compact('data', 'parent'));
+    }
+
+    public function profile_kyc()
+    {
+        return view('customers.profile_kyc');
+    }
+
+    public function password_change()
+    {
+        return view('customers.password_change');
+    }
+
+    public function joining_invoice()
+    {
+        return view('customers.joining_invoice');
+    }
+
+
+
     public function show($id)
     {
         $data = Customer::findOrFail($id)->with(['user','parent'])->get();
@@ -34,7 +59,7 @@ class CustomerController extends Controller
     public function my_info()
     {
         $user = auth()->user();
-        $data =Customer::where('user_id', $user->id)->with(['user','parent'])->get();
+        $data = Customer::where('user_id', $user->id)->with(['user','parent'])->get();
         return view('customers.my-info', compact('data'));
     }
 
