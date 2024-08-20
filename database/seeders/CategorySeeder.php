@@ -11,7 +11,7 @@ class CategorySeeder extends Seeder
     {
         DB::table('categories')->insert([
             [
-                'name' => 'Category 1',
+                'name' => 'package',
                 'create_by' => 1,  // Make sure this user ID exists in the users table
                 'created_at' => now(),
                 'updated_at' => now(),

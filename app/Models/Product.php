@@ -19,6 +19,7 @@ class Product extends Model
         'name',
         'price',
         'discount_price',
+        'perchase_commission',
         'description',
         'category_id',
         'brand_id',

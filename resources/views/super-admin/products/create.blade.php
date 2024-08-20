@@ -46,6 +46,13 @@
                                         <label class="form-label">Discount Price</label>
                                         <input type="number" class="form-control" name="discount_price" placeholder="Discount Price" />
                                     </div>
+                                    {{-- perchase_commission --}}
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Purchase Commission</label>
+                                        <input type="number" class="form-control" name="perchase_commission" placeholder="Purchase Commission" required />
+                                    </div>
+
                                     <div class="mb-3">
                                         <label class="form-label">Stock</label>
                                         <input type="number" class="form-control" name="stock" placeholder="Stock Quantity" required />

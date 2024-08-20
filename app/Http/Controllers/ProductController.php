@@ -38,6 +38,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'discount_price' => $request->discount_price,
+            'perchase_commission' => $request->perchase_commission,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
@@ -95,29 +96,32 @@ class ProductController extends Controller
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'remove_images' => 'array',
         ]);
-    
+
         // Update product details
         $product->update([
             'product_code' => $validated['product_code'],
             'name' => $validated['name'],
             'price' => $validated['price'],
+            'discount_price' => $request->discount_price,
+            'perchase_commission' => $request->perchase_commission,
+            'description' => $request->description,
             'category_id' => $validated['category_id'],
             'brand_id' => $validated['brand_id'],
             'stock' => $validated['stock'],
         ]);
-    
+
         // Handle image removal
         if ($request->has('remove_images')) {
             foreach ($request->remove_images as $imageId) {
                 $productImage = ProductImage::find($imageId);
                 if ($productImage) {
                     Storage::disk('public')->delete($productImage->media->src);
-                    $productImage->media->delete(); 
-                    $productImage->delete(); 
+                    $productImage->media->delete();
+                    $productImage->delete();
                 }
             }
         }
-    
+
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $imageFile) {
                 $image = MediaController::store(
@@ -132,10 +136,10 @@ class ProductController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
-    
+
 
 
 

@@ -38,7 +38,7 @@ Route::post('/register', [AuthController::class, 'signUpProcess'])->name('regist
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::resource('products', ProductController::class);
-
+Route::get('perchase/now/{id}', [SaleController::class, 'perchase_now'])->name('perchase.now');
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin']], function () {
@@ -115,6 +115,4 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('profile/kyc', [CustomerController::class, 'profile_kyc'])->name('profile.kyc');
     Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
     Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
-
-
 });

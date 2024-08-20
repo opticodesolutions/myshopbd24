@@ -14,6 +14,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->decimal('price', 8, 2);
             $table->decimal('discount_price', 8, 2)->nullable();
+            $table->decimal('perchase_commission', 8, 2);
             $table->text('description')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('brand_id');
