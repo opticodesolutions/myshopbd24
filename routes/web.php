@@ -16,6 +16,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/link', function () {
@@ -38,7 +39,7 @@ Route::post('/register', [AuthController::class, 'signUpProcess'])->name('regist
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::resource('products', ProductController::class);
-Route::get('perchase/now/{id}', [SaleController::class, 'perchase_now'])->name('perchase.now');
+Route::get('purchase/now/{id}', [PurchaseController::class, 'purchase_now'])->name('purchase.now');
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin']], function () {
@@ -106,8 +107,7 @@ Route::group(['middleware' => ['role:user']], function () {
     // // Media routes
     // Route::resource('medias', MediaController::class);
     // Route::resource('sales', SaleController::class);
-    Route::get('purchase/commission', [TransactionController::class, 'index'])->name('purchase.commission');
-    Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
+
 
     Route::get('user/profile', [CustomerController::class, 'my_info'])->name('user/profile');
 
@@ -116,3 +116,5 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
     Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
 });
+Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
+Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');

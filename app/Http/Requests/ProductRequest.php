@@ -26,7 +26,7 @@ class ProductRequest extends FormRequest
             'name' => 'required',
             'price' => 'required|numeric',
             'discount_price' => 'nullable|numeric',
-            'perchase_commission' => 'required|numeric',
+            'purchase_commission' => 'required|numeric',
             'category_id' => 'required',
             'brand_id' => 'required',
             'stock' => 'required|integer',

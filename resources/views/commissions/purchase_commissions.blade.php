@@ -24,7 +24,6 @@
                                     <th>Transaction Type</th>
                                     <th>Customer</th>
                                     <th>Comission Get</th>
-                                    <th>Commission By</th>
                                     <th>Created At</th>
                                     @auth
 
@@ -35,13 +34,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($commissions as $commissions)
+                                @foreach($purchase_commissions as $commissions)
                                 <tr>
-                                    <td>{{ $commissions->sale->product->name }}</td>
+                                    <td>{{ $commissions->product->name }}</td>
                                     <td>{{ $commissions->transaction_type }}</td>
                                     <td>{{ $commissions->user->name ?? 'Unknown' }}</td>
-                                    <td>{{ $commissions->amount }}.TK</td>
-                                    <td>{{ 'Name: '.$commissions->sale->user->name.' ID: '.$commissions->sale->user->id.' Refer Code: '.$commissions->sale->user->customer->refer_code}}</td>
+                                    <td>{{ $commissions->commission }}.TK</td>
 
 
 

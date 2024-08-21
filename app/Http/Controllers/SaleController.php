@@ -26,11 +26,12 @@ class SaleController extends Controller
     public function refer_commissions()
     {
         $user = auth()->user();
-        $refer_code = $user->customer->refer_code;
-        $refers = Customer::where('refer_by', $refer_code)->user_id;
-        $my_reffer_sall_id = Sale::where('user_id', $user->id)->pluck('id');
-        return $refer_code;
-
+        $commissions = Transaction::where('user_id', $user->id)->where('transaction_type', 'refer_commission')->get();
+        // $refer_code = $user->customer->refer_code;
+        // $refers = Customer::where('refer_by', $refer_code)->user_id;
+        // $my_reffer_sall_id = Sale::where('user_id', $user->id)->pluck('id');
+        // return $refer_transaction;
+        return view('commissions.index', compact('commissions'));
     }
 
     public function show($id)
@@ -87,6 +88,24 @@ class SaleController extends Controller
                 'transaction_type' => 'commission' // Example type, adjust as needed
             ]);
         }
+
+$first = true; // Initialize a flag to track the first iteration
+
+foreach ($commissionsDistributed as $commissionData) {
+    // Determine the transaction type based on whether it's the first transaction or not
+    $transactionType = $first ? 'sale_commission' : 'refer_commission';
+
+    // Create the transaction
+    Transaction::create([
+        'user_id' => $commissionData['user_id'],
+        'sale_id' => $sale->id,
+        'amount' => $commissionData['commission'],
+        'transaction_type' => $transactionType
+    ]);
+
+    // Set the flag to false after the first iteration
+    $first = false;
+}
 
         // Update product stock
         $product->stock -= 1;

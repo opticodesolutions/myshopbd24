@@ -11,7 +11,7 @@ class RoleMiddleware
     {
         if (!Auth::check() || !Auth::user()->hasRole($role)) {
             // Redirect or show an error
-            return redirect('/unauthorized'); // Customize as needed
+            return redirect('/login'); // Customize as needed
         }
 
         return $next($request);

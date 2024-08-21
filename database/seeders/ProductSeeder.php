@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
             'name' => 'Product 1',
             'price' => 99.99,
             'discount_price' => 89.99,
-            'perchase_commission' => 10,
+            'purchase_commission' => 10,
             'description' => 'Description for Product 1',
             'category_id' => $categoryId,
             'brand_id' => $brandId,
