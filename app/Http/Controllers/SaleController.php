@@ -6,9 +6,11 @@ use App\Models\Sale;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Customer;
+use App\Models\Purchase;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class SaleController extends Controller
 {
@@ -47,29 +49,60 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'user_id' => 'required|exists:users,id',
-            'product_price' => 'required|numeric',
-        ]);
-
-        $product = Product::with('commissions')->findOrFail($request->product_id);
-
-
-
-        $user = User::findOrFail($request->user_id);
-        $customer = Customer::where('user_id', $user->id)->firstOrFail();
-
-
-        // $customer->calculateCommissions($product);
-
-        // $sale = Sale::create([
-        //     'user_id' => $user->id,
-        //     'product_id' => $product->id,
-        //     'product_price' => $request->product_price,
-        //     'commission' => $customer->Total_sale_commission,
+        // $request->validate([
+        //     'product_id' => 'required|exists:products,id',
+        //     'user_id' => 'required|exists:users,id',
+        //     'product_price' => 'required|numeric',
+        //     'purchase_commission' => 'required|numeric', // Added validation
+        //     'name' => 'sometimes|required|string',
+        //     'email' => 'sometimes|required|email',
+        //     'password' => 'sometimes|required|confirmed',
+        //     'refer_code' => 'sometimes|string'
         // ]);
 
+        $product = Product::with('commissions')->findOrFail($request->product_id);
+        $user = User::findOrFail($request->user_id);
+        $customer = Customer::where('user_id', $user->id)->firstOrFail(); // seller
+
+        if ($request->name && $request->email && $request->password && $request->password_confirmation && $request->refer_code) {
+
+            // Create user
+            $purchase_user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            $purchase_user->assignRole($request->role);
+
+            $purchase_user->customer()->create([
+                'refer_code' => "REF" . rand(1000, 9999),
+                'refer_by' => $request->refer_code ?? null
+            ]);
+
+            // Create Purchase
+            $purchase = Purchase::create([
+                'user_id' => $purchase_user->id, // The primary user for whom the commission is calculated
+                'product_id' => $request->product_id,
+                'commission' => $request->purchase_commission
+            ]);
+
+            // Create Transaction
+            $transaction = Transaction::create([
+                'user_id' => $purchase_user->id, // Corrected from $purchase_user->user_id
+                'purchase_id' => $purchase->id,
+                'amount' => $request->purchase_commission,
+                'transaction_type' => 'purchase_commission'
+            ]);
+
+            // Balance Add To purchase_user_customer_table
+            $purchase_user_customer_table = Customer::where('user_id', $purchase_user->id)->first();
+
+            if ($request->payment_method == "Cash") {
+                $purchase_commission = $request->purchase_commission;
+                $purchase_user_customer_table->wallet_balance += $purchase_commission;
+                $purchase_user_customer_table->save();
+            }
+        }
 
         // Calculate commissions
         $commissionsDistributed = $customer->calculateCommissions($product);
@@ -81,17 +114,6 @@ class SaleController extends Controller
             'product_price' => $request->product_price,
             'commission' => $commissionsDistributed[0]['commission'] ?? 0, // Commission for the primary user
         ]);
-
-
-        // Create a Transaction record for each distributed commission
-        // foreach ($commissionsDistributed as $commissionData) {
-        //     Transaction::create([
-        //         'user_id' => $commissionData['user_id'],
-        //         'sale_id' => $sale->id,
-        //         'amount' => $commissionData['commission'],
-        //         'transaction_type' => 'commission' // Example type, adjust as needed
-        //     ]);
-        // }
 
         $first = true; // Initialize a flag to track the first iteration
 
@@ -114,9 +136,10 @@ class SaleController extends Controller
         // Update product stock
         $product->stock -= 1;
         $product->save();
-        return redirect()->route('products.index')->with('success', 'Product Buy successfully.');
 
+        return redirect()->route('products.index')->with('success', 'Product purchased successfully.');
     }
+
 
 
     // public function update(Request $request, $id)

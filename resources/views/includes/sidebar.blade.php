@@ -144,7 +144,7 @@
                         <a class='sidebar-link' href='{{ route('password.change') }}'>Password Change</a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('joining.invoice') }}'>Joining Invoice</a>
+                        <a class='sidebar-link' href='{{ route('join.invoice') }}'>Joining Invoice</a>
                     </li>
                 </ul>
             </li>

@@ -28,9 +28,11 @@ Route::get('/link', function () {
     }
 });
 
+Route::get('/joining', [FrontendController::class, 'join_invoice'])->name('join.invoice');
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 
+// Route:get('/join/invoice', [FrontendController::class, 'join_invoice'])->name('join.invoice');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginProcess'])->name('loginProcess');

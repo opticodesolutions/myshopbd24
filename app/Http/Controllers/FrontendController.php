@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
 
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,5 +27,16 @@ class FrontendController extends Controller
         {$query->where('name', 'package');})
         ->get();
         return view('frontend.pages.index', compact('categories','products','packages'));
+    }
+
+    public function join_invoice()
+    {
+        if (auth()->check()) {
+            $purchase = Purchase::with('product')->where('user_id', auth()->user()->id)->first();
+            return view('frontend.pages.join_invoice', compact('purchase'));
+        }else {
+            # code...
+            return redirect('/login');
+        }
     }
 }

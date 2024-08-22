@@ -133,7 +133,7 @@
                                     </a>
 
                                 @else
-                                    <a href="{{ route('perchase.now', $product->id) }}" class="">
+                                    <a href="{{ route('purchase.now', $product->id) }}" class="">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="feather-icon icon-shopping-bag me-2"></i>
                                             Perchase Now
