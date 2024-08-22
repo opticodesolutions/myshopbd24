@@ -23,6 +23,12 @@ class SaleController extends Controller
         return view('sales.index', compact('sales'));
     }
 
+    public function sale_now($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('sales.sale_now', compact('product'));
+    }
+
     public function refer_commissions()
     {
         $user = auth()->user();
@@ -30,7 +36,7 @@ class SaleController extends Controller
         // $refer_code = $user->customer->refer_code;
         // $refers = Customer::where('refer_by', $refer_code)->user_id;
         // $my_reffer_sall_id = Sale::where('user_id', $user->id)->pluck('id');
-        // return $refer_transaction;
+         //return $commissions;
         return view('commissions.index', compact('commissions'));
     }
 
@@ -52,8 +58,6 @@ class SaleController extends Controller
 
 
         $user = User::findOrFail($request->user_id);
-
-        // Assuming Customer model is linked to User model
         $customer = Customer::where('user_id', $user->id)->firstOrFail();
 
 
@@ -80,32 +84,32 @@ class SaleController extends Controller
 
 
         // Create a Transaction record for each distributed commission
+        // foreach ($commissionsDistributed as $commissionData) {
+        //     Transaction::create([
+        //         'user_id' => $commissionData['user_id'],
+        //         'sale_id' => $sale->id,
+        //         'amount' => $commissionData['commission'],
+        //         'transaction_type' => 'commission' // Example type, adjust as needed
+        //     ]);
+        // }
+
+        $first = true; // Initialize a flag to track the first iteration
+
         foreach ($commissionsDistributed as $commissionData) {
+            // Determine the transaction type based on whether it's the first transaction or not
+            $transactionType = $first ? 'sale_commission' : 'refer_commission';
+
+            // Create the transaction
             Transaction::create([
                 'user_id' => $commissionData['user_id'],
                 'sale_id' => $sale->id,
                 'amount' => $commissionData['commission'],
-                'transaction_type' => 'commission' // Example type, adjust as needed
+                'transaction_type' => $transactionType
             ]);
+
+            // Set the flag to false after the first iteration
+            $first = false;
         }
-
-$first = true; // Initialize a flag to track the first iteration
-
-foreach ($commissionsDistributed as $commissionData) {
-    // Determine the transaction type based on whether it's the first transaction or not
-    $transactionType = $first ? 'sale_commission' : 'refer_commission';
-
-    // Create the transaction
-    Transaction::create([
-        'user_id' => $commissionData['user_id'],
-        'sale_id' => $sale->id,
-        'amount' => $commissionData['commission'],
-        'transaction_type' => $transactionType
-    ]);
-
-    // Set the flag to false after the first iteration
-    $first = false;
-}
 
         // Update product stock
         $product->stock -= 1;

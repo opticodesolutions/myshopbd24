@@ -37,9 +37,9 @@
                                 @foreach($purchase_commissions as $commissions)
                                 <tr>
                                     <td>{{ $commissions->product->name }}</td>
-                                    <td>{{ $commissions->transaction_type }}</td>
+                                    <td>{{ $commissions->transaction_type ?? 'Purchase Commission' }}</td>
                                     <td>{{ $commissions->user->name ?? 'Unknown' }}</td>
-                                    <td>{{ $commissions->commission }}.TK</td>
+                                    <td class="commission">{{ $commissions->commission }}</td>
 
 
 
@@ -55,9 +55,38 @@
                                         </td>
                                     @endif
                                     @endauth
-
                                 </tr>
                                 @endforeach
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td colspan="1">Total</td>
+                                    <!-- This is where the total commission will be displayed -->
+                                    <td id="total-commission"></td>
+                                    <td></td>
+                                </tr>
+
+                            <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var commissions = document.querySelectorAll('.commission');
+                                        var totalCommission = 0;
+
+                                        commissions.forEach(function (td) {
+                                            // Extract the commission value and convert it to a number
+                                            var commissionValue = parseFloat(td.textContent);
+                                            if (!isNaN(commissionValue)) {
+                                                totalCommission += commissionValue;
+                                            }
+                                        });
+
+                                        // Display the total sum in the designated element
+                                        var totalElement = document.getElementById('total-commission');
+                                        if (totalElement) {
+                                            totalElement.textContent = totalCommission.toFixed(2) + ' TK';
+                                        }
+                                    });
+                            </script>
+
+
                             </tbody>
                         </table>
                     </div>

@@ -39,7 +39,46 @@ Route::post('/register', [AuthController::class, 'signUpProcess'])->name('regist
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::resource('products', ProductController::class);
+Route::resource('purchases', PurchaseController::class);
 Route::get('purchase/now/{id}', [PurchaseController::class, 'purchase_now'])->name('purchase.now');
+
+Route::get('sale/now/{id}', [SaleController::class, 'sale_now'])->name('sale.now');
+
+Route::post('purchase/save', [PurchaseController::class, 'purchase_save'])->name('purchase.save');
+
+Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
+// purchase/now/2
+
+
+
+
+Route::resource('sales', SaleController::class);
+Route::resource('customers', CustomerController::class);
+
+
+Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
+Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
+
+
+
+// User Routes
+Route::group(['middleware' => ['role:user']], function () {
+    Route::get('/user', [UserController::class, 'index'])->name('user');
+
+    // Payment Routes
+    Route::get('payments/topup', [PaymentController::class, 'topupIndex'])->name('payments.topup.index');
+    Route::get('payments/withdraw', [PaymentController::class, 'withdrawIndex'])->name('payments.withdraw.index');
+    Route::get('payments/topup/create', [PaymentController::class, 'createTopup'])->name('payments.topup.create');
+    Route::get('payments/withdraw/create', [PaymentController::class, 'createWithdraw'])->name('payments.withdraw.create');
+    Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
+    Route::get('user/profile', [CustomerController::class, 'my_info'])->name('user/profile');
+
+    Route::get('personal/info', [CustomerController::class, 'personal_info'])->name('personal.info');
+    Route::get('profile/kyc', [CustomerController::class, 'profile_kyc'])->name('profile.kyc');
+    Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
+    Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
+});
+
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin']], function () {
@@ -55,7 +94,6 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     // Product routes
     // Comission routes
     Route::resource('commissions', CommissionController::class);
-    Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
 
     // Brand routes
     Route::resource('brands', BrandController::class);
@@ -84,37 +122,3 @@ Route::group(['middleware' => ['role:admin']], function () {
 Route::group(['middleware' => ['role:agent']], function () {
     Route::get('/agent', [AgentController::class, 'index']);
 });
-Route::resource('sales', SaleController::class);
-Route::resource('customers', CustomerController::class);
-
-// User Routes
-Route::group(['middleware' => ['role:user']], function () {
-    Route::get('/user', [UserController::class, 'index'])->name('user');
-
-    // Payment Routes
-    Route::get('payments/topup', [PaymentController::class, 'topupIndex'])->name('payments.topup.index');
-    Route::get('payments/withdraw', [PaymentController::class, 'withdrawIndex'])->name('payments.withdraw.index');
-    Route::get('payments/topup/create', [PaymentController::class, 'createTopup'])->name('payments.topup.create');
-    Route::get('payments/withdraw/create', [PaymentController::class, 'createWithdraw'])->name('payments.withdraw.create');
-    Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
-
-    // // Comission routes
-    // Route::resource('commissions', CommissionController::class);
-    // // Brand routes
-    // Route::resource('brands', BrandController::class);
-    // // Category routes
-    // Route::resource('categories', CategoryController::class);
-    // // Media routes
-    // Route::resource('medias', MediaController::class);
-    // Route::resource('sales', SaleController::class);
-
-
-    Route::get('user/profile', [CustomerController::class, 'my_info'])->name('user/profile');
-
-    Route::get('personal/info', [CustomerController::class, 'personal_info'])->name('personal.info');
-    Route::get('profile/kyc', [CustomerController::class, 'profile_kyc'])->name('profile.kyc');
-    Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
-    Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
-});
-Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
-Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');

@@ -113,16 +113,24 @@
                       </button> --}}
 
                                 @if($product->category->name==='package')
-                                    <form action="{{ route('sales.store') }}" method="POST" class="">
+                                    {{-- <form action="{{ route('sales.store') }}" method="POST" class="">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <input type="hidden" name="product_price" value="{{ $product->discount_price }}">
                                         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                                        <input type="">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="feather-icon icon-shopping-bag me-2"></i>
                                             Sale Now
                                         </button>
-                                    </form>
+                                    </form> --}}
+
+                                    <a href="{{ route('sale.now', $product->id) }}" class="">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="feather-icon icon-shopping-bag me-2"></i>
+                                            Sale Now
+                                        </button>
+                                    </a>
 
                                 @else
                                     <a href="{{ route('perchase.now', $product->id) }}" class="">

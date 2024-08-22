@@ -36,36 +36,35 @@ class PurchaseController extends Controller
     {
         $product = Product::findOrFail($id);
         return view('purchases.purchase_now', compact('product'));
-
     }
 
-    public function store_purchase($id)
+    public function purchase_save(Request $request)
     {
-        $user = auth()->user();
-        $customer = Customer::where('user_id', $user->id)->firstOrFail();
-        $product = Product::findOrFail($id);
 
         $purchase = Purchase::create([
-            'user_id' => $customer->user_id, // The primary user for whom the commission is calculated
-            'product_id' => $product->id,
-            'commission' => $product->purchase_commission
+            'user_id' => $request->user_id, // The primary user for whom the commission is calculated
+            'product_id' => $request->product_id,
+            'commission' => $request->purchase_commission
         ]);
+
         $transaction = Transaction::create([
-            'user_id' => $customer->user_id, // The primary user for whom the commission is calculated
-            'sale_id' => $purchase->id,
-            'amount' => $product->purchase_commission,
+            'user_id' => $request->user_id, // The primary user for whom the commission is calculated
+            'purchase_id' => $purchase->id,
+            'amount' => $request->purchase_commission,
             'transaction_type' => 'purchase_commission'
         ]);
+        $customer = Customer::where('user_id', $request->user_id)->first();
 
-        // $wallet = $customer->wallet_balance;
-        // $current_user = Customer::findOrFail($customer->user_id);
-        // $commission = $product->purchase_commission;
-        // $current_user->wallet_balance -= $commission;
-        // $current_user->save();
+        if ($request->payment_method == "Cash") {
+            $purchase_commission = $request->purchase_commission;
+            // $customer->Total_purchase_commission += $request->purchase_commission; Nedd to make Total_purchase_commission feld in customer
+            $customer->wallet_balance += $request->purchase_commission;
+            $customer->save();
+        return redirect()->route('purchase.commission')->with('success', 'Purchase commission added successfully');
 
-        $purchase_commission = $product->purchase_commission;
-        $$customer->Total_sale_commission += $commission;
-        $$customer->wallet_balance += $commission;
-        $current_user->save();
+        }else{
+            return redirect()->route('purchase.commission')->with('error', 'Purchase commission not added successfully');
+        }
+
     }
 }

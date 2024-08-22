@@ -18,6 +18,7 @@ class TransactionSeeder extends Seeder
             Transaction::create([
                 'user_id' => $user->id,
                 'sale_id' => $sale->id,
+                'purchase_id' => null,
                 'amount' => 100.00,
                 'transaction_type' => 'sale',
             ]);

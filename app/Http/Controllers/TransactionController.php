@@ -12,21 +12,21 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         if ($user->hasRole('super-admin')) {
-            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'commission')->get();
+            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'sale_commission')->get();
         }else{
-            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'commission')->where('user_id', $user->id)->get();
+            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'sale_commission')->where('user_id', $user->id)->get();
         }
         return view('commissions.index', compact('commissions'));
     }
 
-    public function refer_commissions()
-    {
-        $user = auth()->user();
-        $refer_code = $user->customer->refer_code;
-        $refers = Customer::where('refer_by', $refer_code)->get();
+    // public function refer_commissions()
+    // {
+    //     $user = auth()->user();
+    //     $refer_code = $user->customer->refer_code;
+    //     $refers = Customer::where('refer_by', $refer_code)->get();
 
-        return $refer_code;
-    }
+    //     return $refer_code;
+    // }
 
     public function show($id)
     {

@@ -154,12 +154,12 @@
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Income</span>
                 </a>
                 <ul id="Income" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Income">
-                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>Purchase Income</a></li>
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('purchase.commission') }}'>Purchase Income</a></li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Sales Income</a>
+                        <a class='sidebar-link' href='{{ route('sales.commission') }}'>Sales Income</a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Refer Income</a>
+                        <a class='sidebar-link' href='{{ route('refer.commission') }}'>Refer Income</a>
                     </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Insentive Income</a>
