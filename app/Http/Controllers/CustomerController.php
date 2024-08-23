@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -35,12 +38,85 @@ class CustomerController extends Controller
 
     public function profile_kyc()
     {
-        return view('customers.profile_kyc');
+        $user = auth()->user();
+        $customer = Customer::with('user')->where('user_id', $user->id)->first();
+        // return $customer;
+
+        return view('customers.profile_kyc', compact('user'));
+    }
+
+    public function kyc_update(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
+            'nominee_name' => 'nullable|string|max:255',
+            'religion' => 'nullable|string|max:255',
+            'blood_group' => 'nullable|string|max:10',
+            'national_id' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date',
+            'profession' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update user information
+        $user->name = $validated['name'];
+        $user->father_name = $validated['father_name'] ?? $user->father_name;
+        $user->mother_name = $validated['mother_name'] ?? $user->mother_name;
+        $user->nominee_name = $validated['nominee_name'] ?? $user->nominee_name;
+        $user->religion = $validated['religion'] ?? $user->religion;
+        $user->blood_group = $validated['blood_group'] ?? $user->blood_group;
+        $user->national_id = $validated['national_id'] ?? $user->national_id;
+        $user->date_of_birth = $validated['date_of_birth'] ?? $user->date_of_birth;
+        $user->profession = $validated['profession'] ?? $user->profession;
+        $user->address = $validated['address'] ?? $user->address;
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete the old profile picture if it exists
+            if ($user->profile_picture) {
+                Storage::delete($user->profile_picture);
+            }
+
+            // Store the new profile picture
+            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures');
+            $user->profile_picture = $profilePicturePath;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     public function password_change()
     {
-        return view('customers.password_change');
+        $user = auth()->user();
+        return view('customers.password_change', compact('user'));
+    }
+
+    public function password_update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+        return redirect()->back()->with('success', 'Password updated successfully.');
     }
 
     public function joining_invoice()

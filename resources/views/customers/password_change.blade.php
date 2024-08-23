@@ -17,6 +17,42 @@
                         <h6 class="card-subtitle text-muted">Change</h6>
                     </div>
                     <div class="card-body">
+                        <form method="POST" action="{{ route('password.update') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" class="form-control @error('current_password') is-invalid @enderror"
+                                       name="current_password" placeholder="Current Password" required>
+                                @error('current_password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">New Password</label>
+                                <input type="password" class="form-control @error('new_password') is-invalid @enderror"
+                                       name="new_password" placeholder="New Password" required>
+                                @error('new_password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control @error('new_password_confirmation') is-invalid @enderror"
+                                       name="new_password_confirmation" placeholder="Confirm New Password" required>
+                                @error('new_password_confirmation')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
 
 
                     </div>

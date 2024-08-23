@@ -77,7 +77,9 @@ Route::group(['middleware' => ['role:user']], function () {
 
     Route::get('personal/info', [CustomerController::class, 'personal_info'])->name('personal.info');
     Route::get('profile/kyc', [CustomerController::class, 'profile_kyc'])->name('profile.kyc');
+    Route::post('kyc.update', [CustomerController::class, 'kyc_update'])->name('kyc.update');
     Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
+    Route::post('password/update', [CustomerController::class, 'password_update'])->name('password.update');
     Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
 });
 
