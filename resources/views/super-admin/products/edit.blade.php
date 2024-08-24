@@ -65,12 +65,12 @@
                                                 value="{{ old('discount_price', $product->discount_price) }}"
                                                 placeholder="Discount Price" />
                                         </div>
-                                         {{-- perchase_commission --}}
+                                         {{-- purchase_commission --}}
 
                                         <div class="mb-3">
                                             <label class="form-label">Purchase Commission</label>
-                                            <input type="number" class="form-control" name="perchase_commission"
-                                                value="{{ old('perchase_commission', $product->perchase_commission) }}"
+                                            <input type="number" class="form-control" name="purchase_commission"
+                                                value="{{ old('purchase_commission', $product->purchase_commission) }}"
                                                 placeholder="Purchase Commission" required />
                                         </div>
                                         <div class="mb-3">
