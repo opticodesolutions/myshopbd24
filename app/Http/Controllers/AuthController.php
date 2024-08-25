@@ -64,7 +64,8 @@ class AuthController extends Controller
     }
     public function signUp()
     {
-        return view('auth.signUp');
+        // return view('auth.signUp');
+        return redirect('/login')->with('error', 'Currently not available');
     }
 
     public function signUpProcess(RegistrationRequest $request)

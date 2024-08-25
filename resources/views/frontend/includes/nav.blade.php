@@ -110,7 +110,7 @@
             <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default"
                 aria-labelledby="navbar-defaultLabel">
                 <div class="offcanvas-header pb-1">
-                    <a href="index.html"><img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}"
+                    <a href="{{ route('home') }}" class="navbar-brand"><img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}"
                             alt="eCommerce HTML Template" /></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
@@ -196,14 +196,16 @@
                                 <a class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="pages/signin.html">Sign in</a></li>
-                                    <li><a class="dropdown-item" href="pages/signup.html">Signup</a></li>
-                                    <li><a class="dropdown-item" href="pages/forgot-password.html">Forgot Password</a>
-                                    </li>
+                                    @php
+                                        $brands = App\Models\Brand::all();
+                                    @endphp
+                                    @foreach ($brands as $brand)
+                                    <li><a class="dropdown-item" href="#">{{$brand->name}}</a></li>
+                                    @endforeach
                                 </ul>
                             </li>
                             <li class="nav-item w-100 w-lg-auto">
-                                <a class="nav-link" href="dashboard/index.html">Login</a>
+                                <a class="nav-link" href="{{ route('login') }}">Login</a>
                             </li>
                         </ul>
                     </div>
