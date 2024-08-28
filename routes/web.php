@@ -28,6 +28,11 @@ Route::get('/link', function () {
     }
 });
 
+Route::get('/users/generations', [UserController::class, 'showGenerations'])->name('users.generations');
+Route::get('/users/generations-tree', [UserController::class, 'showGenerationsTree'])->name('users.generations.tree');
+
+
+
 Route::get('/joining', [FrontendController::class, 'join_invoice'])->name('join.invoice');
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');

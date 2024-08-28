@@ -21,6 +21,73 @@ class Customer extends Model
         'wallet_balance'
     ];
 
+    // public function getGenerations($generation = 1, $maxGenerations = 4)
+    // {
+    //     $result = [];
+
+    //     if ($generation <= $maxGenerations) {
+    //         $children = self::where('refer_by', $this->refer_code)->get();
+
+    //         foreach ($children as $child) {
+    //             $result[] = [
+    //                 'id' => $child->id,
+    //                 'refer_code' => $child->refer_code,
+    //                 'refer_by' => $child->refer_by,
+    //                 'generation' => $generation,
+    //             ];
+
+    //             // Recursive call to get the next generation
+    //             $result = array_merge($result, $child->getGenerations($generation + 1, $maxGenerations));
+    //         }
+    //     }
+
+    //     return $result;
+    // }
+
+    public function getGenerations($generation = 1, $maxGenerations = 4)
+    {
+        $result = [];
+
+        if ($generation <= $maxGenerations) {
+            $children = self::where('refer_by', $this->refer_code)->get();
+
+            foreach ($children as $child) {
+                $result[$generation][] = $child->id;
+
+                // Recursive call to get the next generation
+                $childGenerations = $child->getGenerations($generation + 1, $maxGenerations);
+                foreach ($childGenerations as $gen => $ids) {
+                    $result[$gen] = array_merge($result[$gen] ?? [], $ids);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getGenerationsTree($generation = 1, $maxGenerations = 4)
+    {
+        $result = [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'refer_code' => $this->refer_code,
+            'refer_by' => $this->refer_by,
+            'wallet_balance' => $this->wallet_balance,
+            'generation' => $generation,
+            'children' => [],
+        ];
+
+        if ($generation < $maxGenerations) {
+            $children = self::where('refer_by', $this->refer_code)->get();
+
+            foreach ($children as $child) {
+                $result['children'][] = $child->getGenerationsTree($generation + 1, $maxGenerations);
+            }
+        }
+
+        return $result;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
