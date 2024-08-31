@@ -97,7 +97,7 @@
                                         <tr style="text-align: center">
                                             <td>5</td>
                                             <td>Diamond Saller(DS)</td>
-                                            <td style="text-align: center;">5 Gold Seller</td>
+                                            <td style="text-align: center;">3 Gold Seller</td>
 
                                             <td style="text-align: center;"> Car  / TK.10,00,000</td>
                                             <td>
@@ -114,7 +114,7 @@
                                         <tr style="text-align: center">
                                             <td>6</td>
                                             <td>Messaging Pertnerer(MP)</td>
-                                            <td style="text-align: center;">5 Diamond Seller</td>
+                                            <td style="text-align: center;">2 Diamond Seller</td>
 
                                             <td style="text-align: center;"> 2% Commission with Tk.60000/100000 Per Month </td>
                                             <td>
