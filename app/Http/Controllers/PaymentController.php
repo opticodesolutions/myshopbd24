@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Customer;
 use App\Models\Transaction;
+use App\Models\CoinTransfer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -123,5 +124,72 @@ class PaymentController extends Controller
     {
         $withdrawals = Payment::where('type', 'withdraw')->get();
         return view('super-admin.Payments.withdraw.index', compact('withdrawals'));
+    }
+
+    public function coinTransfer()
+    {
+        $users = User::where('id', '!=', Auth::id())->get();
+        $filteredUsers = $users->filter(function($user) {
+            return $user->hasRole('user');
+        });
+        // return $filteredUsers;
+        return view('user.Payments.CoinTransfer.create', compact('filteredUsers'));
+    }
+
+    public function coinTransferStore(Request $request)
+    {
+            $request->validate([
+                'receiver_user_id' => 'required|exists:users,id',
+                'amount' => 'required|numeric|min:1',
+            ]);
+
+            $minimumAmount = 500;
+
+            $sender_user_id = Auth::id();
+            $sender_user_info = Customer::where('user_id', $sender_user_id)->firstOrFail();
+
+            if ($request->amount < $minimumAmount) {
+                return redirect()->back()->with('error', 'Minimum transfer amount is 500.');
+            }
+
+            if ($sender_user_info->wallet_balance < $request->amount) {
+                return redirect()->back()->with('error', $sender_user_info->wallet_balance);
+            }
+
+            $sender_user_info->wallet_balance -= $request->amount;
+            $sender_user_info->save();
+
+            $receiver_user_info = Customer::where('user_id', $request->receiver_user_id)->firstOrFail();
+            $receiver_user_info->wallet_balance += $request->amount;
+            $receiver_user_info->save();
+
+            $trx_id = uniqid('trx_');
+
+            CoinTransfer::create([
+                'sender_user_id' => $sender_user_id,
+                'receiver_user_id' => $request->receiver_user_id,
+                'amount' => $request->amount,
+                'trx_id' => $trx_id,
+                'status' => 'completed',
+            ]);
+
+            return redirect('coin/transfer/history')->with('success', 'Coin Transfer completed successfully.');
+    }
+
+    public function coinTransferHistory()
+    {
+        $coinTransfers = CoinTransfer::with('sender', 'receiver')->get();
+        return view('user.Payments.CoinTransfer.index', compact('coinTransfers'));
+    }
+    public function coinTransferReceiverHistory()
+    {
+        $coinTransfers = CoinTransfer::where('receiver_user_id', Auth::id())->with('sender', 'receiver')->get();
+        return view('user.Payments.CoinTransfer.index', compact('coinTransfers'));
+    }
+
+    public function coinTransferSenderHistory()
+    {
+        $coinTransfers = CoinTransfer::where('sender_user_id', Auth::id())->with('sender', 'receiver')->get();
+        return view('user.Payments.CoinTransfer.index', compact('coinTransfers'));
     }
 }

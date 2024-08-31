@@ -139,6 +139,14 @@ class CustomerController extends Controller
         return view('customers.my-info', compact('data'));
     }
 
+    public function refer_info(){
+
+        $user = auth()->user();
+        $data = Customer::where('user_id', $user->id)->with(['user','children'])->get();
+        // return $data;
+        return view('customers.refer-info', compact('data'));
+    }
+
     public function store(Request $request)
     {
         $customer = Customer::create($request->all());

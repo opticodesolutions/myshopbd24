@@ -76,7 +76,8 @@ class SaleController extends Controller
 
             $purchase_user->customer()->create([
                 'refer_code' => "REF" . rand(1000, 9999),
-                'refer_by' => $request->refer_code ?? null
+                'refer_by' => $request->refer_code ?? null,
+                'wallet_balance' => -500
             ]);
 
             // Create Purchase

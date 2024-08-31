@@ -79,6 +79,7 @@
                     </ul>
                 </li>
 
+
                 <li class="sidebar-item">
                     <a data-bs-target="#sales" data-bs-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Sales</span>
@@ -104,6 +105,8 @@
                         <li class="sidebar-item">
                             <a class='sidebar-link' href='{{ route('admin.payments.withdraw.index') }}'>Withdraw Request</a>
                         </li>
+                        <li class="sidebar-item"><a class='sidebar-link' href='{{ route('coin.transfer.history') }}'>Coin Transfer History</a></li>
+
                     </ul>
                 </li>
 
@@ -162,10 +165,10 @@
                         <a class='sidebar-link' href='{{ route('refer.commission') }}'>Refer Income</a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Insentive Income</a>
+                        <a class='sidebar-link' href='{{ route('insensitive.income') }}'>Insentive Income</a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Total Income</a>
+                        <a class='sidebar-link' href='{{ route('total.commission') }}'>Total Income</a>
                     </li>
                 </ul>
             </li>
@@ -178,10 +181,10 @@
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations.tree') }}'>Team Tree List</a></li>
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations') }}'>Genaration List</a></li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Rafael Information</a>
+                        <a class='sidebar-link' href='{{ route('refer.info') }}'>Rafael Information</a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Insentive Information</a>
+                        <a class='sidebar-link' href='{{ route('insensitive.info') }}'>Insentive Information</a>
                     </li>
                 </ul>
             </li>
@@ -191,26 +194,20 @@
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Payment Information</span>
                 </a>
                 <ul id="Payment" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Payment">
-                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>Can Transfer</a></li>
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('coin.transfer') }}'>Coin Transfer</a></li>
+
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('coin.transfer.sender.history') }}'>Coin Send History</a></li>
+
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('coin.transfer.receiver.history') }}'>Coin Receive History</a></li>
+
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>withdorw</a>
+                        <a class='sidebar-link' href='{{ route('payments.withdraw.create') }}'>Withdraw Now</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.withdraw.index') }}'>Withdraw history</a>
                     </li>
                 </ul>
             </li>
-
-            <li class="sidebar-item">
-                <a class='sidebar-link' href='#'>Support</a>
-            </li>
-
-            <li class="sidebar-item">
-                <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Balance List</a>
-            </li>
-
-            <li class="sidebar-item">
-                <a class='sidebar-link' href='{{ route('logout') }}'>Log out</a>
-            </li>
-
-
             <li class="sidebar-item">
                 <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">TopUp</span>
@@ -224,6 +221,22 @@
             </li>
 
             <li class="sidebar-item">
+                <a class='sidebar-link' href='https://wa.me/+8801757760650'>Support</a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Branch List</a>
+            </li>
+
+
+            <li class="sidebar-item">
+                <a class='sidebar-link' href='{{ route('logout') }}'>Log out</a>
+            </li>
+
+
+
+
+            {{-- <li class="sidebar-item">
                 <a data-bs-target="#Withdraw" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Withdraw</span>
                 </a>
@@ -235,9 +248,9 @@
                         <a class='sidebar-link' href='{{ route('payments.withdraw.index') }}'>Withdraw history</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a data-bs-target="#category" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Purchase</span>
                 </a>
@@ -249,23 +262,23 @@
                         <a class="sidebar-link" href="{{ route('purchase.commission') }}">Purchase Commission's</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a data-bs-target="#Brand" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Refer</span>
                 </a>
                 <ul id="Brand" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                     <li class="sidebar-item"><a class='sidebar-link' href=''>My Refer User's</a></li>
-                    {{-- <li class="sidebar-item">
+                    <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('brands.index') }}'>List Brands</a>
-                    </li> --}}
+                    </li>
                 </ul>
-            </li>
+            </li> --}}
 
 
 
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a data-bs-target="#Transfer" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Transfer</span>
                 </a>
@@ -277,7 +290,7 @@
                         <a class="sidebar-link" href="">Transfer History</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
         @endif
 
         </ul>

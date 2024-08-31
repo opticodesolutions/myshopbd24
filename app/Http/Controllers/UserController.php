@@ -44,6 +44,21 @@ class UserController extends Controller
         // Total Sales Commission Sum
         $Total_sells_commission = Sale::where('user_id', $user->id)->sum('commission');
 
+        $user = auth()->user();
+        $data = Customer::where('user_id', $user->id)->with(['user','parent'])->get();
+
+        $latest_users = Customer::whereHas('user', function($query) {
+            $query->role('user');
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        $top_earner = Customer::whereHas('user', function($query) {
+            $query->role('user');
+        })
+        ->orderBy('wallet_balance', 'desc')
+        ->get();
+
         return view('user.home.index', compact(
             'Total_reffers',
             'Total_transactions_amount',
@@ -54,7 +69,10 @@ class UserController extends Controller
             'Total_sells_commission',
             'Balance_customer',
             'Total_withdrawn_amount',
-            'Total_topup_amount'
+            'Total_topup_amount',
+            'data',
+            'latest_users',
+            'top_earner'
         ));
     }
     public function all_users()

@@ -43,4 +43,20 @@ class FrontendController extends Controller
             return redirect('/login');
         }
     }
+
+    public function insensitive_income(){
+        if (auth()->check()) {
+            return view('commissions.insensitive_income');
+        }else{
+            return redirect('/login');
+        }
+    }
+
+    public function insensitive_info(){
+        if (auth()->check()) {
+            return view('commissions.insensitive_income');
+        }else{
+            return redirect('/login');
+        }
+    }
 }

@@ -2,7 +2,8 @@
     <div class="bg-light py-1">
         <div class="container">
             <div class="row">
-                <div class="col-12 text-center"><span>Super Value Deals - Save more with coupons</span></div>
+                <div class="col-12 text-center"><span>My Shop (আমার দোকান ) ডাইরেক্ট সেলিং ই-কমার্স বিজনেস সিস্টেম হট লাইন +8809649370000
+                </span></div>
 
             </div>
         </div>
@@ -12,12 +13,12 @@
             <div class="row w-100 align-items-center gx-lg-2 gx-0">
                 <div class="col-xxl-2 col-lg-3 col-md-6 col-5">
                     <a class="navbar-brand d-none d-lg-block" href="{{ route('home') }}">
-                        <img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}"
+                        <img style=" height: 69px; position: absolute; margin-top: -40px; " src="{{ asset('logo.jpeg') }}"
                             alt="eCommerce HTML Template" />
                     </a>
                     <div class="d-flex justify-content-between w-100 d-lg-none">
                         <a class="navbar-brand" href="{{ route('home') }}">
-                            <img src="{{ asset('frontend/assets/images/logo/freshcart-logo.svg') }}"
+                            <img style=" height: 69px; position: absolute; margin-top: -40px; " src="{{ asset('logo.jpeg') }}"
                                 alt="eCommerce HTML Template" />
                         </a>
                     </div>

@@ -19,6 +19,18 @@ class TransactionController extends Controller
         return view('commissions.index', compact('commissions'));
     }
 
+    public function total_commission(){
+        $user = auth()->user();
+        if ($user->hasRole('user')) {
+            $commissions = Transaction::with(['user', 'sale.product'])->where('user_id', $user->id)->whereIn('transaction_type', ['sale_commission', 'refer_commission', 'purchase_commission'])->get();
+            // return $commissions;
+            return view('commissions.total_commission', compact('commissions'));
+        }else{
+           return redirect()->back()->with('error', 'Unauthorized');
+        }
+
+    }
+
     // public function refer_commissions()
     // {
     //     $user = auth()->user();

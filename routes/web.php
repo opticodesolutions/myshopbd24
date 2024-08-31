@@ -34,6 +34,8 @@ Route::get('/users/generations-tree', [UserController::class, 'showGenerationsTr
 
 
 Route::get('/joining', [FrontendController::class, 'join_invoice'])->name('join.invoice');
+Route::get('insensitive/income', [FrontendController::class, 'insensitive_income'])->name('insensitive.income');
+Route::get('insensitive/info', [FrontendController::class, 'insensitive_info'])->name('insensitive.info');
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 
@@ -65,6 +67,7 @@ Route::resource('customers', CustomerController::class);
 
 Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
 Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
+Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 
 
 
@@ -78,6 +81,14 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('payments/topup/create', [PaymentController::class, 'createTopup'])->name('payments.topup.create');
     Route::get('payments/withdraw/create', [PaymentController::class, 'createWithdraw'])->name('payments.withdraw.create');
     Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
+
+    Route::get('coin/transfer', [PaymentController::class, 'coinTransfer'])->name('coin.transfer');
+    Route::post('coin/transfer', [PaymentController::class, 'coinTransferStore'])->name('coin.transfer.store');
+    Route::get('coin/transfer/receiver-history', [PaymentController::class, 'coinTransferReceiverHistory'])->name('coin.transfer.receiver.history');
+    Route::get('coin/transfer/sender-history', [PaymentController::class, 'coinTransferSenderHistory'])->name('coin.transfer.sender.history');
+    // Route::get('coin/transfer/rec')
+
+
     Route::get('user/profile', [CustomerController::class, 'my_info'])->name('user/profile');
 
     Route::get('personal/info', [CustomerController::class, 'personal_info'])->name('personal.info');
@@ -86,6 +97,8 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('password/change', [CustomerController::class, 'password_change'])->name('password.change');
     Route::post('password/update', [CustomerController::class, 'password_update'])->name('password.update');
     Route::get('joining/invoice', [CustomerController::class, 'joining_invoice'])->name('joining.invoice');
+
+    Route::get('refer/info', [CustomerController::class, 'refer_info'])->name('refer.info');
 });
 
 
@@ -117,6 +130,7 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('admin/payments/topup', [PaymentController::class, 'topupList'])->name('admin.payments.topup.index');
     Route::get('admin/payments/withdraw', [PaymentController::class, 'withdrawList'])->name('admin.payments.withdraw.index');
     Route::post('payments/update-status/{id}', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
+    Route::get('coin/transfer/history', [PaymentController::class, 'coinTransferHistory'])->name('coin.transfer.history');
 
     // Customer routes
     Route::resource('customers', CustomerController::class);
