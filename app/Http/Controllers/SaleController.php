@@ -58,37 +58,55 @@ class SaleController extends Controller
         return Sale::findOrFail($id);
     }
 
+
     public function store(Request $request)
     {
         // $request->validate([
         //     'product_id' => 'required|exists:products,id',
-        //     'user_id' => 'required|exists:users,id',
-        //     'product_price' => 'required|numeric',
-        //     'purchase_commission' => 'required|numeric', // Added validation
-        //     'name' => 'sometimes|required|string',
-        //     'email' => 'sometimes|required|email',
-        //     'password' => 'sometimes|required|confirmed',
-        //     'refer_code' => 'sometimes|string'
+        //     'quantity' => 'required|integer|min:1',
+        //     'name' => 'required|string',
+        //     'email' => 'required|email|unique:users,email',
+        //     'password' => 'required|string|confirmed',
+        //     'refer_code' => 'sometimes|string',
+        //     'position' => 'required|in:left,right',
         // ]);
 
-        $product = Product::with('commissions')->findOrFail($request->product_id);
-        $user = User::findOrFail($request->user_id);
-        $customer = Customer::where('user_id', $user->id)->firstOrFail(); // seller
-
-
+        // Check product availability
         $product = Product::findOrFail($request->product_id);
-
         if ($product->stock < $request->quantity) {
             return back()->with('error', 'Insufficient stock.');
         }
 
+        // Create User
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
+        // Create Customer
+        $referByCustomer = Customer::where('refer_code', $request->refer_code)->first();
+        $customer = Customer::create([
+            'user_id' => $user->id,
+            'Total_Sales' => 0,
+            'refer_code' => strtoupper(substr(md5(time() . $user->id), 0, 10)), // Generate unique referral code
+            'refer_by' => $referByCustomer ? $referByCustomer->refer_code : null,
+            'position_parent' => $referByCustomer ? $referByCustomer->id : null,
+            'position' => $request->position,
+            'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
+            'Total_sale_commission' => 0,
+            'matching_commission' => 0,
+            'wallet_balance' => 0,
+            'subscription_start_date' => now(),
+            'subscription_end_date' => now()->addMonth(),
+        ]);
 
+        // Process Sale
         $totalAmount = $product->price * $request->quantity;
         $sale = Sale::create([
             'product_id' => $product->id,
-            'user_id' => auth()->id(),
-            'customer_id' => $request->customer_id,
+            'user_id' => $user->id,
+            'customer_id' => $customer->id,
             'price' => $product->price,
             'quantity' => $request->quantity,
             'total_amount' => $totalAmount,
@@ -97,8 +115,9 @@ class SaleController extends Controller
         // Adjust stock
         $product->decrement('stock', $request->quantity);
 
-        return redirect()->route('products.index')->with('success', 'Product purchased successfully.');
+        return redirect()->route('products.index')->with('success', 'Product purchased and user created successfully.');
     }
+
 
     public function updateStatus(Request $request, Sale $sale)
     {
