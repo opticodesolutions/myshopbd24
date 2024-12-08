@@ -33,7 +33,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Commission Amount</label>
-                                <input type="text" class="form-control" name="amount" value="{{ old('amount') }}" placeholder="Commission Amount" required>
+                                <input type="number" class="form-control" name="amount" value="{{ old('amount') }}" placeholder="20% = 0.2,35% = 0.35" required>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Create</button>

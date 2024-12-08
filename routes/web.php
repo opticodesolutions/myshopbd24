@@ -28,6 +28,17 @@ Route::get('/link', function () {
     }
 });
 
+Route::get('/joining_job', [FrontendController::class, 'joining_job'])->name('join.job');
+Route::post('/job_post_save', [FrontendController::class, 'job_post_save'])->name('join.job_post_save');
+
+
+
+
+
+
+Route::get('/branch_list', [UserController::class, 'branch_list'])->name('users.branch_list');
+
+
 Route::get('/users/generations', [UserController::class, 'showGenerations'])->name('users.generations');
 Route::get('/users/generations-tree', [UserController::class, 'showGenerationsTree'])->name('users.generations.tree');
 
@@ -104,6 +115,9 @@ Route::group(['middleware' => ['role:user']], function () {
 
 // Super Admin Routes
 Route::group(['middleware' => ['role:super-admin']], function () {
+    Route::get('/job_list', [FrontendController::class, 'job_list'])->name('join.job_list');
+Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.jobs.show');
+
     Route::get('/super-admin', [SuperAdminController::class, 'index'])->name('super-admin');
 
     // User routes

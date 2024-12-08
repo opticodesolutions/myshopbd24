@@ -18,7 +18,7 @@
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ url($role) }}">
             <span class="sidebar-brand-text align-middle">
-                MyShopBd24
+                Futuregroup
                 <sup>
                     {{ $user->name }}
                 </sup>
@@ -35,6 +35,12 @@
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route($role)}}">
                     <i class="align-middle" data-feather="sliders"></i>  <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/">
+                    <i class="align-middle" data-feather="sliders"></i>  <span class="align-middle">Home</span>
                 </a>
             </li>
             @if($role == 'super-admin')
@@ -63,6 +69,18 @@
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('categories.index') }}">List Categories</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a data-bs-target="#Commissions" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Commissions</span>
+                    </a>
+                    <ul id="Commissions" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
+                        <li class="sidebar-item"><a class='sidebar-link' href='{{ route('commissions.create') }}'>Create Commissions</a></li>
+                        <li class="sidebar-item">
+                            <a class='sidebar-link' href='{{ route('commissions.index') }}'>List Commissions</a>
                         </li>
                     </ul>
                 </li>
@@ -109,6 +127,24 @@
 
                     </ul>
                 </li>
+
+<li class="sidebar-item">
+    <a data-bs-target="#jobs" data-bs-toggle="collapse" class="sidebar-link collapsed">
+        <i class="align-middle" data-feather="sliders"></i>
+        <span class="align-middle">Jobs</span>
+    </a>
+    <ul id="jobs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+        <!-- Create Job Link -->
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('join.job') }}">Create Job</a>
+        </li>
+
+        <!-- View Jobs List Link -->
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('join.job_list') }}">View Jobs</a>
+        </li>
+    </ul>
+</li>
 
                 <li class="sidebar-item">
                     <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed">
@@ -225,7 +261,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a class='sidebar-link' href='{{ route('payments.topup.index') }}'>Branch List</a>
+                <a class='sidebar-link' href='{{ route('users.branch_list') }}'>Branch List</a>
             </li>
 
 

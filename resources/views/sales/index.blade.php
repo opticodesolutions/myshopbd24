@@ -13,7 +13,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Brand</h5>
+                        <h5 class="card-title"></h5>
                         <h6 class="card-subtitle text-muted">List</h6>
                     </div>
                     <div class="card-body">
@@ -36,7 +36,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($sales as $sale)
+                                @php
+                                    // Conditionally set the data based on the user's role
+                                    $data = auth()->user()->hasRole('super-admin') ? $combinedData : $sales;
+                                @endphp
+                                
+                                @foreach($data as $sale)
                                 <tr>
                                     <td>{{ $sale->product->product_code }}</td>
                                     <td>{{ $sale->product->name }}</td>

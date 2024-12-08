@@ -18,7 +18,17 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="{{ asset('backend/img/avatars/avatar.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" height="110">
+                                                        @php
+                            $user = Auth::user();
+                            @endphp
+                            @if($user->profile_picture)
+                            <img src="{{ Storage::url($user->profile_picture) }}"
+                                class="img-fluid rounded-circle border border-light" alt="User Avatar"
+                                style="width: 150px; height: 150px;">
+                            @else
+                                                        <img src="{{ asset('backend/img/avatars/avatar.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" height="110">
+
+                            @endif
                             <div class="mt-3">
                                 <h4>{{$data->user->name}}</h4>
                                 <p class="text-secondary mb-1"><span style="padding-bottom: 5px;" class="pl-4 pr-4 badge bg-secondary badge-pill">Customer ID</span></p>
@@ -51,72 +61,69 @@
                                 </tr>
                                 <tr>
                                     <th>Father</th>
-                                    <td></td>
+                                    <td>{{ $data->user->father_name }}</td>
                                 </tr>
                                 <tr>
                                     <th>Mother</th>
-                                    <td></td>
+                                    <td>{{ $data->user->mother_name }}</td>
                                 </tr>
                                 <tr>
                                     <th>Mobile </th>
-                                    <td>01402505300</td>
+                                    <td>{{ $data->user->phone_number }}</td>
                                 </tr>
                                 <tr>
                                     <th>Date of Birth </th>
-                                    <td></td>
+                                    <td>{{ $data->user->date_of_birth }}</td>
                                 </tr>
                                 <tr>
                                     <th>Gender </th>
-                                    <td> </td>
+                                    <td>Male</td>
                                 </tr>
                                 <tr>
                                     <th>National ID</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>E-mail</th>
-                                    <td>projuktieletroniec@gmail.com</td>
+                                    <td>{{ $data->user->national_id }}</td>
                                 </tr>
                                 <tr>
                                     <th>Religion</th>
-                                    <td></td>
+                                    <td>{{ $data->user->religion }}</td>
                                 </tr>
                                 <tr>
                                     <th>Blood Group</th>
-                                    <td></td>
+                                    <td>{{ $data->user->blood_group }}</td>
                                 </tr>
                                 <tr>
                                     <th>Address</th>
-                                    <td style="padding: 0;">
-                                        <table class="table table-bordered m-0">
-                                            <tbody><tr>
-                                                <th>Division</th>
-                                                <td>Mymensingh</td>
-                                            </tr>
-                                            <tr>
-                                                <th>District</th>
-                                                <td>Sherpur</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Thana</th>
-                                                <td>Sherpur Sadar</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Union</th>
-                                                <td>Char Sherpur</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Word</th>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2" class="text-center bg-light">Address ↓</th>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                        </tbody></table>
-                                    </td>
+                                    <td>{{ $data->user->address }}</td>
+                                    <!--<td style="padding: 0;">-->
+                                    <!--    <table class="table table-bordered m-0">-->
+                                    <!--        <tbody><tr>-->
+                                    <!--            <th>Division</th>-->
+                                    <!--            <td>Mymensingh</td>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <th>District</th>-->
+                                    <!--            <td>Sherpur</td>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <th>Thana</th>-->
+                                    <!--            <td>Sherpur Sadar</td>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <th>Union</th>-->
+                                    <!--            <td>Char Sherpur</td>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <th>Word</th>-->
+                                    <!--            <td></td>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <th colspan="2" class="text-center bg-light">Address ↓</th>-->
+                                    <!--        </tr>-->
+                                    <!--        <tr>-->
+                                    <!--            <td colspan="2"></td>-->
+                                    <!--        </tr>-->
+                                    <!--    </tbody></table>-->
+                                    <!--</td>-->
                                 </tr>
                                 <tr>
                                     <th>Refer to you</th>
@@ -158,18 +165,18 @@
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <th>A HP </th>
-                                    <td>300</td>
-                                </tr>
-                                <tr>
-                                    <th>B HP </th>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <th>My HP </th>
-                                    <td>50</td>
-                                </tr>
+                                <!--<tr>-->
+                                <!--    <th>A HP </th>-->
+                                <!--    <td>300</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--    <th>B HP </th>-->
+                                <!--    <td>0</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--    <th>My HP </th>-->
+                                <!--    <td>50</td>-->
+                                <!--</tr>-->
 
                             </tbody></table>
                         </div>

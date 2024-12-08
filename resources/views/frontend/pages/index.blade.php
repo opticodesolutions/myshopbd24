@@ -64,7 +64,7 @@
          <section>
             <div class="container">
                <div class="row">
-                  <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                  <div class="col-12 col-md-4 mb-3 mb-lg-0">
                      <div>
                         <div class="py-10 px-8 rounded" style="background: url({{ asset('frontend/assets/images/banner/grocery-banner.png')}}) no-repeat; background-size: cover; background-position: center">
                            <div>
@@ -79,7 +79,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-12 col-md-6">
+                  <div class="col-12 col-md-4">
                      <div>
                         <div class="py-10 px-8 rounded" style="background: url({{ asset('frontend/assets/images/banner/grocery-banner-2.jpg')}}) no-repeat; background-size: cover; background-position: center">
                            <div>
@@ -94,6 +94,10 @@
                         </div>
                      </div>
                   </div>
+
+                <div class="col-md-4" style=" text-align: center; ">
+                     <iframe src=""></iframe>
+                </div>
                </div>
             </div>
          </section>
@@ -172,7 +176,7 @@
                                                 <div>
                                                     @if($product->discount_price)
                                                         <span class="text-dark">${{ number_format($product->discount_price, 2) }}</span>
-                                                        <span class="text-decoration-line-through text-muted">${{ number_format($product->price, 2) }}</span>
+                                                        {{-- <span class="text-decoration-line-through text-muted">${{ number_format($product->price, 2) }}</span> --}}
                                                     @else
                                                         <span class="text-dark">${{ number_format($product->price, 2) }}</span>
                                                     @endif
@@ -266,10 +270,10 @@
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <div>
                                             @if($product->discount_price)
-                                                <span class="text-dark">${{ number_format($product->discount_price, 2) }}</span>
-                                                <span class="text-decoration-line-through text-muted">${{ number_format($product->price, 2) }}</span>
+                                                <span class="text-dark">৳{{ number_format($product->discount_price, 2) }}</span>
+                                                {{-- <span class="text-decoration-line-through text-muted">${{ number_format($product->price, 2) }}</span> --}}
                                             @else
-                                                <span class="text-dark">${{ number_format($product->price, 2) }}</span>
+                                                {{-- <span class="text-dark">${{ number_format($product->price, 2) }}</span> --}}
                                             @endif
                                         </div>
                                         <div>

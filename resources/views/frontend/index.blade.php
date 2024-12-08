@@ -86,8 +86,8 @@
                                             <a href="#" class="ms-2">(30 reviews)</a>
                                         </div>
                                         <div class="fs-4">
-                                            <span class="fw-bold text-dark">$32</span>
-                                            <span class="text-decoration-line-through text-muted">$35</span>
+                                            <span class="fw-bold text-dark">৳32</span>
+                                            <span class="text-decoration-line-through text-muted">৳35</span>
                                             <span><small class="fs-6 ms-2 text-danger">26% Off</small></span>
                                         </div>
                                         <hr class="my-6" />

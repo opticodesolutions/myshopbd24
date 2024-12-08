@@ -55,8 +55,8 @@ $referCode = $customer ? $customer->refer_code : '';
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Discount Price</label>
-                                <input type="number" class="form-control @error('discount_price') is-invalid @enderror"
+                                <!--<label class="form-label">Discount Price</label>-->
+                                <input type="hidden" class="form-control @error('discount_price') is-invalid @enderror"
                                     name="discount_price" placeholder="Discount Price"
                                     value="{{ old('discount_price', $product->discount_price) }}" readonly>
                                 @error('discount_price')
@@ -67,7 +67,7 @@ $referCode = $customer ? $customer->refer_code : '';
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Purchase Commission</label>
+                                <label class="form-label">Purchase Coin</label>
                                 <input type="number"
                                     class="form-control @error('purchase_commission') is-invalid @enderror"
                                     name="purchase_commission" placeholder="Purchase Commission"

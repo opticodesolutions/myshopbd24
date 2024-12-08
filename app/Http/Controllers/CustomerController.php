@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Storage;
 class CustomerController extends Controller
 {
     public function index()
@@ -61,6 +61,7 @@ class CustomerController extends Controller
             'date_of_birth' => 'nullable|date',
             'profession' => 'nullable|string|max:255',
             'address' => 'nullable|string',
+            'phone_number' => 'nullable|string|max:255',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -75,6 +76,8 @@ class CustomerController extends Controller
         $user->date_of_birth = $validated['date_of_birth'] ?? $user->date_of_birth;
         $user->profession = $validated['profession'] ?? $user->profession;
         $user->address = $validated['address'] ?? $user->address;
+        $user->phone_number = $validated['phone_number'] ?? $user->phone_number;
+
 
         // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {

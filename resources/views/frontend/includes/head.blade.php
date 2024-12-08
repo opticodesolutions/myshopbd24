@@ -1,8 +1,8 @@
       <!-- Required meta tags -->
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-      <meta content="Codescandy" name="author" />
-      <title>Myshopbd24.com</title>
+      <meta content="Rsm Monaem" name="keywords" /><meta content="Rsm Monaem" name="author" />
+      <title>Futuregroup.My</title>
 
       <link href="{{ asset('frontend/assets/libs/slick-carousel/slick/slick.css') }}" rel="stylesheet" />
       <link href="{{ asset('frontend/assets/libs/slick-carousel/slick/slick-theme.css') }}" rel="stylesheet" />

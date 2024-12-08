@@ -123,6 +123,16 @@
                                 </div>
                                 @enderror
                             </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
+                                @error('phone_number')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Address</label>

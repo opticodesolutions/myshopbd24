@@ -33,6 +33,11 @@ class Purchase extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    
+        public function commission()
+    {
+        return $this->hasOne(Commission::class, 'product_id', 'product_id');
+    }
 
     public function transactions()
     {

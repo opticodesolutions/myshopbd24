@@ -6,7 +6,7 @@
     <div class="container-fluid p-0">
 
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Create commissions </h1>
+            <h1 class="h3 d-inline align-middle">List commissions </h1>
             {{-- <a class="badge bg-primary ms-2" href="https://adminkit.io/pricing/"
                 target="_blank">Pro Component <i class="fas fa-fw fa-external-link-alt"></i></a> --}}
         </div>
@@ -32,7 +32,7 @@
                                 @foreach($commissions as $commission)
                                 <tr>
                                     <td>{{ $commission->product->name ?? 'Unknown' }}</td>
-                                    <td>{{ $commission->amount ?? '0.00' }}</td>
+                                    <td>{{ $commission->amount*100 ?? '0.00' }}%</td>
                                     <td>{{ $commission->created_at->format('Y-m-d H:i') }}</td>
                                     <td>
                                         <a href="{{ route('commissions.edit', $commission->id) }}" class="btn btn-warning btn-sm">Edit</a>

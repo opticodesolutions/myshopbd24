@@ -10,14 +10,16 @@ class Commission extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'product_id',
-        'amount',
-    ];
+    protected $fillable = ['customer_id', 'sale_id', 'direct_bonus', 'downline_bonus', 'matching_bonus'];
 
-    public function product()
+    public function customer()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
     }
 }
 

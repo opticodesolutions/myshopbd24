@@ -18,6 +18,7 @@ class AddAdditionalFieldsToUsersTable extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('profession')->nullable();
             $table->text('address')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('profile_picture')->nullable(); // Assuming you want to store the path to the profile picture
         });
     }
@@ -35,6 +36,7 @@ class AddAdditionalFieldsToUsersTable extends Migration
                 'date_of_birth',
                 'profession',
                 'address',
+                'phone_number',
                 'profile_picture',
             ]);
         });

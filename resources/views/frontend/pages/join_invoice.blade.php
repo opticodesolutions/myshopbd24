@@ -16,7 +16,7 @@
             <a href="index.php"><img src=""></a>
         </div>
         <div id="company">
-            <h2 class="name">MyShopBD24.Com</h2>
+            <h2 class="name">Futuregroup.My.Com</h2>
             <div>Sherpur, Mymensingh.</div>
             <div></div>
             <div><a href="mailto: info@happyproductsltd.com">info@mybdshop24.com</a></div>

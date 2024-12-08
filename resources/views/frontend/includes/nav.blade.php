@@ -2,7 +2,7 @@
     <div class="bg-light py-1">
         <div class="container">
             <div class="row">
-                <div class="col-12 text-center"><span>My Shop (আমার দোকান ) ডাইরেক্ট সেলিং ই-কমার্স বিজনেস সিস্টেম হট লাইন +8809649370000
+                <div class="col-12 text-center"><span>Future Group এর হট লাইন +8809XXXXXXXX
                 </span></div>
 
             </div>
@@ -188,11 +188,11 @@
                     <div>
                         <ul class="navbar-nav align-items-center">
                             <li class="nav-item w-100 w-lg-auto">
-                                <a class="nav-link " href="#">Home</a>
+                                <a class="nav-link " href="/">Home</a>
                             </li>
-                            <li class="nav-item w-100 w-lg-auto">
-                                <a class="nav-link" href="#">Shop</a>
-                            </li>
+                            <!--<li class="nav-item w-100 w-lg-auto">-->
+                            <!--    <a class="nav-link" href="#">Shop</a>-->
+                            <!--</li>-->
                             <li class="nav-item dropdown w-100 w-lg-auto">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
@@ -205,9 +205,39 @@
                                     @endforeach
                                 </ul>
                             </li>
-                            <li class="nav-item w-100 w-lg-auto">
-                                <a class="nav-link" href="{{ route('login') }}">Login</a>
-                            </li>
+@php
+if(auth()->user())
+{
+    $user = auth()->user();
+    //User info
+    $customer = \App\Models\Customer::where('user_id', $user->id)->first();
+    $role = null;
+
+    if ($user->hasRole('super-admin')) {
+        $role = 'super-admin';
+    } elseif ($user->hasRole('admin')) {
+        $role = 'admin';
+    } elseif ($user->hasRole('agent')) {
+        $role = 'agent';
+    } elseif ($user->hasRole('user')) {
+        $role = 'user';
+    }
+}
+
+@endphp
+@if(auth()->user())
+    <li class="nav-item w-100 w-lg-auto">
+        <a class="nav-link" href="{{ url($role) }}">DashBoard</a>
+    </li>
+@else
+    <li class="nav-item w-100 w-lg-auto">
+        <a class="nav-link" href="{{ route('login') }}">Login</a>
+    </li>
+@endif
+    <li class="nav-item w-100 w-lg-auto">
+        <a class="nav-link" href="{{ route('join.job') }}">Apply Job</a>
+    </li>
+
                         </ul>
                     </div>
                 </div>

@@ -59,16 +59,16 @@
                                             <input type="text" class="form-control" name="price"
                                                 value="{{ old('price', $product->price) }}" placeholder="Price" required />
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Discount Price</label>
-                                            <input type="text" class="form-control" name="discount_price"
-                                                value="{{ old('discount_price', $product->discount_price) }}"
-                                                placeholder="Discount Price" />
-                                        </div>
+                                        <!--<div class="mb-3">-->
+                                        <!--    <label class="form-label">Discount Price</label>-->
+                                        <!--    <input type="text" class="form-control" name="discount_price"-->
+                                        <!--        value="{{ old('discount_price', $product->discount_price) }}"-->
+                                        <!--        placeholder="Discount Price" />-->
+                                        <!--</div>-->
                                          {{-- purchase_commission --}}
 
                                         <div class="mb-3">
-                                            <label class="form-label">Purchase Commission</label>
+                                            <label class="form-label">Purchase Coin</label>
                                             <input type="number" class="form-control" name="purchase_commission"
                                                 value="{{ old('purchase_commission', $product->purchase_commission) }}"
                                                 placeholder="Purchase Commission" required />

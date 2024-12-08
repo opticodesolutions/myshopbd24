@@ -6,7 +6,7 @@
 
 	<link rel="canonical" href="pages-blank-2.html" />
 
-	<title>@yield('title', 'Super Admin Dashboard') | Myshopbd24</title>
+	<title>@yield('title', 'Super Admin Dashboard') | Futuregroup.My</title>
 
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 

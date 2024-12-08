@@ -20,6 +20,9 @@ class Product extends Model
         'price',
         'discount_price',
         'purchase_commission',
+        'matching_commission',
+        'referral_commission',
+        'subscription_fee',
         'description',
         'category_id',
         'brand_id',
@@ -40,16 +43,6 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
-    }
-
-    public function commissions()
-    {
-        return $this->belongsTo(Commission::class);
-    }
-
-    public function commission_price()
-    {
-        return $this->hasOne(Commission::class, 'product_id', 'id');
     }
 
     public function sales()

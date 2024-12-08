@@ -17,11 +17,11 @@ class ProductSeeder extends Seeder
 
        $products = Product::create([
             'product_code' => 1001,
-            'name' => 'Product 1',
-            'price' => 99.99,
+            'name' => 'Basic Membership',
+            'price' => 6900,
             'discount_price' => 89.99,
             'purchase_commission' => 10,
-            'description' => 'Description for Product 1',
+            'description' => 'Basic membership product for MLM users.',
             'category_id' => $categoryId,
             'brand_id' => $brandId,
             'stock' => 50,
