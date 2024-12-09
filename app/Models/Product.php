@@ -20,9 +20,11 @@ class Product extends Model
         'price',
         'discount_price',
         'purchase_commission',
+
         'matching_commission',
         'referral_commission',
         'subscription_fee',
+
         'description',
         'category_id',
         'brand_id',

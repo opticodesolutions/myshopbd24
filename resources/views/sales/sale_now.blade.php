@@ -4,147 +4,91 @@
 
 @section('content')
 @php
-$customer = \App\Models\Customer::where('user_id', auth()->id())->first();
-$referCode = $customer ? $customer->refer_code : '';
+    $customer = \App\Models\Customer::where('user_id', auth()->id())->first();
+    $referCode = $customer ? $customer->refer_code : '';
 @endphp
 <main class="content">
     <div class="container-fluid p-0">
 
         <div class="mb-3">
             <h1 class="h3 d-inline align-middle">Sale Now</h1>
-            {{-- <a href="{{ route('categories.index') }}" class="btn btn-secondary float-end">Back to Categories</a>
-            --}}
         </div>
 
         <div class="row">
             <div class="col-12 col-xl-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Category Details</h5>
-                        <h6 class="card-subtitle text-muted">Fill out the form below to create a new category.</h6>
+                        <h5 class="card-title">Product Details</h5>
+                        <h6 class="card-subtitle text-muted">Fill out the form below to purchase a product and optionally register a new user.</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('sales.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Package Name</label>
-                                <input type="text" class="form-control @error('package_name') is-invalid @enderror" name="package_name"
-       placeholder="Product Name" value="{{ old('package_name', $product->name) }}" readonly>
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <label class="form-label">Product Code</label>
+                                <input type="text" class="form-control" name="product_code" value="{{ $product->product_code }}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Seller ID</label>
-                                <input type="text" class="form-control" name="user_id" value="{{ auth()->user()->id }}"
-                                    readonly>
+                                <label class="form-label">Package Name</label>
+                                <input type="text" class="form-control" name="name" value="{{ $product->name }}" readonly>
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Price</label>
-                                <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                    name="price" placeholder="Price" value="{{ old('price', $product->price) }}"
-                                    readonly>
-                                @error('price')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <input type="text" class="form-control" name="price" value="{{ $product->price }}" readonly>
                             </div>
-
                             <div class="mb-3">
-                                <!--<label class="form-label">Discount Price</label>-->
-                                <input type="hidden" class="form-control @error('discount_price') is-invalid @enderror"
-                                    name="discount_price" placeholder="Discount Price"
-                                    value="{{ old('discount_price', $product->discount_price) }}" readonly>
-                                @error('discount_price')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <label class="form-label">Discount Price</label>
+                                <input type="text" class="form-control" name="discount_price" value="{{ $product->discount_price }}" readonly>
                             </div>
-
                             <div class="mb-3">
-                                <label class="form-label">Purchase Coin</label>
-                                <input type="number"
-                                    class="form-control @error('purchase_commission') is-invalid @enderror"
-                                    name="purchase_commission" placeholder="Purchase Commission"
-                                    value="{{ old('purchase_commission', $product->purchase_commission) }}" readonly>
-                                @error('purchase_commission')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <label class="form-label">Purchase Commission</label>
+                                <input type="text" class="form-control" name="purchase_commission" value="{{ $product->purchase_commission }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Matching Commission</label>
+                                <input type="text" class="form-control" name="matching_commission" value="{{ $product->matching_commission }}" readonly>
                             </div>
 
+                            <!-- User Registration Section -->
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <input id="user_register_check" class="form-check-input" type="checkbox"
-                                        name="user_register" {{ old('user_register') === 'Yes' ? 'checked' : '' }}>
+                                    <input id="user_register_check" class="form-check-input" type="checkbox" name="user_register" {{ old('user_register') === 'Yes' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="user_register_check">
-                                        Register New User ?
+                                        Register New User?
                                     </label>
                                 </div>
-                                @error('user_register')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
                             </div>
 
-                            <div id="user_registration_fields"
-                                style="display: {{ old('user_register') === 'Yes' ? 'block' : 'none' }}">
-                                <input type="hidden" name="role" value="user">
-
+                            <div id="user_registration_fields" style="display: {{ old('user_register') === 'Yes' ? 'block' : 'none' }}">
                                 <div class="mb-3">
-                                    <label class="form-label">New User Full name</label>
-                                    <input class="form-control form-control-lg @error('name') is-invalid @enderror"
-                                        type="text" name="name" placeholder="Enter your name"
-                                        value="{{ old('name') }}" />
+                                    <label class="form-label">User Name</label>
+                                    <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" placeholder="Enter full name" value="{{ old('name') }}">
                                     @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label">New User Email</label>
-                                    <input class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                        type="email" name="email" placeholder="Enter your email"
-                                        value="{{ old('email') }}" />
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" placeholder="Enter email" value="{{ old('email') }}">
                                     @error('email')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label">New User Password</label>
-                                    <input class="form-control form-control-lg @error('password') is-invalid @enderror"
-                                        type="password" name="password" placeholder="Enter password" />
+                                    <label class="form-label">Password</label>
+                                    <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Enter password">
                                     @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label">New User Confirm Password</label>
-                                    <input
-                                        class="form-control form-control-lg @error('password_confirmation') is-invalid @enderror"
-                                        type="password" name="password_confirmation" placeholder="Re-enter password" />
+                                    <label class="form-label">Confirm Password</label>
+                                    <input class="form-control @error('password_confirmation') is-invalid @enderror" type="password" name="password_confirmation" placeholder="Confirm password">
                                     @error('password_confirmation')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Saler Refer Code</label>
 
@@ -158,54 +102,65 @@ $referCode = $customer ? $customer->refer_code : '';
                                     </div>
                                     @enderror
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Position</label>
+                                    <select class="form-select @error('position') is-invalid @enderror" name="position">
+                                        <option value="left" {{ old('position') === 'left' ? 'selected' : '' }}>Left</option>
+                                        <option value="right" {{ old('position') === 'right' ? 'selected' : '' }}>Right</option>
+                                    </select>
+                                    @error('position')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Position Parent</label>
+                                    <input class="form-control @error('position_parent') is-invalid @enderror" type="text" name="position_parent" placeholder="Enter position parent" value="{{ old('position_parent') }}">
+                                    @error('position_parent')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Level</label>
+                                    <input class="form-control @error('level') is-invalid @enderror" type="number" name="level" placeholder="Enter level" value="{{ old('level') }}">
+                                    @error('level')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
+                            <!-- Payment Section -->
                             <div class="mb-3">
                                 <label class="form-label">Payment Method</label>
-                                <select class="form-select @error('payment_method') is-invalid @enderror"
-                                    name="payment_method">
-                                    <option value="">Select Payment Method</option>
+                                <select class="form-select @error('payment_method') is-invalid @enderror" name="payment_method">
                                     <option value="Cash" selected>Cash</option>
                                 </select>
                                 @error('payment_method')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Purchase</button>
                             </div>
-
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var userRegisterCheck = document.getElementById('user_register_check');
-                var userRegistrationFields = document.getElementById('user_registration_fields');
+                const userRegisterCheck = document.getElementById('user_register_check');
+                const userRegistrationFields = document.getElementById('user_registration_fields');
 
                 function toggleUserRegistrationFields() {
-                    if (userRegisterCheck.checked) {
-                        userRegistrationFields.style.display = 'block';
-                        console.log(userRegistrationFields.style.display);
-                    } else {
-                        userRegistrationFields.style.display = 'none';
-                        console.log(userRegistrationFields.style.display);
-                    }
+                    userRegistrationFields.style.display = userRegisterCheck.checked ? 'block' : 'none';
                 }
 
-                // Attach event listener to checkbox
                 userRegisterCheck.addEventListener('change', toggleUserRegistrationFields);
-
-                // Trigger the function on page load to set the initial state
                 toggleUserRegistrationFields();
             });
         </script>
     </div>
 </main>
-
 @endsection

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 class CustomerController extends Controller
 {
     public function index()
@@ -25,15 +24,15 @@ class CustomerController extends Controller
         ])
             ->where('refer_by', $customer->refer_code)
             ->get();
-        // return $customers;
-         return view('customers.index', compact('customers'));
+         return $customers;
+         //return view('customers.index', compact('customers'));
     }
 
     public function personal_info()
     {
         $user = auth()->user();
         $data = Customer::where('user_id', $user->id)->with(['user'])->first();
-        $parent = Customer::where('refer_code', $data->refer_by)->with(['user'])->first();
+        $parent = Customer::where('refer_code', $data->refer_by??null)->with(['user'])->first();
         return view('customers.personal_info',compact('data', 'parent'));
     }
 

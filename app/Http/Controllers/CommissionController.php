@@ -11,7 +11,8 @@ class CommissionController extends Controller
 {
     public function index()
     {
-        $commissions = Commission::with('product')->get();
+        $commissions = Commission::with('sale')->get();
+        // return $commissions;
         return view('super-admin.commissions.index', compact('commissions'));
     }
 

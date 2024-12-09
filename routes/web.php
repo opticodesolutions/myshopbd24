@@ -32,6 +32,7 @@ Route::get('/joining_job', [FrontendController::class, 'joining_job'])->name('jo
 Route::post('/job_post_save', [FrontendController::class, 'job_post_save'])->name('join.job_post_save');
 
 
+Route::put('/sales/{sale}/update-status', [SaleController::class, 'updateStatus'])->name('sales.updateStatus');
 
 
 
@@ -67,6 +68,8 @@ Route::get('sale/now/{id}', [SaleController::class, 'sale_now'])->name('sale.now
 Route::post('purchase/save', [PurchaseController::class, 'purchase_save'])->name('purchase.save');
 
 Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
+Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
 // purchase/now/2
 
 

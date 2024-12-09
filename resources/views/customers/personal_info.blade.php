@@ -30,7 +30,7 @@
 
                             @endif
                             <div class="mt-3">
-                                <h4>{{$data->user->name}}</h4>
+                                <h4>{{$data->user->name??''}}</h4>
                                 <p class="text-secondary mb-1"><span style="padding-bottom: 5px;" class="pl-4 pr-4 badge bg-secondary badge-pill">Customer ID</span></p>
                             </div>
                         </div>
@@ -39,11 +39,11 @@
                             <table class="w-100 table table-bordered mt-3">
                                 <tbody><tr>
                                     <td><b>Name</b></td>
-                                    <td><b>{{ $data->user->name }}</b></td>
+                                    <td><b>{{ $data->user->name ?? '' }}</b></td>
                                 </tr>
                                 <tr>
                                     <th><b>ID</b></th>
-                                    <td><b>{{ $data->user_id }}</b></td>
+                                    <td><b>{{ $data->user_id??'' }}</b></td>
                                 </tr>
                                 <tr>
                                     <th>ID Status</th>
@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <th>User</th>
-                                    <td>{{ $data->user->email }}</td>
+                                    <td>{{ $data->user->email??'' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Rank</th>
@@ -61,19 +61,19 @@
                                 </tr>
                                 <tr>
                                     <th>Father</th>
-                                    <td>{{ $data->user->father_name }}</td>
+                                    <td>{{ $data->user->father_name ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Mother</th>
-                                    <td>{{ $data->user->mother_name }}</td>
+                                    <td>{{ $data->user->mother_name ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Mobile </th>
-                                    <td>{{ $data->user->phone_number }}</td>
+                                    <td>{{ $data->user->phone_number ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Date of Birth </th>
-                                    <td>{{ $data->user->date_of_birth }}</td>
+                                    <td>{{ $data->user->date_of_birth ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Gender </th>
@@ -81,19 +81,19 @@
                                 </tr>
                                 <tr>
                                     <th>National ID</th>
-                                    <td>{{ $data->user->national_id }}</td>
+                                    <td>{{ $data->user->national_id ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Religion</th>
-                                    <td>{{ $data->user->religion }}</td>
+                                    <td>{{ $data->user->religion ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Blood Group</th>
-                                    <td>{{ $data->user->blood_group }}</td>
+                                    <td>{{ $data->user->blood_group ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Address</th>
-                                    <td>{{ $data->user->address }}</td>
+                                    <td>{{ $data->user->address ?? '' }}</td>
                                     <!--<td style="padding: 0;">-->
                                     <!--    <table class="table table-bordered m-0">-->
                                     <!--        <tbody><tr>-->
@@ -127,18 +127,18 @@
                                 </tr>
                                 <tr>
                                     <th>Refer to you</th>
-                                    <td>{{$parent->user->name.' ' }}({{$parent->refer_code}})</td>
+                                    <td>{{$parent->user->name??''.' ' }}({{$parent->refer_code??''}})</td>
                                 </tr>
                                 <tr>
                                     <th>Placement ID</th>
-                                    <td>{{$data->user->name}} ({{$data->refer_code}})</td>
+                                    <td>{{$data->user->name??''}} ({{$data->refer_code??''}})</td>
                                 </tr>
 
                                 @php
                                 use Carbon\Carbon;
 
                                 // Assuming $data->created_at is a Carbon instance, otherwise you should convert it.
-                                $joinDate = Carbon::parse($data->created_at);
+                                $joinDate = Carbon::parse($data->created_at??'');
                                 $now = Carbon::now();
                                 $diff = $joinDate->diff($now);
 
@@ -161,7 +161,7 @@
                                 <tr>
                                     <th>Team</th>
                                     <td>
-                                        {{ \App\Models\Customer::where('refer_by', $data->refer_code)->count() }}
+                                        {{ \App\Models\Customer::where('refer_by', $data->refer_code ?? '')->count() }}
                                     </td>
                                 </tr>
 

@@ -12,73 +12,6 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-4">
-                        {{-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img class="d-block w-100" src="https://myshopbd24.com/01.jpeg" alt="First slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="https://myshopbd24.com/02.jpeg" alt="Second slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="https://myshopbd24.com/03.jpeg" alt="Third slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="https://myshopbd24.com/04.jpeg" alt="Fourth slide">
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-                                data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-                                data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div> --}}
-                        <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">
-                            <div class="carousel-indicators">
-                              <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                              <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                              <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                              <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                            </div>
-
-                            <div class="carousel-inner">
-                              <div class="carousel-item active">
-                                <img src="https://myshopbd24.com/01.jpeg" class="d-block w-100" alt="Image 1">
-                              </div>
-                              <div class="carousel-item">
-                                <img src="https://myshopbd24.com/02.jpeg" class="d-block w-100" alt="Image 2">
-                              </div>
-                              <div class="carousel-item">
-                                <img src="https://myshopbd24.com/03.jpeg" class="d-block w-100" alt="Image 3">
-                              </div>
-                              <div class="carousel-item">
-                                <img src="https://myshopbd24.com/04.jpeg" class="d-block w-100" alt="Image 4">
-                              </div>
-                            </div>
-
-                            <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Next</span>
-                            </button>
-                          </div>
-                    </div>
-                    <div class="col-md-4">
                         <div class="card radius-10">
                             <div class="card-body">
                                 @foreach ($data as $item)
@@ -169,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">{{ number_format($purchase_inc, 2) }}</h1>
+                        <h1 class="mt-1 mb-3">0</h1>
                         <div class="mb-0">
                             <span class="badge badge-success-light">3.65%</span>
                             <span class="text-muted">Since last week</span>
@@ -191,7 +124,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">{{ number_format($sale_inc, 2) }}</h1>
+                        <h1 class="mt-1 mb-3">0</h1>
                         <div class="mb-0">
                             <span class="badge badge-success-light">3.65%</span>
                             <span class="text-muted">Since last week</span>
@@ -213,7 +146,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">{{ number_format($refer_inc, 2) }}</h1>
+                        <h1 class="mt-1 mb-3">0</h1>
                         <div class="mb-0">
                             <span class="badge badge-success-light">3.65%</span>
                             <span class="text-muted">Since last week</span>
@@ -235,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">{{ number_format($Total_inc, 2) }}</h1>
+                        <h1 class="mt-1 mb-3">0</h1>
                         <div class="mb-0">
                             <span class="badge badge-success-light">3.65%</span>
                             <span class="text-muted">Since last week</span>
@@ -545,7 +478,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <div class="card radius-10">
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
@@ -568,7 +501,7 @@
                     </marquee>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
 

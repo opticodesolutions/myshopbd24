@@ -12,11 +12,12 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         if ($user->hasRole('super-admin')) {
-            $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'sale_commission')->get();
+            $all = Transaction::with('user', 'sale.product')->get();
+            return view('commissions.index', compact('all'));
+
         }else{
             $commissions = Transaction::with('user', 'sale.product')->where('transaction_type', 'sale_commission')->where('user_id', $user->id)->get();
         }
-        return view('commissions.index', compact('commissions'));
     }
 
     public function total_commission(){

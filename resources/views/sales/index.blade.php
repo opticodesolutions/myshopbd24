@@ -1,34 +1,40 @@
 @extends('layout.app')
 
-@section('title', 'List of Brand')
+@section('title', 'List of Sales')
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">
 
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Sales </h1>
+            <h1 class="h3 d-inline align-middle">Sales</h1>
         </div>
 
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title"></h5>
-                        <h6 class="card-subtitle text-muted">List</h6>
+                        <h5 class="card-title">Sales List</h5>
+                        <h6 class="card-subtitle text-muted">Manage sales and their statuses.</h6>
                     </div>
                     <div class="card-body">
                         <table id="datatables-multi" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>SL</th>
+                                    <th>Sall ID</th>
                                     <th>Product Code</th>
                                     <th>Product</th>
+                                    <th>Seller</th>
                                     <th>Customer</th>
                                     <th>Price</th>
                                     <th>Discount Price</th>
-                                    <th>Commission</th>
+                                    @auth
+                                    @if (auth()->user()->hasRole('super-admin'))
+                                    <th>Status</th>
+                                    @endif
+                                    @endauth
                                     <th>Created At</th>
                                     @auth
-
                                     @if (auth()->user()->hasRole('super-admin'))
                                         <th>Action</th>
                                     @endif
@@ -38,19 +44,37 @@
                             <tbody>
                                 @php
                                     // Conditionally set the data based on the user's role
-                                    $data = auth()->user()->hasRole('super-admin') ? $combinedData : $sales;
+                                    // $data = auth()->user()->hasRole('super-admin') ? $combinedData : $sales;
+                                    $data = auth()->user()->hasRole('super-admin') ? $sales : $sales;
+
                                 @endphp
-                                
+
                                 @foreach($data as $sale)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $sale->id }}</td>
                                     <td>{{ $sale->product->product_code }}</td>
                                     <td>{{ $sale->product->name }}</td>
                                     <td>{{ $sale->user->name ?? 'Unknown' }}</td>
+                                    <td>{{ $sale->customer->name ?? 'Unknown' }}</td>
                                     <td>{{ $sale->product->price }}</td>
                                     <td>{{ $sale->product->discount_price }}</td>
+                                    @if (auth()->user()->hasRole('super-admin'))
                                     <td>
-                                        {{ $sale->commission }}
+                                        <form action="{{ route('sales.updateStatus', $sale->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status" class="form-select form-select-sm"
+                                                onchange="this.form.submit()" style="width: 150px;">
+                                                <option value="pending" {{ $sale->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="confirmed" {{ $sale->status === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                                <option value="processing" {{ $sale->status === 'processing' ? 'selected' : '' }}>Processing</option>
+                                                <option value="ready" {{ $sale->status === 'ready' ? 'selected' : '' }}>Ready</option>
+                                                <option value="delivered" {{ $sale->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
+                                            </select>
+                                        </form>
                                     </td>
+                                    @endif
                                     <td>{{ $sale->created_at->format('Y-m-d H:i') }}</td>
                                     @auth
                                     @if (auth()->user()->hasRole('super-admin'))
@@ -63,39 +87,15 @@
                                         </td>
                                     @endif
                                     @endauth
-
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
 
     </div>
 </main>
-<script src="{{ asset('backend/js/app.js') }}"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function(event) {
-    setTimeout(function(){
-      if(localStorage.getItem('popState') !== 'shown'){
-        window.notyf.open({
-          type: "success",
-          message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-          duration: 10000,
-          ripple: true,
-          dismissible: false,
-          position: {
-            x: "left",
-            y: "bottom"
-          }
-        });
-
-        localStorage.setItem('popState','shown');
-      }
-    }, 15000);
-  });
-</script>
 @endsection

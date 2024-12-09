@@ -2,159 +2,211 @@
 
 namespace App\Services;
 
-use App\Models\Commission;
-use App\Models\Customer;
 use App\Models\Sale;
+use App\Models\User;
+use App\Models\Customer;
+use App\Models\Purchase;
+use App\Models\Commission;
 use App\Models\Transaction;
 use App\Models\MatchingCommission;
+use Illuminate\Support\Facades\DB;
 
 class CommissionService
 {
+    /**
+     * Calculate commissions for a sale.
+     */
     public function calculateCommissions(Sale $sale)
     {
-        $customer = $sale->customer;
+        DB::transaction(function () use ($sale) {
+            $this->sellTransactions($sale);
+            $this->handleSubscriptionFee($sale);
+            $this->distributeDirectBonus($sale);
+            $this->distributeDownlineBonus($sale);
+        });
+    }
 
-        // Subscription Fee Handling
-        $subscriptionFee = 1300;
-        $subscriptionCommissionPerUser = 25;
-        $remainingSubscriptionBonus = 0;
+    private function sellTransactions(Sale $sale)
+    {
+        Purchase::create([
+            'user_id' => $sale->customer_id, // Admin transaction
+            'product_id' => $sale->product_id,
+            'commission' => 0,
+        ]);
 
-        // Add subscription profit to admin
-        $adminProfit = $subscriptionFee;
         Transaction::create([
-            'user_id' => null, // Admin transaction
+            'user_id' => $sale->user_id, // Admin transaction
+            'sale_id' => $sale->id,
+            'purchase_id' => Purchase::latest()->first()->id,
+            'amount' => $sale->price,
+            'transaction_type' => 'new_sale',
+        ]);
+    }
+
+    /**
+     * Handle subscription fee for admin.
+     */
+    private function handleSubscriptionFee(Sale $sale)
+    {
+        $subscriptionFee = 1300;
+
+        Transaction::create([
+            'user_id' => $sale->customer_id, // Admin transaction
             'sale_id' => $sale->id,
             'amount' => $subscriptionFee,
             'transaction_type' => 'admin_subscription_fee',
         ]);
+    }
 
-        // Direct Bonus
+    /**
+     * Distribute direct bonus to the parent.
+     */
+    private function distributeDirectBonus(Sale $sale)
+    {
         $directBonus = 1000;
-        $customer->increment('wallet_balance', $directBonus);
-        Transaction::create([
-            'user_id' => $customer->id,
-            'sale_id' => $sale->id,
-            'amount' => $directBonus,
-            'transaction_type' => 'direct_bonus',
-        ]);
-        Commission::create([
-            'customer_id' => $customer->id,
-            'sale_id' => $sale->id,
-            'direct_bonus' => $directBonus,
-            'left_amount' => 0,
-            'right_amount' => 0,
-        ]);
+        $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
 
-        // Downline Bonus
-        $downlineBonus = 1500;
-        $remainingBonus = $downlineBonus;
-        $childCommission = 250;
-
-        // Matching Commission and Distribution up to 10 levels
-        $matchingBonus = 0;
-        $matchingLevels = 10;
-        $levelsCovered = 0;
-        $parent = $this->getParent($customer);
-
-        while ($parent && $remainingBonus >= $childCommission && $levelsCovered < $matchingLevels) {
-            // Determine the position of the user (left or right)
-            $position = $customer->position; // Get the position (left or right)
-
-            if ($position === 'left') {
-                // Add the commission to left_amount
-                $parent->increment('wallet_balance', $childCommission);
-                Transaction::create([
-                    'user_id' => $parent->id,
-                    'sale_id' => $sale->id,
-                    'amount' => $childCommission,
-                    'transaction_type' => 'downline_bonus',
-                ]);
-                Commission::create([
-                    'customer_id' => $parent->id,
-                    'sale_id' => $sale->id,
-                    'downline_bonus' => $childCommission,
-                    'left_amount' => $childCommission,  // Add commission to left_amount
-                    'right_amount' => 0,
-                ]);
-            } else {
-                // Add the commission to right_amount
-                $parent->increment('wallet_balance', $childCommission);
-                Transaction::create([
-                    'user_id' => $parent->id,
-                    'sale_id' => $sale->id,
-                    'amount' => $childCommission,
-                    'transaction_type' => 'downline_bonus',
-                ]);
-                Commission::create([
-                    'customer_id' => $parent->id,
-                    'sale_id' => $sale->id,
-                    'downline_bonus' => $childCommission,
-                    'left_amount' => 0,
-                    'right_amount' => $childCommission,  // Add commission to right_amount
-                ]);
-            }
-
-            $remainingBonus -= $childCommission;
-            $matchingBonus += $childCommission;
-            $levelsCovered++;
-
-            // Save Matching Commission for each level
-            MatchingCommission::create([
-                'customer_id' => $parent->id,
-                'sale_id' => $sale->id,
-                'amount' => $childCommission,
-                'level' => $levelsCovered,
-            ]);
-
-            // Move to the parent
-            $parent = $this->getParent($parent);
+        if (!$user || !$user->customer) {
+            // Handle case where user or associated customer doesn't exist
+            return;
         }
 
-        // Check if matching levels are less than 10
-        $matchingLevelsCovered = $levelsCovered;
-        if ($matchingLevelsCovered < $matchingLevels) {
-            // Calculate the remaining matching bonus
-            $remainingMatchingBonus = $remainingBonus;
+        $customer = $user->customer; // Get the associated Customer model
+        $parent = $this->getParent($customer);
 
-            // Add the remaining matching bonus directly as admin profit
+        if ($parent) {
+            $parent->increment('wallet_balance', $directBonus);
+
+            $pUser = DB::table('customers')->find($parent->id); // Find the user based on customer_id (which references users)
+
             Transaction::create([
-                'user_id' => null, // Admin transaction
+                'user_id' => $sale->user_id,// P_user_id
                 'sale_id' => $sale->id,
-                'amount' => $remainingMatchingBonus,
+                'amount' => $directBonus,
+                'transaction_type' => 'direct_bonus',
+            ]);
+
+            Commission::create([
+                'customer_id' => $parent->id,// P_user_c_id
+                'sale_id' => $sale->id,
+                'direct_bonus' => $directBonus,
+                'left_amount' => 0,
+                'right_amount' => 0,
+            ]);
+        }
+    }
+
+
+    /**
+     * Distribute downline bonuses up the referral chain.
+     */
+    private function distributeDownlineBonus(Sale $sale)
+{
+    $downlineBonus = 1500;
+    $remainingBonus = $downlineBonus;
+    $childCommission = 250;
+    $matchingLevels = 10;
+    $levelsCovered = 0;
+
+    $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
+
+    if (!$user || !$user->customer) {
+        // Handle case where user or associated customer doesn't exist
+        return;
+    }
+
+    $customer = $user->customer; // Get the associated Customer model
+    $parent = $this->getParent($customer);
+
+    while ($parent && $remainingBonus >= $childCommission && $levelsCovered < $matchingLevels) {
+        $this->processDownlineBonus($parent, $sale, $childCommission, $customer->position);
+
+        $remainingBonus -= $childCommission;
+        $levelsCovered++;
+
+        // Move to the next level in the referral chain
+        $customer = $parent;
+        $parent = $this->getParent($customer);
+    }
+
+    $this->handleRemainingBonus($sale, $remainingBonus, $levelsCovered, $matchingLevels);
+}
+
+    /**
+     * Process downline bonus for a single level.
+     */
+    private function processDownlineBonus($parent, $sale, $amount, $position)
+    {
+        // Fetch the parent's commission record or create a new one if it doesn't exist
+        $commission = Commission::firstOrNew(['customer_id' => $parent->id]);
+        $pUser = DB::table('customers')->find($parent->id); // Find the user based on customer_id (which references users)
+
+
+        if ($position === 'left') {
+            // Increment the left amount
+            $commission->left_amount += $amount;
+
+            Transaction::create([
+                'user_id' => $sale->user_id,
+                'sale_id' => $sale->id,
+                'amount' => $amount,
+                'transaction_type' => 'downline_left_hold_bonus',
+            ]);
+        } elseif ($position === 'right') {
+            // Increment the right amount
+            $commission->right_amount += $amount;
+            Transaction::create([
+                'user_id' => $pUser->id,
+                'sale_id' => $sale->id,
+                'amount' => $amount,
+                'transaction_type' => 'downline_right_hold_bonus',
+            ]);
+        }
+
+        // Check if both left and right are sufficient to pay the downline bonus
+        if ($commission->left_amount >= $amount && $commission->right_amount >= $amount) {
+            // Distribute the bonus
+            $parent->increment('wallet_balance', $amount);
+
+            // Deduct the amount from left and right to balance out the distribution
+            $commission->left_amount -= $amount;
+            $commission->right_amount -= $amount;
+
+            Transaction::create([
+                'user_id' => $sale->user_id,
+                'sale_id' => $sale->id,
+                'amount' => $amount,
+                'transaction_type' => 'downline_bonus',
+            ]);
+        }
+
+        // Save the updated commission record
+        $commission->save();
+    }
+
+
+    /**
+     * Handle remaining bonus not distributed within matching levels.
+     */
+    private function handleRemainingBonus($sale, $remainingBonus, $levelsCovered, $matchingLevels)
+    {
+        if ($levelsCovered < $matchingLevels) {
+            Transaction::create([
+                'user_id' => $sale->customer_id, // Admin transaction
+                'sale_id' => $sale->id,
+                'amount' => $remainingBonus,
                 'transaction_type' => 'admin_profit_from_matching_commission',
             ]);
         }
-
-        // Check if subscription levels are less than 15
-        $subscriptionLevelsCovered = $levelsCovered;
-        if ($subscriptionLevelsCovered < 15) {
-            // Calculate the remaining subscription bonus
-            $remainingSubscriptionBonus = (15 - $subscriptionLevelsCovered) * $subscriptionCommissionPerUser;
-
-            // Add the remaining subscription bonus directly as admin profit
-            Transaction::create([
-                'user_id' => null, // Admin transaction
-                'sale_id' => $sale->id,
-                'amount' => $remainingSubscriptionBonus,
-                'transaction_type' => 'admin_profit_from_subscription_bonus',
-            ]);
-        }
-
-        // Remaining Matching Bonus
-        $remainingMatchingBonus = $remainingBonus;
-        Transaction::create([
-            'user_id' => null, // Admin transaction
-            'sale_id' => $sale->id,
-            'amount' => $remainingMatchingBonus,
-            'transaction_type' => 'admin_profit_from_matching_commission',
-        ]);
     }
 
+    /**
+     * Get the parent of the customer in the referral chain.
+     */
     private function getParent(Customer $customer)
     {
-        if ($customer->refer_by) {
-            return Customer::where('refer_code', $customer->refer_by)->first();
-        }
-        return null;
+        return $customer->parent; // Assuming a 'parent' relationship is defined in the Customer model.
     }
 }
+
+
