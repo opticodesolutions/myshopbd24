@@ -97,7 +97,7 @@ class SaleController extends Controller
             'refer_by' => $request->refer_code ?? null,
 
             // 'position_parent' => $referByCustomer ? $referByCustomer->id : null,
-            'position_parent' => $request->refer_code ?? null,
+            'position_parent' => $request->position_parent ?? null,
 
             'position' => $request->position,
             'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
