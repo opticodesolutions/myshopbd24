@@ -45,7 +45,7 @@
                                     ">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $commission->id }}</td>
-                                        <td>{{ $commission->sale->id }}</td>
+                                        <td>{{ $commission->sale->id ?? 'N/A' }}</td>
                                         <td>{{ $commission->sale->product->name }}</td>
                                         <td>
                                             @switch($commission->transaction_type)

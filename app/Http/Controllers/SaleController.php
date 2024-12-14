@@ -84,7 +84,7 @@ class SaleController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        
+
         $user->assignRole("user");
 
 
@@ -106,7 +106,7 @@ class SaleController extends Controller
             'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
             'Total_sale_commission' => 0,
             'matching_commission' => 0,
-            'wallet_balance' => -6900,
+            'wallet_balance' => -$product->price,
             'subscription_start_date' => now(),
             'subscription_end_date' => now()->addMonth(),
         ]);
@@ -134,7 +134,7 @@ class SaleController extends Controller
     {
 
         $customer_wallet = Customer::where('user_id', $sale->customer_id)->first();
-        if($customer_wallet->wallet_balance<=0){
+        if($customer_wallet->wallet_balance<0){
             return back()->with('error', 'Your Account Not Active.');
         }else{
             $request->validate(['status' => 'required|in:confirmed,processing,ready,delivered']);
