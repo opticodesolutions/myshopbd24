@@ -84,6 +84,9 @@ class SaleController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        
+        $user->assignRole("user");
+
 
             // Create Customer
         $referByCustomer = Customer::where('refer_code', $request->refer_code)->first();//parent
@@ -97,13 +100,13 @@ class SaleController extends Controller
             'refer_by' => $request->refer_code ?? null,
 
             // 'position_parent' => $referByCustomer ? $referByCustomer->id : null,
-            'position_parent' => $request->position_parent ?? null,
+            'position_parent' => $request->refer_code ?? null,
 
             'position' => $request->position,
             'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
             'Total_sale_commission' => 0,
             'matching_commission' => 0,
-            'wallet_balance' => 0,
+            'wallet_balance' => -6900,
             'subscription_start_date' => now(),
             'subscription_end_date' => now()->addMonth(),
         ]);
@@ -129,16 +132,21 @@ class SaleController extends Controller
 
     public function updateStatus(Request $request, Sale $sale)
     {
-        $request->validate(['status' => 'required|in:confirmed,processing,ready,delivered']);
 
-        $sale->update(['status' => $request->status]);
+        $customer_wallet = Customer::where('user_id', $sale->customer_id)->first();
+        if($customer_wallet->wallet_balance<=0){
+            return back()->with('error', 'Your Account Not Active.');
+        }else{
+            $request->validate(['status' => 'required|in:confirmed,processing,ready,delivered']);
 
-        if ($request->status === 'delivered') {
-            // Trigger commission calculation
-            $this->combinedData->calculateCommissions($sale);
+            $sale->update(['status' => $request->status]);
+
+            if ($request->status === 'delivered') {
+                // Trigger commission calculation
+                $this->combinedData->calculateCommissions($sale);
+            }
+            return back()->with('success', 'Sale status updated successfully.');
         }
-
-        return back()->with('success', 'Sale status updated successfully.');
     }
 
 

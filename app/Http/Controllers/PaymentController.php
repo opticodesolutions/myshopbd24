@@ -90,6 +90,11 @@ class PaymentController extends Controller
                     'amount' => $request->amount,
                     'transaction_type' => 'topup',
                 ]);
+                
+        $customeraddtk = Customer::where('user_id', $request->user_id)->first();
+        $customeraddtk->wallet_balance = $request->amount;
+        $customeraddtk->save();
+        
             } elseif ($request->type === 'withdraw') {
                 if ($request_user_info->wallet_balance < $request->amount) {
                     return redirect()->back()->with('error', 'Insufficient balance.');

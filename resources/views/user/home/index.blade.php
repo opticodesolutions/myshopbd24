@@ -31,8 +31,8 @@
                                 </div>
                                 @php
                                 $balance = $Balance_customer;
-                                $target = -500;
-                                $remainingAmount = max(500, -$balance);
+                                $target = -6900;
+                                $remainingAmount = max(6900, -$balance);
                                 $progress = $balance < 0 ? min(100, ((-$balance) / (-$target)) * 100) : 0; @endphp <ul
                                     class="list-group   list-group-flush">
                                     <li class="list-group-item bg-transparent py-1 ">
