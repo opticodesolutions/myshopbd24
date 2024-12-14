@@ -26,9 +26,7 @@ class PurchaseController extends Controller
     public function purchase_commission()
     {
         $user = auth()->user();
-        // $commissions = Purchase::where('user_id', $user->id)->where('transaction_type', 'purchase_commission')->get();
-        $purchase_commissions = Purchase::where('user_id', $user->id)->get();
-
+        $purchase_commissions = Purchase::where('user_id', $user->id)->paginate(10);
         return view('commissions.purchase_commissions', compact('purchase_commissions'));
     }
 

@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 
 class SuperAdminController extends Controller
 {
@@ -57,6 +58,11 @@ class SuperAdminController extends Controller
         // Total Sales Commission Sum
         $Total_sells_commission = Transaction::where('transaction_type', 'direct_bonus')->sum('amount');
 
+        // Total Dabits
+        $totaldabit = Account::where('type', 'debit')->sum('amount');
+        // Total Credits
+        $totalcredit = Account::where('type', 'cradit')->sum('amount');
+
         return view('super-admin.home.index', compact(
             'Total_customer',
             'Total_transactions_amount',
@@ -68,7 +74,9 @@ class SuperAdminController extends Controller
             // 'Balance_customer',
             'Total_withdrawn_amount',
             'Total_topup_amount',
-            'Total_admin_income'
+            'Total_admin_income',
+            'totaldabit',
+            'totalcredit'
         ));
     }
 }

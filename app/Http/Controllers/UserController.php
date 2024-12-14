@@ -19,7 +19,7 @@ class UserController extends Controller
 //         $Total_reffers = Customer::where('refer_by', $customer->refer_code)->count()+;
 
 //         //Balance Customer
-        $Balance_customer = $customer->wallet_balance;
+        $Balance_customer = $customer->wallet_balance??0;
 
 //         // Total withdrown amount
 //         $Total_withdrawn_amount = Transaction::where('transaction_type', 'withdraw')->where('user_id', $user->id)->sum('amount');

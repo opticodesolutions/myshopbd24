@@ -9,7 +9,9 @@ use App\Models\Transaction;
 use App\Models\CoinTransfer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -64,59 +66,75 @@ class PaymentController extends Controller
         // Find the user from the request
         $request_user = User::findOrFail($request->user_id);
         $request_user_info = Customer::where('user_id', $request_user->id)->first();
+        
+        if(!$request_user_info){
+            return redirect()->back()->with('error', 'User not found.');
+        }
+        DB::beginTransaction();
+        try{
+            // Determine role
+            $role = $user->hasRole('super-admin') ? 'super-admin' : ($user->hasRole('admin') ? 'admin' : ($user->hasRole('agent') ? 'agent' : 'user'));
 
-        // Determine role
-        $role = $user->hasRole('super-admin') ? 'super-admin' :
-                ($user->hasRole('admin') ? 'admin' :
-                ($user->hasRole('agent') ? 'agent' : 'user'));
+            $data = [
+                'status' => $request->status,
+                'created_by_user_id' => $user->id,
+                'created_by' => $role,
+                'created_by_sms' => $request->created_by_sms,
+            ];
 
-        $data = [
-            'status' => $request->status,
-            'created_by_user_id' => $user->id,
-            'created_by' => $role,
-            'created_by_sms' => $request->created_by_sms,
-        ];
+            if ($request->status === 'success') {
+                $data['account_id'] = $request->account_id;
+                $data['transaction_id'] = $request->transaction_id;
 
-        if ($request->status === 'success') {
-            $data['account_id'] = $request->account_id;
-            $data['transaction_id'] = $request->transaction_id;
-
-            // Update user wallet balance based on the type
-            if ($request->type === 'topup') {
-                $request_user_info->wallet_balance += $request->amount;
-                Transaction::create([
-                    'user_id' => $request->user_id,
-                    'sale_id' => null,
-                    'amount' => $request->amount,
-                    'purchase_id' => null,
-                    'transaction_type' => 'topup',
-                ]);
-
-        $customeraddtk = Customer::where('user_id', $request->user_id)->first();
-        $customeraddtk->wallet_balance += $request->amount;
-        $customeraddtk->save();
-
-            } elseif ($request->type === 'withdraw') {
-                if ($request_user_info->wallet_balance < $request->amount) {
-                    return redirect()->back()->with('error', 'Insufficient balance.');
-                } else {
-                    $request_user_info->wallet_balance -= $request->amount;
-                    Transaction::create([
+                // Update user wallet balance based on the type
+                if ($request->type === 'topup') {
+                    $request_user_info->wallet_balance += $request->amount;
+                    $transection = Transaction::create([
                         'user_id' => $request->user_id,
                         'sale_id' => null,
                         'amount' => $request->amount,
-                        'transaction_type' => 'withdraw',
+                        'purchase_id' => null,
+                        'transaction_type' => 'topup',
                     ]);
+
+                    Account::create([
+                        'amount' => $request->amount,
+                        'type' => 'debit',
+                        'tran_id' => $transection->id,
+                        'approved_by' => Auth::id()
+                    ]);
+                    $customeraddtk = Customer::where('user_id', $request->user_id)->first();
+                    $customeraddtk->wallet_balance += $request->amount;
+                    $customeraddtk->save();
+                } elseif ($request->type === 'withdraw') {
+                    if ($request_user_info->wallet_balance < $request->amount) {
+                        return redirect()->back()->with('error', 'Insufficient balance.');
+                    } else {
+                        $request_user_info->wallet_balance -= $request->amount;
+                        $transection = Transaction::create([
+                            'user_id' => $request->user_id,
+                            'sale_id' => null,
+                            'amount' => $request->amount,
+                            'transaction_type' => 'withdraw',
+                        ]);
+                        Account::create([
+                            'amount' => $request->amount,
+                            'type' => 'cadit',
+                            'tran_id' => $transection->id,
+                            'approved_by' => Auth::id()
+                        ]);
+                    }
                 }
+                $request_user_info->save();
             }
-            $request_user_info->save();
 
-
+            $payment->update($data);
+            DB::commit();
+            return redirect()->back()->with('success', 'Payment status updated successfully.');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $payment->update($data);
-
-        return redirect()->back()->with('success', 'Payment status updated successfully.');
     }
 
 

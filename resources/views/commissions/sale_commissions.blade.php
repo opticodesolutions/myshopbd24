@@ -6,7 +6,7 @@
     <div class="container-fluid p-0 card p-3">
 
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Purchase Income List</h1>
+            <h1 class="h3 d-inline align-middle">Sales Income List</h1>
         </div>
 
         <div class="row">
@@ -35,13 +35,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($purchase_commissions as $commissions)
+                                @foreach($sale_commissions as $commissions)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $commissions->product->name }}</td>
+                                    <td>{{ @$commissions->product->name }}</td>
                                     <td>{{ $commissions->transaction_type ?? 'Purchase Commission' }}</td>
-                                    <td>{{ $commissions->user->name ?? 'Unknown' }}</td>
-                                    <td class="commission">{{ $commissions->commission }}</td>
+                                    <td>{{ @$commissions->user->name ?? 'Unknown' }}</td>
+                                    <td class="commission">{{ @$commissions->commission }}</td>
 
 
 

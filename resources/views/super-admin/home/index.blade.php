@@ -182,6 +182,27 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Accounts</h5>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="stat text-primary">
+                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="form-label">Total Dabit Amount</label>
+                            <h1 class="mt-1 mb-3">{{ number_format($totaldabit, 2 ?? 0) }}</h1>
+                            <label class="form-label">Total Cardit Amount</label>
+                            <h1 class="mt-1 mb-3">{{ number_format($totalcredit, 2 ?? 0) }}</h1>
+                        </div>
+                    </div>
+                </div>
 
 
 

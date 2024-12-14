@@ -134,11 +134,11 @@ class SaleController extends Controller
     {
 
         $customer_wallet = Customer::where('user_id', $sale->customer_id)->first();
-        if($customer_wallet->wallet_balance<0){
+        if($customer_wallet->wallet_balance>0){
             return back()->with('error', 'Your Account Not Active.');
         }else{
             $request->validate(['status' => 'required|in:confirmed,processing,ready,delivered']);
-
+            
             $sale->update(['status' => $request->status]);
 
             if ($request->status === 'delivered') {
@@ -162,5 +162,13 @@ class SaleController extends Controller
     {
         Sale::findOrFail($id)->delete();
         return response()->json(null, 204);
+    }
+
+
+    public function sale_commission()
+    {
+        $user = auth()->user();
+        $sale_commissions = Sale::where('user_id', $user->id)->paginate(1);
+        return view('commissions.sale_commissions', compact('sale_commissions'));
     }
 }

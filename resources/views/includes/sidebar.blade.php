@@ -83,7 +83,7 @@
                             <a class='sidebar-link' href='{{ route('commissions.index') }}'>List Commissions</a>
                         </li>
                         <li class="sidebar-item">
-                            <a class='sidebar-link' href='https://www.futuregroup.my/transactions'>List Transactions</a>
+                            <a class='sidebar-link' href='{{ url('/transactions') }}'>List Transactions</a>
                         </li>
                         
                     </ul>
