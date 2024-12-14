@@ -32,6 +32,11 @@ class SuperAdminController extends Controller
         // Total withdrown amount
         $Total_withdrawn_amount = Transaction::where('transaction_type', 'withdraw')->sum('amount');
 
+        $Total_admin_income = Transaction::where(function($query) {
+            $query->where('transaction_type', 'admin_profit_from_matching_commission')
+                  ->orWhere('transaction_type', 'admin_subscription_fee');
+        })->sum('amount');
+
         // Total Topup amount
         $Total_topup_amount = Transaction::where('transaction_type', 'topup')->sum('amount');
 
@@ -39,10 +44,10 @@ class SuperAdminController extends Controller
         $Total_transactions_amount = Transaction::sum('amount');
 
         // Total Count transactions
-        $Total_commission_transactions = Transaction::where('transaction_type', 'commission')->count();
+        $Total_commission_transactions = Transaction::where('transaction_type', 'downline_bonus')->count();
 
         // Total Count transactions
-        $Total_commission_transaction = Transaction::where('transaction_type', 'commission')->sum('amount');
+        $Total_commission_transaction = Transaction::where('transaction_type', 'downline_bonus')->sum('amount');
         // Total earnings
        // $Total_earnings = $Total_transactions_amount - $Total_withdrawn_amount;
 
@@ -50,7 +55,7 @@ class SuperAdminController extends Controller
         $Total_sells = Sale::count();
 
         // Total Sales Commission Sum
-        $Total_sells_commission = Transaction::where('transaction_type', 'commission')->sum('amount');
+        $Total_sells_commission = Transaction::where('transaction_type', 'direct_bonus')->sum('amount');
 
         return view('super-admin.home.index', compact(
             'Total_customer',
@@ -62,7 +67,8 @@ class SuperAdminController extends Controller
             'Total_sells_commission',
             // 'Balance_customer',
             'Total_withdrawn_amount',
-            'Total_topup_amount'
+            'Total_topup_amount',
+            'Total_admin_income'
         ));
     }
 }

@@ -22,7 +22,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <h1 class="mt-1 mb-3">{{ number_format($Total_transactions_amount-$Total_withdrawn_amount, 2 ?? 0) }}</h1>
+                            <h1 class="mt-1 mb-3">
+                                {{-- {{ number_format($Total_transactions_amount-$Total_withdrawn_amount, 2 ?? 0) }} --}}
+                                                                                                {{ number_format($Total_admin_income, 2 ?? 0) }}
+
+                            </h1>
                             <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>

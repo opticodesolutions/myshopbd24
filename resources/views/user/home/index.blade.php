@@ -43,7 +43,8 @@
                                         <p class="m-0">Account Type</p>
 
 
-                                        @if($balance < 0) <span style="padding-bottom: 5px;"
+                                        @if($balance < 0)
+                                        <span style="padding-bottom: 5px;"
                                             class="pl-4 pr-4 badge bg-secondary badge-pill">Processing</span>
                                             <div class="">
                                                 <label class="form-label">Current Balance: {{ $balance }}</label>

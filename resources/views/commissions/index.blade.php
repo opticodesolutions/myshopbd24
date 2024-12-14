@@ -51,9 +51,9 @@
                                     ">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $commissions->id }}</td>
-                                        <td>{{ $commissions->sale->id }}</td>
+                                        <td>{{ @$commissions->sale->id }}</td>
                                         <td>{{ $commissions->user->id }}</td>
-                                        <td>{{ $commissions->sale->product->name }}</td>
+                                        <td>{{ @$commissions->sale->product->name }}</td>
                                         <td>
                                             @switch($commissions->transaction_type)
                                                 @case('admin_profit_from_matching_commission')
