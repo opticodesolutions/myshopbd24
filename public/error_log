@@ -1,0 +1,1 @@
+[06-Sep-2024 19:09:24 UTC] PHP Fatal error:  Cannot use App\Models\Purchase as Purchase because the name is already in use in /home/myshopbd/public_html/app/Http/Controllers/SaleController.php on line 10
