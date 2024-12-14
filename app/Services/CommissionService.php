@@ -166,7 +166,7 @@ class CommissionService
         // Check if both left and right are sufficient to pay the downline bonus
         if ($commission->left_amount >= $amount && $commission->right_amount >= $amount) {
             // Distribute the bonus
-            $parent->increment('wallet_balance', $amount);
+            $parent->increment('wallet_balance', $commission->left_amount+$commission->right_amount);
 
             // Deduct the amount from left and right to balance out the distribution
             $commission->left_amount -= $amount;
@@ -175,7 +175,7 @@ class CommissionService
             Transaction::create([
                 'user_id' => $sale->user_id,
                 'sale_id' => $sale->id,
-                'amount' => $amount,
+                'amount' => $commission->left_amount+$commission->right_amount,
                 'transaction_type' => 'downline_bonus',
             ]);
         }
