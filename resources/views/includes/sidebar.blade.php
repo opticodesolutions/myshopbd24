@@ -85,6 +85,9 @@
                         <li class="sidebar-item">
                             <a class='sidebar-link' href='{{ url('/transactions') }}'>List Transactions</a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class='sidebar-link' href='{{ url('/admin/subscription-fee') }}'>Admin Subscription Fee</a>
+                        </li>
                         
                     </ul>
                 </li>

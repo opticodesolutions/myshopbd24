@@ -64,4 +64,23 @@ class TransactionController extends Controller
         Transaction::findOrFail($id)->delete();
         return response()->json(null, 204);
     }
+
+    public function Admin_Subscription_fee(Request $request){
+
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
+            // Fetch paginated results
+            $admin_subscription_fee = Transaction::where('transaction_type', 'admin_subscription_fee')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+            // Calculate the total amount from the paginated results
+            $totalAmount = $admin_subscription_fee->sum('amount');
+
+            // Return view with paginated data and total amount
+            return view('commissions.admin_subscription_fee', compact('admin_subscription_fee', 'totalAmount'));
+        } else {
+            return redirect()->back()->with('error', 'Unauthorized');
+        }
+    }
 }

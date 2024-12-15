@@ -151,6 +151,8 @@ Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.job
 
     // Customer routes
     Route::resource('customers', CustomerController::class);
+    // Admin Subscription Fee
+    Route::get('admin/subscription-fee', [TransactionController::class, 'Admin_Subscription_fee'])->name('admin.subscription.index');
 });
 
 // Admin Routes
