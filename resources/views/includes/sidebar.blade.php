@@ -199,7 +199,7 @@
                 <ul id="Income" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Income">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('purchase.commission') }}'>Purchase Income</a></li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('sales.commission') }}'>Sales Income</a>
+                        <a class='sidebar-link' href='{{ route('sales.income') }}'>Sales Income</a>
                     </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('refer.commission') }}'>Refer Income</a>

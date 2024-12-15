@@ -164,11 +164,4 @@ class SaleController extends Controller
         return response()->json(null, 204);
     }
 
-
-    public function sale_commission()
-    {
-        $user = auth()->user();
-        $sale_commissions = Sale::where('user_id', $user->id)->paginate(1);
-        return view('commissions.sale_commissions', compact('sale_commissions'));
-    }
 }

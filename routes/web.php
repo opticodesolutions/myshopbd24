@@ -17,6 +17,7 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SalesIncomeController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/link', function () {
@@ -67,20 +68,17 @@ Route::get('sale/now/{id}', [SaleController::class, 'sale_now'])->name('sale.now
 
 Route::post('purchase/save', [PurchaseController::class, 'purchase_save'])->name('purchase.save');
 
-// Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
+Route::get('sales/commission', [TransactionController::class, 'index'])->name('sales.commission');
 Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
 // purchase/now/2
 
-
-
-
-Route::resource('sales', SaleController::class
+Route::resource('sales', SaleController::class);
 Route::resource('customers', CustomerController::class);
 
 
 Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
-Route::get('sales/income', [SaleController::class, 'sale_commission'])->name('sales.income');
+Route::get('sales-income', [SalesIncomeController::class, 'sale_commission'])->name('sales.income');
 Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
 Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 
