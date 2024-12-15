@@ -208,6 +208,9 @@
                         <a class='sidebar-link' href='{{ route('insensitive.income') }}'>Insentive Income</a>
                     </li>
                     <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('macthing.comminsion') }}'>Matching Income</a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('total.commission') }}'>Total Income</a>
                     </li>
                 </ul>

@@ -79,6 +79,7 @@ Route::resource('customers', CustomerController::class);
 
 Route::get('purchase/commission', [PurchaseController::class, 'purchase_commission'])->name('purchase.commission');
 Route::get('sales-income', [SalesIncomeController::class, 'sale_commission'])->name('sales.income');
+Route::get('macthing-comminsion', [SalesIncomeController::class, 'matching_commission'])->name('macthing.comminsion');
 Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
 Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 

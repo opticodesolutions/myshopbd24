@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Sale;
 use App\Models\User;
-use App\Models\Customer;
 use App\Models\Commission;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
@@ -29,10 +28,6 @@ class Customer extends Model
         'subscription_start_date',
         'subscription_end_date'
     ];
-
-
-
-
 
     public function user()
     {
