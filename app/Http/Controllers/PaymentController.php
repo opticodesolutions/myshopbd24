@@ -23,7 +23,10 @@ class PaymentController extends Controller
 
     public function withdrawIndex()
     {
-        $withdrawals = Payment::where('type', 'withdraw')->where('user_id', Auth::id())->get();
+        $withdrawals = Payment::where('type', 'withdraw')
+        ->where('user_id', Auth::id())
+        ->orderby('created_at', 'desc')
+        ->paginate(10);
         return view('user.Payments.withdraw.index', compact('withdrawals'));
     }
 
@@ -39,27 +42,33 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'notes' => 'nullable|string',
-            'payment_method' => 'required|in:cash,Bkash',
-            'account_id' => 'nullable|integer',
-            'transaction_id' => 'nullable|string',
-            'amount' => 'required|numeric',
-            'type' => 'required|in:topup,withdraw',
-        ]);
+        try{
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'notes' => 'nullable|string',
+                'payment_method' => 'required|in:cash,Bkash',
+                'account_id' => 'nullable|integer',
+                'transaction_id' => 'nullable|string',
+                'amount' => 'required|numeric',
+                'type' => 'required|in:topup,withdraw',
+            ]);
+            $request_user_info = Customer::where('user_id', auth()->user()->id)->first();
+            if ($request_user_info->wallet_balance < $request->amount)
+            return redirect()->back()->with('error', 'Insufficient balance.');
 
-        $data['status'] = 'pending';
+            $data['status'] = 'pending';
 
-        Payment::create($data);
+            Payment::create($data);
 
-        return redirect()->back()->with('success', 'Payment request created successfully.');
+            return redirect()->back()->with('success', 'Payment request created successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function updateStatus(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
-
         $user = auth()->user();
         $customer = Customer::where('user_id', $user->id)->first();
 
