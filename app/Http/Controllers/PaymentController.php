@@ -152,7 +152,9 @@ class PaymentController extends Controller
 
     public function topupList()
     {
-        $topups = Payment::where('type', 'topup')->paginate(10);
+        $topups = Payment::where('type', 'topup')
+        ->orderby('created_at', 'desc')
+        ->paginate(10);
         return view('super-admin.Payments.Topup.index', compact('topups'));
     }
 
