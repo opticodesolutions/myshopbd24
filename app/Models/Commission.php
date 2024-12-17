@@ -10,7 +10,7 @@ class Commission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'sale_id', 'direct_bonus', 'downline_bonus', 'matching_bonus'];
+    protected $fillable = ['customer_id', 'sale_id', 'direct_bonus', 'downline_bonus', 'matching_bonus', 'subscription_bonus'];
 
     public function customer()
     {

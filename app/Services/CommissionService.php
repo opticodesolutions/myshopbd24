@@ -10,21 +10,33 @@ use App\Models\Purchase;
 use App\Models\Commission;
 use App\Models\Transaction;
 use App\Models\MatchingCommission;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class CommissionService
 {
+   private $subcriptionCommission;
+    public function __construct(SubcriptionCommission $subcriptionCommission){
+        $this->subcriptionCommission = $subcriptionCommission;
+    }
     /**
      * Calculate commissions for a sale.
      */
     public function calculateCommissions(Sale $sale)
     {
-        DB::transaction(function () use ($sale) {
+       DB::beginTransaction();
+       try{
+            $this->subcriptionCommission->distributeSubcriptionDownlineBonus($sale);
             $this->sellTransactions($sale);
             $this->handleSubscriptionFee($sale);
             $this->distributeDirectBonus($sale);
             $this->distributeDownlineBonus($sale);
-        });
+           
+            DB::commit();
+       }catch(Exception $e){
+           DB::rollBack();
+           return redirect()->back()->with('error', $e->getMessage());
+       }
     }
 
     private function sellTransactions(Sale $sale)
@@ -125,7 +137,7 @@ class CommissionService
         $downlineBonus = 1500;
         $remainingBonus = $downlineBonus;
         $childCommission = 250;
-        $matchingLevels = 10;
+        $matchingLevels = 11;
         $levelsCovered = 0;
 
         $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
