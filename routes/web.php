@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\IncentiveIncomeController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PurchaseController;
@@ -153,6 +154,8 @@ Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.job
     Route::resource('customers', CustomerController::class);
     // Admin Subscription Fee
     Route::get('admin/subscription-fee', [TransactionController::class, 'Admin_Subscription_fee'])->name('admin.subscription.index');
+    // Insective Info
+    Route::resource('incentive_income', IncentiveIncomeController::class);
 });
 
 // Admin Routes

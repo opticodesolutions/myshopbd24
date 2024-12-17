@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\JobsPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\IncentiveIncome;
 use App\Models\Sale;
 
 class FrontendController extends Controller
@@ -127,7 +128,8 @@ class FrontendController extends Controller
 
     public function insensitive_info(){
         if (auth()->check()) {
-            return view('commissions.insensitive_income');
+            $incentiveIncomes = IncentiveIncome::paginate(10);
+            return view('commissions.insensitive_income', compact('incentiveIncomes'));
         }else{
             return redirect('/login');
         }
