@@ -26,7 +26,6 @@
                                     <div class="mt-3 mb-3">
                                         <h4 class="text-capitalize"> <span id="ContentPlaceHolder1_txtName"
                                                 class="progress-description">{{ $item->user->name }}</span></h4>
-
                                     </div>
                                 </div>
                                 @php
@@ -48,10 +47,10 @@
                                             class="pl-4 pr-4 badge bg-secondary badge-pill">Processing</span>
                                             <div class="">
                                                 <label class="form-label">Current Balance: {{ $balance }}</label>
-
-                                                {{-- <label class="form-label">Remaining to Reach 0: ${{ $remainingAmount }}</label>
-                                                --}}
-                                                <div class="progress">
+<br>
+                                                <label class="form-label">Completed {{ number_format(100-$progress, 2) }}%</label>
+                                                
+                                                <div class="progress" style=" background-color: #FF5722; color: black; --bs-progress-bar-bg: green; ">
                                                     <div class="progress-bar" role="progressbar"
                                                         style="width: {{ 100-$progress }}%;"
                                                         aria-valuenow="{{ 100-$progress }}" aria-valuemin="0"
@@ -97,6 +96,27 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col mt-0">
+                                <h5 class="card-title">Wallet Balance</h5>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stat text-primary">
+                                    <i class="align-middle" data-feather="dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h1 class="mt-1 mb-3">{{$Balance_customer}}</h1>
+                        <div class="mb-0">
+                            <span class="badge badge-success-light">3.65%</span>
+                            <span class="text-muted">Since last week</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
