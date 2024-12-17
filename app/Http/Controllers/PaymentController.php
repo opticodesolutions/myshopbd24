@@ -131,7 +131,7 @@ class PaymentController extends Controller
                         ]);
                         Account::create([
                             'amount' => $request->amount,
-                            'type' => 'cadit',
+                            'type' => 'cradit',
                             'tran_id' => $transection->id,
                             'approved_by' => Auth::id()
                         ]);
@@ -160,7 +160,7 @@ class PaymentController extends Controller
 
     public function withdrawList()
     {
-        $withdrawals = Payment::where('type', 'withdraw')->get();
+        $withdrawals = Payment::where('type', 'withdraw')->paginate(10);
         return view('super-admin.Payments.withdraw.index', compact('withdrawals'));
     }
 
