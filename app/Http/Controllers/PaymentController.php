@@ -17,7 +17,10 @@ class PaymentController extends Controller
 {
     public function topupIndex()
     {
-        $topups = Payment::where('type', 'topup', )->where('user_id', Auth::id())->get();
+        $topups = Payment::where('type', 'topup', )
+        ->orderby('created_at', 'desc')
+        ->where('user_id', Auth::id())
+        ->paginate(10);
         return view('user.Payments.Topup.index', compact('topups'));
     }
 
@@ -149,7 +152,7 @@ class PaymentController extends Controller
 
     public function topupList()
     {
-        $topups = Payment::where('type', 'topup')->get();
+        $topups = Payment::where('type', 'topup')->paginate(10);
         return view('super-admin.Payments.Topup.index', compact('topups'));
     }
 
