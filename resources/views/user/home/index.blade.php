@@ -66,9 +66,6 @@
                                                 class="pl-4 pr-4 badge bg-secondary badge-pill">Customer</span>
                                             @endif
 
-
-
-
                                     </li>
                                     <li class="list-group-item bg-transparent py-2 ">
                                         <p class="m-0">Mobile No</p>
@@ -80,7 +77,17 @@
                                         <span
                                             class="badge bg-secondary badge-pill ps-4 pe-4">{{$item->user->email}}</span>
                                     </li>
+                                    @php
+                                        $startDate = \Carbon\Carbon::parse($item->subscription_start_date);
+                                        $endDate = \Carbon\Carbon::parse($item->subscription_end_date);
 
+                                        $diffInMonths = $startDate->diffInMonths($endDate);
+                                        $diffInDays = $startDate->diffInDays($endDate->copy()->subMonths($diffInMonths));
+                                    @endphp
+                                    <li class="list-group-item bg-transparent py-1 ">
+                                        <p class="m-0">Membership Duration Remaining</p>
+                                            <span class="badge bg-primary badge-pill ps-4 pe-4">{{ $diffInMonths }} months</span>
+                                    </li>
                                     </ul>
                                     @endforeach
                             </div>
