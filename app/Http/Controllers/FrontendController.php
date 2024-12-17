@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\JobsPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Sale;
 
 class FrontendController extends Controller
 {
@@ -104,7 +105,7 @@ class FrontendController extends Controller
     public function join_invoice()
     {
         if (auth()->check()) {
-            $purchase = Purchase::with('product')->where('user_id', auth()->user()->id)->first();
+            $purchase = Sale::with('product')->where('customer_id', auth()->user()->id)->first();
             if ($purchase == null) {
               return redirect()->back()->with('error', 'You have not purchased any Package yet');
             }else {

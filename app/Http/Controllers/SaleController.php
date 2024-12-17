@@ -46,9 +46,9 @@ class SaleController extends Controller
     public function refer_commissions()
     {
         $user = auth()->user();
-        $commissions = Transaction::where('user_id', $user->id)->where('transaction_type', 'direct_bonus')->paginate(10);
-        $totalCommission = $commissions->sum('amount');
-        return view('commissions.index', compact('commissions', 'totalCommission'));
+        $all = Transaction::where('user_id', $user->id)->where('transaction_type', 'direct_bonus')->paginate(10);
+        $totalCommission = $all->sum('amount');
+        return view('commissions.index', compact('all', 'totalCommission'));
     }
 
     public function show($id)

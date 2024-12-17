@@ -66,20 +66,21 @@
           </tr>
           <tr>
             <td colspan="3">PAID</td>
-            <td>৳ {{$purchase->product->price}}</td>
+            <td>৳ {{ $purchase->status == 'delivered' ? $purchase->product->price : 0 }}</td>
+            
           </tr>
           <tr>
             <td colspan="3">DUE</td>
-            <td>৳ 00</td>
+            <td>৳ {{ $purchase->status != 'delivered' ? $purchase->product->price : 0 }}</td>
           </tr>
         </tfoot>
       </table>
 
-
-      <div style="display: flex;align-items: center;justify-content: center; margin-bottom: 10px;">
-        <img src="https://happyproductsltd.com/image/static/paid.png" style="width: 130px;height: auto;">
-      </div>
-
+      @if ($purchase->status == 'delivered')
+        <div style="display: flex;align-items: center;justify-content: center; margin-bottom: 10px;">
+          <img src="https://happyproductsltd.com/image/static/paid.png" style="width: 130px;height: auto;">
+        </div>
+      @endif
 
 
         <div id="thanks">Thank you! To be with us</div>

@@ -102,6 +102,12 @@
                                         @endauth
                                     </tr>
                                 @endforeach
+                                {{-- <tr>
+                                    <td colspan="5"></td>
+                                    <td colspan="2">Total</td>
+                                    <td>{{ $totalCommission }}.TK</td>
+                                    <td></td>
+                                </tr> --}}
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end mt-3">
