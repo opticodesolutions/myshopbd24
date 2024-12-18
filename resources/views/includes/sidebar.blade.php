@@ -259,7 +259,9 @@
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('payments.withdraw.create') }}'>Withdraw Now</a>
                     </li>
-                    
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='{{ route('payments.withdraw.index') }}'>Withdraw History</a>
+                    </li>
                 </ul>
             </li>
             <li class="sidebar-item">
@@ -281,9 +283,9 @@
                 <a class='sidebar-link' href='https://wa.me/+8801757760650'>Support</a>
             </li>
 
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a class='sidebar-link' href='{{ route('users.branch_list') }}'>Branch List</a>
-            </li>
+            </li> --}}
 
 
             <li class="sidebar-item">
