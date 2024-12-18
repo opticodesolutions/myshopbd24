@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\DB;
 
 class CommissionService
 {
-   private $subcriptionCommission;
-    public function __construct(SubcriptionCommission $subcriptionCommission){
+    private $subcriptionCommission;
+    public function __construct(SubcriptionCommission $subcriptionCommission)
+    {
         $this->subcriptionCommission = $subcriptionCommission;
     }
     /**
@@ -24,19 +25,20 @@ class CommissionService
      */
     public function calculateCommissions(Sale $sale)
     {
-       DB::beginTransaction();
-       try{
-            $this->subcriptionCommission->distributeSubcriptionDownlineBonus($sale);
+        DB::beginTransaction();
+        try {
+            $this->subcriptionCommission->distributeSubscriptionDownlineBonus($sale);
             $this->sellTransactions($sale);
             $this->handleSubscriptionFee($sale);
             $this->distributeDirectBonus($sale);
             $this->distributeDownlineBonus($sale);
-           
+
+
             DB::commit();
-       }catch(Exception $e){
-           DB::rollBack();
-           return redirect()->back()->with('error', $e->getMessage());
-       }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     private function sellTransactions(Sale $sale)
