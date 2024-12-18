@@ -157,6 +157,11 @@
             <a class="sidebar-link" href="{{ route('incentive_income.index') }}">
                 <i class="align-middle" data-feather="sliders"></i> Incentive Income</a>
         </li>
+        {{-- incentive_income --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
+                <i class="align-middle" data-feather="sliders"></i> Subcriptions</a>
+        </li>
 
                 <li class="sidebar-item">
                     <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed">
@@ -254,10 +259,11 @@
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('payments.withdraw.create') }}'>Withdraw Now</a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class='sidebar-link' href='{{ route('payments.withdraw.index') }}'>Withdraw history</a>
-                    </li>
+                    
                 </ul>
+            </li>
+            <li class="sidebar-item">
+               <a class='sidebar-link' href='{{ route('subcription-renew.show',Auth::user()->id) }}'><i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Subcription history</span></a>
             </li>
             <li class="sidebar-item">
                 <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">

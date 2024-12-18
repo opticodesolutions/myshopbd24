@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Home')
 @section('content')
-    <main class="content">
+<main class="content">
     <div class="container-fluid p-0">
         <!-- TopUp History Section -->
         <div class="row mb-4">

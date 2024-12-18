@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesIncomeController;
+use App\Http\Controllers\SubcriptioRenewController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/link', function () {
@@ -84,7 +85,7 @@ Route::get('macthing-comminsion', [SalesIncomeController::class, 'matching_commi
 Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->name('refer.commission');
 Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 
-
+Route::resource('subcription-renew', SubcriptioRenewController::class);
 
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
