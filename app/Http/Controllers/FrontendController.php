@@ -120,7 +120,8 @@ class FrontendController extends Controller
 
     public function insensitive_income(){
         if (auth()->check()) {
-            return view('commissions.insensitive_income');
+            $incentiveIncomes = IncentiveIncome::paginate(10);
+            return view('commissions.insensitive_income', compact('incentiveIncomes'));
         }else{
             return redirect('/login');
         }

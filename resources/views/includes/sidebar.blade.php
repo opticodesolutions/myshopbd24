@@ -152,6 +152,11 @@
         </li>
     </ul>
 </li>
+        {{-- incentive_income --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('incentive_income.index') }}">
+                <i class="align-middle" data-feather="sliders"></i> Incentive Income</a>
+        </li>
 
                 <li class="sidebar-item">
                     <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed">
