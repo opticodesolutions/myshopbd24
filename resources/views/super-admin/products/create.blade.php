@@ -3,17 +3,12 @@
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">
-
-        <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Create Product</h1>
-        </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Product</h5>
-                        <h6 class="card-subtitle text-muted">Create New Product</h6>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h2>Product</h2>
+                        <a href="{{ route('products.index') }}" class="btn btn-primary mb-3"><i class="fas fa-list"></i> Product List</a>
                     </div>
                     <div class="card-body">
                         @if($errors->any())
@@ -39,13 +34,13 @@
                                         <input type="text" class="form-control" name="name" placeholder="Product Name" required />
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Price</label>
-                                        <input type="number" class="form-control" name="price" placeholder="Price" required />
+                                        <label class="form-label">Buy Price</label>
+                                        <input type="number" class="form-control" name="price" placeholder="Buy Price" required />
                                     </div>
-                                    <!--<div class="mb-3">-->
-                                    <!--    <label class="form-label">Discount Price</label>-->
-                                    <!--    <input type="number" class="form-control" name="discount_price" placeholder="Discount Price" />-->
-                                    <!--</div>-->
+                                    <div class="mb-3">
+                                       <label class="form-label">Sell Price</label>
+                                        <input type="number" class="form-control" name="discount_price" placeholder="Sell Price" />
+                                    </div>
                                     {{-- purchase_commission --}}
 
                                     <div class="mb-3">

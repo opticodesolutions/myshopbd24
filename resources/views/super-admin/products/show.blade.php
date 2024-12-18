@@ -24,9 +24,9 @@
                                 <dd class="col-sm-8">{{ $product->product_code }}</dd>
                                 <dt class="col-sm-4">Name:</dt>
                                 <dd class="col-sm-8">{{ $product->name }}</dd>
-                                <dt class="col-sm-4">Price:</dt>
+                                <dt class="col-sm-4">Buy Price:</dt>
                                 <dd class="col-sm-8">${{ number_format($product->price, 2) }}</dd>
-                                <dt class="col-sm-4">Discount Price:</dt>
+                                <dt class="col-sm-4">Sell Price:</dt>
                                 <dd class="col-sm-8">${{ number_format($product->discount_price, 2) }}</dd>
                                 <dt class="col-sm-4">Commission:</dt>
                                 <dd class="col-sm-8">${{$product->commissions->sum('amount') ?? '0.00'}}</dd>

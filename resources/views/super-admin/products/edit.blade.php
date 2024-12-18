@@ -3,18 +3,12 @@
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
-
-            <div class="mb-3">
-                <h3>Update Product</h3>
-                <a href="{{ route('products.index') }}" class="btn btn-primary mb-3">List Product</a>
-            </div>
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Product</h5>
-                            <h6 class="card-subtitle text-muted">Update Product Details</h6>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h2>Update Product</h2>
+                            <a href="{{ route('products.index') }}" class="btn btn-primary mb-3"><i class="fas fa-list"></i> List Product</a>
                         </div>
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -55,16 +49,16 @@
                                                 required />
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Price</label>
+                                            <label class="form-label">Buy Price</label>
                                             <input type="text" class="form-control" name="price"
-                                                value="{{ old('price', $product->price) }}" placeholder="Price" required />
+                                                value="{{ old('price', $product->price) }}" placeholder="Buy Price" required />
                                         </div>
-                                        <!--<div class="mb-3">-->
-                                        <!--    <label class="form-label">Discount Price</label>-->
-                                        <!--    <input type="text" class="form-control" name="discount_price"-->
-                                        <!--        value="{{ old('discount_price', $product->discount_price) }}"-->
-                                        <!--        placeholder="Discount Price" />-->
-                                        <!--</div>-->
+                                       <div class="mb-3">
+                                           <label class="form-label">Sell Price</label>
+                                          <input type="text" class="form-control" name="discount_price"
+                                            value="{{ old('discount_price', $product->discount_price) }}"
+                                                placeholder="Sell Price" />
+                                        </div>
                                          {{-- purchase_commission --}}
 
                                         <div class="mb-3">

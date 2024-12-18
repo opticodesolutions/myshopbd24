@@ -3,27 +3,22 @@
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">
-
-        <div class="mb-3">
-            <h3>Product List</h3>
-            <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add New Product</a>
-        </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Product</h5>
-                        <h6 class="card-subtitle text-muted">List</h6>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h3>Product List</h3>
+                      <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add New Product</a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="table-dark">
                                 <tr>
                                     <th>SL</th>
                                     <th>Product Code</th>
                                     <th>Name</th>
-                                    <th>Price</th>
+                                    <th>Buy Price</th>
+                                    <th>Sell Price</th>
                                     <th>Stock</th>
                                     <th>Category</th>
                                     <th>Brand</th>
@@ -37,6 +32,7 @@
                                         <td>{{ $product->product_code }}</td>
                                         <td>{{ $product->name }}</td>
                                         <td>BDT {{ number_format($product->price, 2) }}</td>
+                                        <td>BDT {{ number_format($product->discount_price, 2) }}</td>
                                         <td>{{ $product->stock }}</td>
                                         <td>{{ $product->category->name }}</td>
                                         <td>{{ $product->brand->name }}</td>
@@ -54,7 +50,9 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <div class="d-flex justify-content-end mt-3">
+                        {{ $products->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
