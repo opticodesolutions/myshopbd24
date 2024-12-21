@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Services\CommissionService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class SaleController extends Controller
@@ -25,13 +26,9 @@ class SaleController extends Controller
     {
         $user = auth()->user();
             if ($user->hasRole('super-admin')) {
-                $sales = Sale::with('user', 'product')->get();
-
-                //$purchases = Purchase::with('user', 'product' )->get();
-
-                // $combinedData = $sales->merge($purchases);
+                $sales = Sale::with('user', 'product')->orderby('created_at', 'desc')->paginate(10);
             }else{
-                $sales = Sale::with('user', 'product')->where('user_id', $user->id)->get();
+                $sales = Sale::with('user', 'product')->where('user_id', $user->id)->orderby('created_at', 'desc')->paginate(10);
             }
             // return $purchases
         return view('sales.index', compact('sales'));
@@ -69,61 +66,66 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-
-        $product = Product::findOrFail($request->product_id);
-        if ($product->stock < $request->quantity??1) {
-            return back()->with('error', 'Insufficient stock.');
-        }
+        DB::beginTransaction();
+        try{
+            $product = Product::findOrFail($request->product_id);
+            if ($product->stock < $request->quantity ?? 1) {
+                return back()->with('error', 'Insufficient stock.');
+            }
 
             // Create User
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        $user->assignRole("user");
+            $user->assignRole("user");
 
 
             // Create Customer
-        $referByCustomer = Customer::where('refer_code', $request->refer_code)->first();//parent
+            $referByCustomer = Customer::where('refer_code', $request->refer_code)->first(); //parent
 
 
-        $customer = Customer::create([
-            'user_id' => $user->id,
-            'Total_Sales' => 0,
-            'refer_code' => strtoupper(substr(md5(time() . $user->id), 0, 10)), // Generate unique referral code
-            // 'refer_by' => $referByCustomer ? $referByCustomer->refer_code : null,
-            'refer_by' => $request->refer_code ?? null,
+            $customer = Customer::create([
+                'user_id' => $user->id,
+                'Total_Sales' => 0,
+                'refer_code' => strtoupper(substr(md5(time() . $user->id), 0, 10)), // Generate unique referral code
+                // 'refer_by' => $referByCustomer ? $referByCustomer->refer_code : null,
+                'refer_by' => $request->refer_code ?? null,
 
-            // 'position_parent' => $referByCustomer ? $referByCustomer->id : null,
-            'position_parent' => $request->refer_code ?? null,
+                // 'position_parent' => $referByCustomer ? $referByCustomer->id : null,
+                'position_parent' => $request->refer_code ?? null,
 
-            'position' => $request->position,
-            'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
-            'Total_sale_commission' => 0,
-            'matching_commission' => 0,
-            'wallet_balance' => -$product->price,
-            'subscription_start_date' => now(),
-            'subscription_end_date' => now()->addMonth(),
-        ]);
+                'position' => $request->position,
+                'level' => $referByCustomer ? $referByCustomer->level + 1 : 1,
+                'Total_sale_commission' => 0,
+                'matching_commission' => 0,
+                'wallet_balance' => -$product->price,
+                'subscription_start_date' => now(),
+                'subscription_end_date' => now()->addMonth(),
+            ]);
 
             // Process Sale
-        $totalAmount = $product->price * $request->quantity??1;
-        $parent = Customer::where('refer_code', $request->refer_code)->first();
-        $sale = Sale::create([
-            'product_id' => $product->id,
-            'user_id' => $parent->user_id,
-            'customer_id' => $customer->user_id,
-            'price' => $product->price,
-            'quantity' => $request->quantity ?? 1,
-            'total_amount' => $totalAmount,
-        ]);
+            $totalAmount = $product->price * $request->quantity ?? 1;
+            $parent = Customer::where('refer_code', $request->refer_code)->first();
+            $sale = Sale::create([
+                'product_id' => $product->id,
+                'user_id' => $parent->user_id,
+                'customer_id' => $customer->user_id,
+                'price' => $product->price,
+                'quantity' => $request->quantity ?? 1,
+                'total_amount' => $totalAmount,
+            ]);
 
-        // Adjust stock
-        $product->decrement('stock', $request->quantity??1);
-
-        return redirect()->route('products.index')->with('success', 'Product purchased and user created successfully.');
+            // Adjust stock
+            $product->decrement('stock', $request->quantity ?? 1);
+            DB::commit();
+            return redirect()->route('sales.income')->with('success', 'Sale created successfully.');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
 

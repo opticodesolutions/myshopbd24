@@ -4,24 +4,18 @@
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">
-
-        <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Sales</h1>
-        </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Sales List</h5>
-                        <h6 class="card-subtitle text-muted">Manage sales and their statuses.</h6>
+                        <h1>Sales List</h1>
                     </div>
-                    <div class="card-body">
-                        <table id="datatables-multi" class="table table-striped" style="width:100%">
-                            <thead>
+                    <div class="card-body table-border-style table-responsive">
+                        <table id="datatables-multi" class="table">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>SL</th>
-                                    <th>Sall ID</th>
+                                    <th>Sell ID</th>
                                     <th>Product Code</th>
                                     <th>Product</th>
                                     <th>Seller</th>
@@ -91,6 +85,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        {{ $sales->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>
