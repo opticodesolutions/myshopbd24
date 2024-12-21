@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\DailyBonusDistibutte;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
@@ -32,8 +33,7 @@ class CommissionService
             $this->handleSubscriptionFee($sale);
             $this->distributeDirectBonus($sale);
             $this->distributeDownlineBonus($sale);
-
-
+            DailyBonusDistibutte::dispatch($sale);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

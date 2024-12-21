@@ -161,6 +161,11 @@
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
                 <i class="align-middle" data-feather="sliders"></i> Subcriptions</a>
+        </li> 
+        {{-- incentive_income --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('/queue-job') }}">
+                <i class="align-middle" data-feather="sliders"></i> Daily Bonus Distribute</a>
         </li>
 
                 <li class="sidebar-item">

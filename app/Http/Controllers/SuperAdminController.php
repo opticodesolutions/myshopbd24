@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class SuperAdminController extends Controller
 {
@@ -78,5 +80,44 @@ class SuperAdminController extends Controller
             'totaldabit',
             'totalcredit'
         ));
+    }
+
+    public function QueueJob(Request $request)
+    {
+        $jobs = DB::table('jobs')
+        ->select('id', 'queue', 'payload', 'attempts', 'reserved_at', 'available_at', 'created_at')
+        ->get();
+
+        $faild = DB::table('failed_jobs')
+        ->select('id', 'connection', 'queue', 'payload', 'exception', 'failed_at')
+        ->get();
+
+        $totalPendingJobs = DB::table('jobs')->count();
+        $totalFieldJobs = DB::table('failed_jobs')->count();
+        $output = shell_exec('ps aux | grep "queue:work" | grep -v "grep"');
+
+        $isRunning = !empty($output);
+        return view('super-admin.queue-job.index', compact('isRunning','jobs', 'faild','totalPendingJobs','totalFieldJobs'));
+    }
+
+    public function QueueJobPOST(Request $request)
+    {
+        try {
+            sleep(10);
+            // // Trigger queue worker
+            Artisan::call('queue:work', [
+                '--stop-when-empty' => true, 
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Job queued successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error processing job queue: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to process the job queue',
+            ], 500);
+        }
     }
 }

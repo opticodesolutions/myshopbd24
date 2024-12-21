@@ -157,6 +157,9 @@ Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.job
     Route::get('admin/subscription-fee', [TransactionController::class, 'Admin_Subscription_fee'])->name('admin.subscription.index');
     // Insective Info
     Route::resource('incentive_income', IncentiveIncomeController::class);
+    // Queue Job Routes
+    Route::get('/queue-job', [SuperAdminController::class, 'QueueJob'])->name('queue.job');
+    Route::post('/queue-job', [SuperAdminController::class, 'QueueJobPOST'])->name('queue.job.post');
 });
 
 // Admin Routes
