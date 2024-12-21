@@ -129,6 +129,7 @@ Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.job
     Route::get('admin/all-customers', [UserController::class, 'customers'])->name('admin.customers.index');
     Route::get('admin/all-agents', [UserController::class, 'agents'])->name('admin.agents.index');
     Route::get('admin/all-users', [UserController::class, 'all_users'])->name('admin.users.index');
+    Route::get('admin/user-distroy/{id}', [UserController::class, 'user_distroy'])->name('admin.users.distroy');
 
 
 

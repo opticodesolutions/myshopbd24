@@ -34,13 +34,13 @@
         <ul class="sidebar-nav">
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route($role)}}">
-                    <i class="align-middle" data-feather="sliders"></i>  <span class="align-middle">Dashboard</span>
+                    <i class="fas fa-tachometer-alt"></i>  <span class="align-middle">Dashboard</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="/">
-                    <i class="align-middle" data-feather="sliders"></i>  <span class="align-middle">Home</span>
+                    <i class="fas fa-home"></i>  <span class="align-middle">Home</span>
                 </a>
             </li>
             @if($role == 'super-admin')
@@ -49,7 +49,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Products</span>
+                        <i class="fas fa-box-open"></i> <span class="align-middle">Products</span>
                     </a>
                     <ul id="product" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item"><a class='sidebar-link' href='{{ route('products.create') }}'>Create Product</a></li>
@@ -61,7 +61,7 @@
 
                 <li class="sidebar-item">
                     <a data-bs-target="#category" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Categories</span>
+                        <i class="fas fa-th-list"></i> <span class="align-middle">Categories</span>
                     </a>
                     <ul id="category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
@@ -75,7 +75,7 @@
 
                 <li class="sidebar-item">
                     <a data-bs-target="#Commissions" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Commissions</span>
+                        <i class="fas fa-hand-holding-usd"></i> <span class="align-middle">Commissions</span>
                     </a>
                     <ul id="Commissions" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item"><a class='sidebar-link' href='{{ route('commissions.create') }}'>Create Commissions</a></li>
@@ -94,7 +94,7 @@
 
                 <li class="sidebar-item">
                     <a data-bs-target="#Brand" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Brands</span>
+                        <i class="fas fa-tags"></i> <span class="align-middle">Brands</span>
                     </a>
                     <ul id="Brand" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item"><a class='sidebar-link' href='{{ route('brands.create') }}'>Create Brand</a></li>
@@ -107,7 +107,7 @@
 
                 <li class="sidebar-item">
                     <a data-bs-target="#sales" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Sales</span>
+                        <i class="fas fa-chart-line"></i> <span class="align-middle">Sales</span>
                     </a>
                     <ul id="sales" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item">
@@ -121,7 +121,7 @@
 
                 <li class="sidebar-item">
                     <a data-bs-target="#payments" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Payments</span>
+                        <i class="fas fa-credit-card"></i> <span class="align-middle">Payments</span>
                     </a>
                     <ul id="payments" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item">
@@ -135,7 +135,7 @@
                     </ul>
                 </li>
 
-<li class="sidebar-item">
+{{-- <li class="sidebar-item">
     <a data-bs-target="#jobs" data-bs-toggle="collapse" class="sidebar-link collapsed">
         <i class="align-middle" data-feather="sliders"></i>
         <span class="align-middle">Jobs</span>
@@ -151,26 +151,26 @@
             <a class="sidebar-link" href="{{ route('join.job_list') }}">View Jobs</a>
         </li>
     </ul>
-</li>
+</li> --}}
         {{-- incentive_income --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('incentive_income.index') }}">
-                <i class="align-middle" data-feather="sliders"></i> Incentive Income</a>
+                <i class="fas fa-gift"></i> Incentive Income</a>
         </li>
         {{-- incentive_income --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
-                <i class="align-middle" data-feather="sliders"></i> Subcriptions</a>
+                <i class="fas fa-sync-alt"></i> Subcriptions</a>
         </li> 
         {{-- incentive_income --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ url('/queue-job') }}">
-                <i class="align-middle" data-feather="sliders"></i> Daily Bonus Distribute</a>
+                 <i class="fas fa-gift"></i> Daily Bonus Distribute</a>
         </li>
 
                 <li class="sidebar-item">
                     <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">User</span>
+                        <i class="fas fa-users"></i> <span class="align-middle">User</span>
                     </a>
                     <ul id="user" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                         <li class="sidebar-item">
@@ -194,7 +194,7 @@
 
             <li class="sidebar-item">
                 <a data-bs-target="#Profile" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Profile</span>
+                    <i class="fas fa-user"></i> <span class="align-middle">Profile</span>
                 </a>
                 <ul id="Profile" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Profile">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('personal.info') }}'>Personal Info</a></li>
@@ -212,7 +212,7 @@
 
             <li class="sidebar-item">
                 <a data-bs-target="#Income" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Income</span>
+                    <i class="fas">৳</i> <span class="align-middle">Income</span>
                 </a>
                 <ul id="Income" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Income">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('purchase.commission') }}'>Purchase Income</a></li>
@@ -236,7 +236,7 @@
 
             <li class="sidebar-item">
                 <a data-bs-target="#Team" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Team Information</span>
+                    <i class="fas fa-users"></i> <span class="align-middle">Team Information</span>
                 </a>
                 <ul id="Team" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Team">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations.tree') }}'>Team Tree List</a></li>
@@ -252,7 +252,7 @@
 
             <li class="sidebar-item">
                 <a data-bs-target="#Payment" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Payment Information</span>
+                     <i class="fas fa-credit-card"></i>  <span class="align-middle">Payment Information</span>
                 </a>
                 <ul id="Payment" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Payment">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('coin.transfer') }}'>Coin Transfer</a></li>
@@ -270,11 +270,11 @@
                 </ul>
             </li>
             <li class="sidebar-item">
-               <a class='sidebar-link' href='{{ route('subcription-renew.show',Auth::user()->id) }}'><i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Subcription history</span></a>
+               <a class='sidebar-link' href='{{ route('subcription-renew.show',Auth::user()->id) }}'><i class="fas fa-history"></i> <span class="align-middle">Subcription history</span></a>
             </li>
             <li class="sidebar-item">
                 <a data-bs-target="#product" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">TopUp</span>
+                    <i class="fas fa-credit-card"></i> <span class="align-middle">TopUp</span>
                 </a>
                 <ul id="product" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
                     <li class="sidebar-item"><a class='sidebar-link' href='{{ route('payments.topup.create') }}'>TopUp Now</a></li>

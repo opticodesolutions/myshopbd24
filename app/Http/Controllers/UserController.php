@@ -8,6 +8,7 @@ use App\Models\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\IncentiveIncome;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -184,6 +185,12 @@ class UserController extends Controller
     public function branch_list(){
 
         return view('user.branch_list');
+    }
+
+    public function user_distroy(Request $request, $id){
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->back()->with('success', 'User Deleted Successfully');
     }
 
 
