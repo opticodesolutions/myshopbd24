@@ -6,6 +6,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\BinaryTreeController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PaymentController;
@@ -45,6 +46,7 @@ Route::get('/branch_list', [UserController::class, 'branch_list'])->name('users.
 
 Route::get('/users/generations', [UserController::class, 'showGenerations'])->name('users.generations');
 Route::get('/users/generations-tree', [UserController::class, 'showGenerationsTree'])->name('users.generations.tree');
+Route::get('/binary-tree', [BinaryTreeController::class, 'showTree']);
 
 
 

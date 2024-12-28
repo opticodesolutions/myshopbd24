@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helpers;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Sale;
@@ -9,9 +10,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\IncentiveIncome;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    private $tree;
+    public function __construct(Helpers $helpers)
+    {
+        $this->tree = $helpers;
+    }
+
     public function index()
     {
         $user = auth()->user();
@@ -122,7 +130,7 @@ class UserController extends Controller
         //     });
         // })->with('user')->get();
         $customers = Customer::with(['user'])->get();
-// return $customers;
+       // return $customers;
         return view ('super-admin.users.index', compact('customers'));
     }
 
@@ -146,21 +154,17 @@ class UserController extends Controller
         if (auth()->user()->hasRole('user')) {
             $id = auth()->user()->id;
 
-            $user = Customer::findOrFail($id);
-            $generations = $user->getGenerations();
-
-            $tableData = [];
-            $sl = 1;
-
-            foreach ($generations as $generation => $userIds) {
-                $tableData[] = [
-                    'SL' => $sl++,
-                    'Generation' => $generation,
-                    'TotalUsers' => count($userIds),
-                    'UserIDs' => implode(', ', $userIds),
-                ];
+            $refercode = Customer::with('user')->where('user_id', auth()->user()->id)->first();
+            $rootReferCode = $refercode->refer_code;
+            $tree = $this->tree->getTree($rootReferCode);
+            $userLevels = [];
+            $this->tree->collectUsersByLevel($tree, $userLevels);
+            // Prepare user count at each level
+            $userCounts = [];
+            foreach ($userLevels as $level => $userIds) {
+                $userCounts[$level] = count($userIds);  
             }
-            return view('generations.user_generations_table', ['tableData' => $tableData]);
+            return view('generations.user_generations_table', compact('userLevels', 'userCounts'));
         }else{
             return redirect()->back()->with('error', 'Unauthorized');
         }
@@ -169,16 +173,12 @@ class UserController extends Controller
 
     public function showGenerationsTree()
     {
-        if (auth()->user()->hasRole('user')) {
-            $id = auth()->user()->id;
+        $refercode = Customer::with('user')->where('user_id', auth()->user()->id)->first();
+        $rootReferCode = $refercode->refer_code;
+        $tree = $this->tree->getTree($rootReferCode);
 
-            $user = Customer::findOrFail($id);
-            $generationsTree = $user->getGenerationsTree();
-
-            return view('generations.generations_tree', ['generationsTree' => $generationsTree]);
-        }else{
-            return redirect()->back()->with('error', 'Unauthorized');
-        }
+        // return $tree;
+        return view('binary-tree', compact('tree'));
 
     }
 
