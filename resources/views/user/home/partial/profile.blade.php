@@ -70,6 +70,15 @@
                                             <span class="badge bg-primary badge-pill ps-4 pe-4">{{ $diffInMonths }} months</span>
                                     </li> --}}
              @include('user.home.partial')
+
+             <li class="list-group-item bg-transparent py-1">
+                <p class="m-0">Designation</p>
+                 <span class="badge bg-secondary badge-pill ps-4 pe-4">{{ $designation }}</span>
+             </li>
+             <li class="list-group-item bg-transparent py-1">
+                <p class="m-0">Total Users</p>
+                 <span class="badge bg-secondary badge-pill ps-4 pe-4">{{ $total_users }}</span>
+             </li>
          </ul>
      @endforeach
  </div>

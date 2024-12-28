@@ -9,6 +9,7 @@ use App\Models\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\IncentiveIncome;
+use App\Models\Purchase;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +25,13 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $customer = Customer::where('user_id', $user->id)->first();
-
+        $total_users = $this->tree->getTotalUsersForRoot($customer->refer_code);
+        $designation = $this->tree->GetDesignation($total_users);
+        $totalReferIncome = Transaction::where('user_id', $user->id)->where('transaction_type', 'direct_bonus')->sum('amount');
+        // return $total_users;
+        // return $this->tree->getAllChildUsersIdsForRoot($customer->refer_code);
+        // return $this->tree->getUsersIdsForLevel($customer->refer_code, 5);
+        
 //         // Total Count referred customers
 //         $Total_reffers = Customer::where('refer_by', $customer->refer_code)->count()+;
 
@@ -70,14 +77,14 @@ class UserController extends Controller
         //         ->get();
 
         //         // Sum of purchase commission amounts
-        // $purchase_inc = Transaction::where('user_id', $user->id)
-        //     ->where('transaction_type', 'purchase_commission')
-        //     ->sum('amount');
+        $purchase_inc = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'purchase_commission')
+            ->sum('amount');
 
         // // Sum of sale commission amounts
-        // $sale_inc = Transaction::where('user_id', $user->id)
-        //     ->where('transaction_type', 'sale_commission')
-        //     ->sum('amount');
+        $sale_inc = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'sale_commission')
+            ->sum('amount');
 
         // // Sum of refer commission amounts
         // $refer_inc = Transaction::where('user_id', $user->id)
@@ -85,12 +92,11 @@ class UserController extends Controller
         //     ->sum('amount');
 
         // // Total sum of all types of commissions
-        // $Total_inc = Transaction::where('user_id', $user->id)
-        //     ->whereIn('transaction_type', ['sale_commission', 'refer_commission', 'purchase_commission'])
-        //     ->sum('amount');
+        $Total_inc = Transaction::where('user_id', $user->id)
+            ->whereIn('transaction_type', ['sale_commission', 'refer_commission', 'purchase_commission'])
+            ->sum('amount');
 
         $incentiveIncomes = IncentiveIncome::paginate(10);
-
         return view('user.home.index', compact(
             // 'Total_reffers',
             // 'Total_transactions_amount',
@@ -107,8 +113,14 @@ class UserController extends Controller
             'data',
             'latest_users',
             'incentiveIncomes',
+            'designation',
+            'total_users',
+            'totalReferIncome',
+            'purchase_inc',
+            'sale_inc',
+            'Total_inc'
             // 'top_earner',
-            // 'purchase_inc', 'sale_inc', 'refer_inc', 'Total_inc'
+            // 'purchase_inc', 'sale_inc', 'refer_inc', 
         ));
     }
     public function all_users()
