@@ -21,6 +21,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesIncomeController;
 use App\Http\Controllers\SubcriptioRenewController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/link', function () {
@@ -88,7 +89,7 @@ Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->na
 Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 
 Route::resource('subcription-renew', SubcriptioRenewController::class);
-
+Route::resource('subscriptions', SubscriptionController::class)->middleware('role:super-admin');
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');
