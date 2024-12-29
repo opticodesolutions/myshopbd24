@@ -16,11 +16,11 @@
                             @include('user.home.partial.profile')
                         </div>
                     </div>
-                    <div class="col-md-4 d-flex">
+                    {{-- <div class="col-md-4 d-flex">
                         <div class="card flex-fill">
                             @include('user.home.partial.joinlist')
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4 d-flex">
                         <div class="card flex-fill bg-transparent shadow-none">
                             @include('user.home.partial.summary')

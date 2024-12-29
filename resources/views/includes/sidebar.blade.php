@@ -157,10 +157,15 @@
             <a class="sidebar-link" href="{{ route('incentive_income.index') }}">
                 <i class="fas fa-gift"></i> Incentive Income</a>
         </li>
-        {{-- incentive_income --}}
+        {{-- Subscriptions --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('subscriptions.index') }}">
+                <i class="fas fa-sync-alt"></i> Subcriptions</a>
+        </li> 
+        {{-- Subcription Renew --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
-                <i class="fas fa-sync-alt"></i> Subcriptions</a>
+                <i class="fas fa-sync-alt"></i> Subcriptions Renew</a>
         </li> 
         {{-- incentive_income --}}
         <li class="sidebar-item">

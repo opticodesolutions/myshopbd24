@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,8 @@
             transition: all 0.5s;
         }
 
-        .tree li::before, .tree li::after {
+        .tree li::before,
+        .tree li::after {
             content: '';
             position: absolute;
             top: 0;
@@ -37,7 +39,8 @@
             border-left: 2px solid #ccc;
         }
 
-        .tree li:only-child::before, .tree li:only-child::after {
+        .tree li:only-child::before,
+        .tree li:only-child::after {
             display: none;
         }
 
@@ -45,7 +48,8 @@
             padding-top: 0;
         }
 
-        .tree li:first-child::before, .tree li:last-child::after {
+        .tree li:first-child::before,
+        .tree li:last-child::after {
             border: 0 none;
         }
 
@@ -80,7 +84,8 @@
             transition: all 0.5s;
         }
 
-        .tree li a:hover, .tree li a:hover+ul li a {
+        .tree li a:hover,
+        .tree li a:hover+ul li a {
             background: #c8e4f8;
             color: #000;
             border: 2px solid #94a0b4;
@@ -94,19 +99,18 @@
         }
     </style>
 </head>
-<body>
-    <div class="container mt-5 mb-3" style=" margin: auto;
-    width: 50%;
 
-    padding: 10px;">
-    <div class="div" style="border: 3px solid green;text-align: center;">
-        <h2 >User Generations Tree</h2>
-    </div>
-        <div class="tree" style="text-align: center">
-            <ul>
+<body>
+    <div class="container mt-5 mb-3" style="margin: auto; max-width: 1200px; padding: 10px;">
+        <div class="div" style="border: 3px solid green; text-align: center; padding: 10px;">
+            <h2>User Generations Tree</h2>
+        </div>
+        <div class="tree" style="text-align: center; margin-top: 20px;">
+            <ul style="list-style: none; padding: 0; margin: 0;">
                 @include('tree_node', ['node' => $generationsTree])
             </ul>
         </div>
     </div>
 </body>
+
 </html>

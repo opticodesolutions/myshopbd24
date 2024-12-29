@@ -28,7 +28,6 @@ class Customer extends Model
         'subscription_start_date',
         'subscription_end_date'
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -59,9 +58,55 @@ class Customer extends Model
     }
 
     public function walletTransactions()
-{
-    return $this->hasMany(Transaction::class, 'user_id');
-}
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 
 
+    public function getGenerationsTree($generation = 1, $maxGenerations = 12)
+    {
+        $result = [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'refer_code' => $this->refer_code,
+            'refer_by' => $this->refer_by,
+            'wallet_balance' => $this->wallet_balance,
+            'generation' => $generation,
+            'position_parent' => $this->position_parent,
+            'position' => $this->position,
+            'profile_image' => $this->user->profile_picture,
+            'children' => [],
+        ];
+
+        if ($generation < $maxGenerations) {
+            $children = self::where('refer_by', $this->refer_code)->get();
+
+            foreach ($children as $child) {
+                $result['children'][] = $child->getGenerationsTree($generation + 1, $maxGenerations);
+            }
+        }
+
+        return $result;
+    }
+
+    public function getGenerations($generation = 1, $maxGenerations = 15)
+    {
+        $result = [];
+
+        if ($generation <= $maxGenerations) {
+            $children = self::where('refer_by', $this->refer_code)->get();
+
+            foreach ($children as $child) {
+                $result[$generation][] = $child->user_id;
+
+                // Recursive call to get the next generation
+                $childGenerations = $child->getGenerations($generation + 1, $maxGenerations);
+                foreach ($childGenerations as $gen => $ids) {
+                    $result[$gen] = array_merge($result[$gen] ?? [], $ids);
+                }
+            }
+        }
+
+        return $result;
+    }
 }

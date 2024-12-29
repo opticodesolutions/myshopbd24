@@ -6,6 +6,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\BinaryTreeController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PaymentController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesIncomeController;
 use App\Http\Controllers\SubcriptioRenewController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/link', function () {
@@ -45,6 +47,7 @@ Route::get('/branch_list', [UserController::class, 'branch_list'])->name('users.
 
 Route::get('/users/generations', [UserController::class, 'showGenerations'])->name('users.generations');
 Route::get('/users/generations-tree', [UserController::class, 'showGenerationsTree'])->name('users.generations.tree');
+Route::get('/binary-tree', [BinaryTreeController::class, 'showTree']);
 
 
 
@@ -86,7 +89,7 @@ Route::get('refer/commission', [SaleController::class, 'refer_commissions'])->na
 Route::get('total/commission', [TransactionController::class, 'total_commission'])->name('total.commission');
 
 Route::resource('subcription-renew', SubcriptioRenewController::class);
-
+Route::resource('subscriptions', SubscriptionController::class)->middleware('role:super-admin');
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');

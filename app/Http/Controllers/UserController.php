@@ -2,21 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helpers;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\IncentiveIncome;
+use App\Models\Purchase;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    private $tree;
+    public function __construct(Helpers $helpers)
+    {
+        $this->tree = $helpers;
+    }
+
     public function index()
     {
         $user = auth()->user();
         $customer = Customer::where('user_id', $user->id)->first();
-
+        $total_users = $this->tree->getTotalUsersForRoot($customer->refer_code);
+        $designation = $this->tree->GetDesignation($total_users);
+        $totalReferIncome = Transaction::where('user_id', $user->id)->where('transaction_type', 'direct_bonus')->sum('amount');
+        // return $total_users;
+        // return $this->tree->getAllChildUsersIdsForRoot($customer->refer_code);
+        // return $this->tree->getUsersIdsForLevel($customer->refer_code, 5);
+        
 //         // Total Count referred customers
 //         $Total_reffers = Customer::where('refer_by', $customer->refer_code)->count()+;
 
@@ -62,14 +77,14 @@ class UserController extends Controller
         //         ->get();
 
         //         // Sum of purchase commission amounts
-        // $purchase_inc = Transaction::where('user_id', $user->id)
-        //     ->where('transaction_type', 'purchase_commission')
-        //     ->sum('amount');
+        $purchase_inc = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'purchase_commission')
+            ->sum('amount');
 
         // // Sum of sale commission amounts
-        // $sale_inc = Transaction::where('user_id', $user->id)
-        //     ->where('transaction_type', 'sale_commission')
-        //     ->sum('amount');
+        $sale_inc = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'sale_commission')
+            ->sum('amount');
 
         // // Sum of refer commission amounts
         // $refer_inc = Transaction::where('user_id', $user->id)
@@ -77,12 +92,11 @@ class UserController extends Controller
         //     ->sum('amount');
 
         // // Total sum of all types of commissions
-        // $Total_inc = Transaction::where('user_id', $user->id)
-        //     ->whereIn('transaction_type', ['sale_commission', 'refer_commission', 'purchase_commission'])
-        //     ->sum('amount');
+        $Total_inc = Transaction::where('user_id', $user->id)
+            ->whereIn('transaction_type', ['sale_commission', 'refer_commission', 'purchase_commission'])
+            ->sum('amount');
 
         $incentiveIncomes = IncentiveIncome::paginate(10);
-
         return view('user.home.index', compact(
             // 'Total_reffers',
             // 'Total_transactions_amount',
@@ -99,8 +113,14 @@ class UserController extends Controller
             'data',
             'latest_users',
             'incentiveIncomes',
+            'designation',
+            'total_users',
+            'totalReferIncome',
+            'purchase_inc',
+            'sale_inc',
+            'Total_inc'
             // 'top_earner',
-            // 'purchase_inc', 'sale_inc', 'refer_inc', 'Total_inc'
+            // 'purchase_inc', 'sale_inc', 'refer_inc', 
         ));
     }
     public function all_users()
@@ -122,7 +142,7 @@ class UserController extends Controller
         //     });
         // })->with('user')->get();
         $customers = Customer::with(['user'])->get();
-// return $customers;
+       // return $customers;
         return view ('super-admin.users.index', compact('customers'));
     }
 
@@ -146,21 +166,17 @@ class UserController extends Controller
         if (auth()->user()->hasRole('user')) {
             $id = auth()->user()->id;
 
-            $user = Customer::findOrFail($id);
-            $generations = $user->getGenerations();
-
-            $tableData = [];
-            $sl = 1;
-
-            foreach ($generations as $generation => $userIds) {
-                $tableData[] = [
-                    'SL' => $sl++,
-                    'Generation' => $generation,
-                    'TotalUsers' => count($userIds),
-                    'UserIDs' => implode(', ', $userIds),
-                ];
+            $refercode = Customer::with('user')->where('user_id', auth()->user()->id)->first();
+            $rootReferCode = $refercode->refer_code;
+            $tree = $this->tree->getTree($rootReferCode);
+            $userLevels = [];
+            $this->tree->collectUsersByLevel($tree, $userLevels);
+            // Prepare user count at each level
+            $userCounts = [];
+            foreach ($userLevels as $level => $userIds) {
+                $userCounts[$level] = count($userIds);  
             }
-            return view('generations.user_generations_table', ['tableData' => $tableData]);
+            return view('generations.user_generations_table', compact('userLevels', 'userCounts'));
         }else{
             return redirect()->back()->with('error', 'Unauthorized');
         }
@@ -169,16 +185,12 @@ class UserController extends Controller
 
     public function showGenerationsTree()
     {
-        if (auth()->user()->hasRole('user')) {
-            $id = auth()->user()->id;
+        $refercode = Customer::with('user')->where('user_id', auth()->user()->id)->first();
+        $rootReferCode = $refercode->refer_code;
+        $tree = $this->tree->getTree($rootReferCode);
 
-            $user = Customer::findOrFail($id);
-            $generationsTree = $user->getGenerationsTree();
-
-            return view('generations.generations_tree', ['generationsTree' => $generationsTree]);
-        }else{
-            return redirect()->back()->with('error', 'Unauthorized');
-        }
+        // return $tree;
+        return view('binary-tree', compact('tree'));
 
     }
 
