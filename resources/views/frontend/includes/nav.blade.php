@@ -157,6 +157,7 @@
                         <div class="collapse mt-2" id="collapseExample">
                             <div class="card card-body">
                                 <ul class="mb-0 list-unstyled">
+                                    @php $categories = App\Models\Category::all(); @endphp
                                     @foreach ($categories as $category)
                                         <li><a class="dropdown-item" href="#">{{ $category->name }}</a></li>
                                     @endforeach

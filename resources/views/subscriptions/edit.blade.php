@@ -4,7 +4,7 @@
     <main class="content">
         <div class="container card p-3">
             <h1>Edit Subscription</h1>
-            <form method="POST" action="{{ route('subscriptions.update', $subscription->id) }}">
+            <form method="POST" action="{{ route('subscriptions.update', $subscription->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('subscriptions._form', ['subscription' => $subscription])

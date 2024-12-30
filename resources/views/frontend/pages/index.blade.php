@@ -196,101 +196,70 @@
                        </div>
                     </div>
                  </section>
-         <!-- Popular Products Start-->
-         <section class="my-lg-14 my-8">
-            <div class="container">
-               <div class="row">
-                  <div class="col-12 mb-6">
-                     <h3 class="mb-0">Popular Products</h3>
-                  </div>
-               </div>
+   
+                     {{-- Popular Subscription --}}
+    <section class="my-lg-14 my-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mb-6">
+                    <h3 class="mb-0">Popular Subscriptions</h3>
+                </div>
+            </div>
 
-               <div class="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-3">
-                    @foreach ($products as $product)
-                        <div class="col">
-                            <div class="card card-product">
-                                <div class="card-body">
-                                    <div class="text-center position-relative">
-                                        <!-- Sale Badge -->
-                                        @if($product->discount_price && $product->discount_price < $product->price)
-                                            <div class="position-absolute top-0 start-0">
-                                                <span class="badge bg-danger">Sale</span>
-                                            </div>
-                                        @endif
-                                        <!-- Product Image -->
-                                        @if($product->images->isNotEmpty())
-                                            <a href="{{ route('products.show', $product->id) }}">
-                                                <img src="{{ Storage::url($product->images->first()->media->src) }}" alt="{{ $product->name }}" class="mb-3 img-fluid" />
-                                            </a>
-                                        @else
-                                            <a href="{{ route('products.show', $product->id) }}">
-                                                <img src="{{ asset('frontend/assets/images/products/default-product-image.jpg') }}" alt="{{ $product->name }}" class="mb-3 img-fluid" />
-                                            </a>
-                                        @endif
-
-                                        <!-- Product Actions -->
-                                        <div class="card-product-action">
-                                            {{-- <a href="#!" class="btn-action" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-                                                <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-html="true" title="Quick View"></i>
-                                            </a>
-                                            <a href="#!" class="btn-action" data-bs-toggle="tooltip" data-bs-html="true" title="Wishlist">
-                                                <i class="bi bi-heart"></i>
-                                            </a>
-                                            <a href="#!" class="btn-action" data-bs-toggle="tooltip" data-bs-html="true" title="Compare">
-                                                <i class="bi bi-arrow-left-right"></i>
-                                            </a> --}}
-                                        </div>
-                                    </div>
-
-                                    <!-- Product Category -->
-                                    <div class="text-small mb-1">
-                                        <a href="#!" class="text-decoration-none text-muted">
-                                            <small>{{ $product->category->name ?? 'Uncategorized' }}</small>
+            <div class="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-3">
+                @foreach ($subscriptions as $subscription)
+                    <div class="col">
+                        <div class="card card-product">
+                            <div class="card-body">
+                                <div class="text-center position-relative">
+                                    <!-- Subscription Image -->
+                                    @if ($subscription->image)
+                                        <a href="{{ route('subscriptions.details', $subscription->id) }}">
+                                            <img src="{{ asset('storage/' . $subscription->image) }}"
+                                                alt="{{ $subscription->name }}" class="mb-3 img-fluid" />
                                         </a>
-                                    </div>
-
-                                    <!-- Product Name -->
-                                    <h2 class="fs-6">
-                                        <a href="{{ route('products.show', $product->id) }}" class="text-inherit text-decoration-none">
-                                            {{ $product->name }}
+                                    @else
+                                        <a href="{{ route('subscriptions.details', $subscription->id) }}">
+                                            <img src="{{ asset('frontend/assets/images/products/default-product-image.jpg') }}"
+                                                alt="{{ $subscription->name }}" class="mb-3 img-fluid" />
                                         </a>
-                                    </h2>
+                                    @endif
+                                </div>
 
-                                    <!-- Product Rating -->
+                                <!-- Subscription Name -->
+                                <h2 class="fs-6">
+                                    <a href="{{ route('subscriptions.details', $subscription->id) }}"
+                                        class="text-inherit text-decoration-none">
+                                        {{ $subscription->name }}
+                                    </a>
+                                </h2>
+
+                                <!-- Subscription Details -->
+                                <div class="mb-2">
+                                    <small class="text-muted">Level: {{ $subscription->lavel }}</small><br>
+                                    <small class="text-muted">Refer Bonus:
+                                        ৳{{ number_format($subscription->ref_income, 2) }}</small>
+                                </div>
+
+                                <!-- Subscription Price -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
-                                        <small class="text-warning">
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <i class="bi bi-star-fill"></i>
-                                            @endfor
-                                        </small>
-                                        <span class="text-muted small">{{ $product->reviews_count }} reviews</span>
+                                        <span class="text-dark">৳{{ number_format($subscription->amount, 2) }}</span>
                                     </div>
-
-                                    <!-- Product Price -->
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <div>
-                                            @if($product->discount_price)
-                                                <span class="text-dark">৳{{ number_format($product->discount_price, 2) }}</span>
-                                                {{-- <span class="text-decoration-line-through text-muted">${{ number_format($product->price, 2) }}</span> --}}
-                                            @else
-                                                {{-- <span class="text-dark">${{ number_format($product->price, 2) }}</span> --}}
-                                            @endif
-                                        </div>
-                                        <div>
-                                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary btn-sm">
-                                                View
-                                            </a>
-                                        </div>
+                                    <div>
+                                        <a href="{{ route('subscriptions.details', $subscription->id) }}"
+                                            class="btn btn-primary btn-sm">
+                                            View
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-
-
-               </div>
+                    </div>
+                @endforeach
             </div>
-         </section>
+        </div>
+    </section>
          <!-- Popular Products End-->
          <!--<section>-->
          <!--   <div class="container">-->

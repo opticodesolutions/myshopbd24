@@ -167,6 +167,11 @@
             <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
                 <i class="fas fa-sync-alt"></i> Subcriptions Renew</a>
         </li> 
+        {{-- Subcription Renew --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('subscription-sales') }}">
+                <i class="fas fa-sync-alt"></i> Subcriptions Sales</a>
+        </li> 
         {{-- incentive_income --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ url('/queue-job') }}">

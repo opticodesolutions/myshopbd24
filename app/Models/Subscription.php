@@ -19,5 +19,6 @@ class Subscription extends Model
         'daily_bonus',
         'admin_profit_salary',
         'admin_profit',
+        'image',
     ];
 }
