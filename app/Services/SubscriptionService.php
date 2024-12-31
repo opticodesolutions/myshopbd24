@@ -24,6 +24,7 @@ class SubscriptionService
     public function DistibuteCommssion($sales){
         try{
             DB::beginTransaction();
+            $this->handleTransaction($sales->user_id, $sales->total_amount, 'subscription_purchase');
             $this->RefferCommission($sales->user_id, $sales->subscription->ref_income);
             $this->admin_profit($sales);
             $this->admin_profit_salary($sales);

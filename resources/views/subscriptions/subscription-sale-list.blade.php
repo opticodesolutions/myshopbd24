@@ -23,7 +23,7 @@
                                 <th>Customer ID</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>Created At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,26 +34,13 @@
                                     <td>{{ $sale->user_id }}</td>
                                     <td>{{ $sale->customer_id }}</td>
                                     <td>{{ number_format($sale->total_amount, 2) }}</td>
-                                    <td>
-                                        <form action="{{ route('subscription_sales.updateStatus', $sale->id) }}" method="POST">
-                                            @csrf
-                                            @method('POST')
-                                            <select name="status" class="form-select form-select-sm"
-                                                onchange="this.form.submit()" style="width: 150px;">
-                                                <option value="pending" {{ $sale->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="approved" {{ $sale->status === 'approved' ? 'selected' : '' }}>Approved</option>
-                                                <option value="failed" {{ $sale->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                            </select>
-                                        </form>
+                                    <td> 
+                                        {!! $sale->status == 'pending' ? '<span class="text-warning">Pending</span>' : 
+                                            ($sale->status == 'approved' ? '<span class="text-success">Approved</span>' : 
+                                            '<span class="text-danger">Cancelled</span>') 
+                                        !!}
                                     </td>
-                                    <td>
-                                        <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                    <form action="#" method="POST" class="d-inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"  onsubmit="return confirm('Are you sure?')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </button>
-                                    </form>
-                                    </td>
+                                    <td>{{ $sale->created_at->format('d-m-Y') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

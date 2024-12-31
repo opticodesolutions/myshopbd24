@@ -99,6 +99,8 @@ Route::get('subscription-sales', [SubscriptionController::class, 'subscription_s
 Route::post('subscription-sales-update-status/{id}', [SubscriptionController::class, 'subscription_sales_status'])->name('subscription_sales.updateStatus')->middleware('role:super-admin');
 
 
+Route::get('subscription-sale-list', [SubscriptionController::class, 'subscriptionSaleList']);
+
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');

@@ -203,8 +203,22 @@ class SubscriptionController extends Controller
         $subscriptionSale = SubscriptionSale::findOrFail($id);
         if($request->status == 'approved'){
            $subscriptionSale->update(['status' => 'approved']);
+           Customer::where('id', $subscriptionSale->customer_id)
+            ->update([
+                'subscription_start_date' => now(), 
+                'subscription_end_date' => now()->addMonth()
+            ]);
            return $this->subscriptionService->DistibuteCommssion($subscriptionSale);
+        }else{
+            $subscriptionSale->update(['status' => $request->status]);
         }
         return redirect()->back()->with('success', 'Subscription sale updated successfully.');
+    }
+
+    public function subscriptionSaleList(){ 
+        $subscriptionSales = SubscriptionSale::with('subscription','user', 'customer')
+        ->where('user_id', auth()->user()->id)
+        ->orderBy('id', 'desc')->paginate(10);
+        return view('subscriptions.subscription-sale-list', compact('subscriptionSales'));
     }
 }

@@ -293,9 +293,13 @@
                     </li>
                 </ul>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('subscription-sale-list') }}">
+                <i class="fas fa-sync-alt"></i> Subcriptions Sales</a>
+            </li> 
 
             <li class="sidebar-item">
-                <a class='sidebar-link' href='https://wa.me/+8801757760650'>Support</a>
+                <a class='sidebar-link' href="#">Support</a>
             </li>
 
             {{-- <li class="sidebar-item">
