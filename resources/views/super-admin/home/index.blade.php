@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-coins"></i>
                                     </div>
                                 </div>
                             </div>
@@ -27,10 +27,10 @@
                                                                                                 {{ number_format($Total_admin_income, 2 ?? 0) }}
 
                             </h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -48,10 +48,10 @@
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ $Total_sells ?? 0 }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-danger-light">-5.25%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -64,15 +64,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="activity"></i>
+                                        <i class="fas fa-chart-line"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ $Total_commission_transactions ?? 0 }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">4.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -85,15 +85,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="shopping-cart"></i>
+                                        <i class="fas fa-money-check"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ number_format($Total_sells_commission, 2 ?? 0) }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">2.35%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -106,15 +106,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-user-circle"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{$Total_customer ?? 0}}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -127,15 +127,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-wallet"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ number_format($Total_withdrawn_amount, 2 ?? 0) }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -148,15 +148,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-plus"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ number_format($Total_topup_amount, 2 ?? 0) }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -170,15 +170,15 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-exchange-alt"></i>
                                     </div>
                                 </div>
                             </div>
                             <h1 class="mt-1 mb-3">{{ number_format($Total_transactions_amount, 2 ?? 0) }}</h1>
-                            <div class="mb-0">
+                            {{-- <div class="mb-0">
                                 <span class="badge badge-success-light">3.65%</span>
                                 <span class="text-muted">Since last week</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="stat text-primary">
-                                        <i class="align-middle" data-feather="dollar-sign"></i>
+                                        <i class="fas fa-building"></i>
                                     </div>
                                 </div>
                             </div>

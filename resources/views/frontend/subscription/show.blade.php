@@ -10,8 +10,8 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Products</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Product</li>
+                            <li class="breadcrumb-item"><a href="#">Subscription</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Subscription</li>
                         </ol>
                     </nav>
                 </div>
@@ -24,27 +24,21 @@
                 <div class="col-md-5 col-xl-6">
                     <!-- img slide -->
                     <div class="product" id="product">
-                        @foreach ($product->images as $key => $productImage)
-                            <div class="zoom" onmousemove="zoom(event)"
-                                style="background-image: url({{ asset('storage/' . $productImage->media->src) }})">
-                                <!-- img -->
-                                <img src="{{ asset('storage/' . $productImage->media->src) }}"
-                                    alt="Product Image {{ $key + 1 }}" />
-                            </div>
-                        @endforeach
+                        <div class="zoom" onmousemove="zoom(event)"
+                            style="background-image: url({{ asset('storage/' . $subscription->image) }})">
+                            <!-- img -->
+                            <img src="{{ asset('storage/' . $subscription->image) }}" alt="Product Image" />
+                        </div>
                     </div>
                     <!-- product tools -->
                     <div class="product-tools">
                         <div class="thumbnails row g-3" id="productThumbnails">
-                            @foreach ($product->images as $key => $productImage)
-                                <div class="col-3">
-                                    <div class="thumbnails-img">
-                                        <!-- img -->
-                                        <img src="{{ asset('storage/' . $productImage->media->src) }}"
-                                            alt="Thumbnail {{ $key + 1 }}" />
-                                    </div>
+                            <div class="col-3">
+                                <div class="thumbnails-img">
+                                    <!-- img -->
+                                    <img src="{{ asset('storage/' . $subscription->image) }}" alt="Thumbnail" />
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                     </div>
 
@@ -52,50 +46,19 @@
                 <div class="col-md-7 col-xl-6">
                     <div class="ps-lg-10 mt-6 mt-md-0">
                         <!-- content -->
-                        <a href="#!" class="mb-4 d-block">{{ $product->category->name }}</a>
+                        <a href="#!" class="mb-4 d-block">{{ @$subscription->category->name }}</a>
                         <!-- heading -->
-                        <h1 class="mb-1">{{ $product->name }}</h1>
-                        <!--<div class="mb-4">-->
-                        <!-- rating -->
-                        <!-- rating -->
-                        <!--    <small class="text-warning">-->
-                        <!--        <i class="bi bi-star-fill"></i>-->
-                        <!--        <i class="bi bi-star-fill"></i>-->
-                        <!--        <i class="bi bi-star-fill"></i>-->
-                        <!--        <i class="bi bi-star-fill"></i>-->
-                        <!--        <i class="bi bi-star-half"></i>-->
-                        <!--    </small>-->
-                        <!--    <a href="#" class="ms-2">(30 reviews)</a>-->
-                        <!--</div>-->
+                        <h1 class="mb-1">{{ $subscription->name }}</h1>
+
                         <div class="fs-4">
-                            <!-- price -->
-                            @php
-                                $discountPercentage = 0;
-                                if ($product->price > 0) {
-                                    $discountPercentage =
-                                        (($product->price - $product->discount_price) / $product->price) * 100;
-                                }
-                            @endphp
-
-                            <span class="fw-bold text-dark">৳{{ number_format($product->discount_price, 2) }}</span>
-                            {{-- <span
-                                class="text-decoration-line-through text-muted">৳{{ number_format($product->price, 2) }}</span>
-                            <span> --}}
-                            {{-- <small class="fs-6 ms-2 text-danger">{{ number_format($discountPercentage, 0) }}%
-                                    Off</small>
-                                </span> --}}
-
-
+                            <span class="fw-bold text-dark">৳{{ number_format($subscription->amount, 2) }}</span>
                         </div>
-                        <!-- hr -->
+                        <div class="fs-4">
+                            <span class="fw-bold text-dark">Rfer Income: ৳ {{ number_format($subscription->ref_income, 2) }}</span>
+                        </div>
+                            <!-- hr -->
                         <hr class="my-6" />
-                        <!--<div class="mb-5">-->
-                        <!--    <button type="button" class="btn btn-outline-secondary">250g</button>-->
-                        <!-- btn -->
-                        <!--    <button type="button" class="btn btn-outline-secondary">500g</button>-->
-                        <!-- btn -->
-                        <!--    <button type="button" class="btn btn-outline-secondary">1kg</button>-->
-                        <!--</div>-->
+
                         <div>
                             <!-- input -->
                             <div class="input-group input-spinner">
@@ -108,41 +71,12 @@
                         </div>
                         <div class="mt-3 row justify-content-start g-2 align-items-center">
                             <div class="col-xxl-4 col-lg-4 col-md-5 col-5 d-grid">
-                                <!-- button -->
-                                <!-- btn -->
-                                {{-- <button type="button" class="btn btn-primary">
-                         <i class="feather-icon icon-shopping-bag me-2"></i>
-                         Add to cart
-                      </button> --}}
-
-                                @if ($product->category->name === 'package')
-                                    {{-- <form action="{{ route('sales.store') }}" method="POST" class="">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="product_price" value="{{ $product->discount_price }}">
-                                        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                                        <input type="">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="feather-icon icon-shopping-bag me-2"></i>
-                                            Sale Now
-                                        </button>
-                                    </form> --}}
-
-                                    <a href="{{ route('sale.now', $product->id) }}" class="">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="feather-icon icon-shopping-bag me-2"></i>
-                                            Sale Now
-                                        </button>
-                                    </a>
-                                @else
-                                    <a href="{{ route('purchase.now', $product->id) }}" class="">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="feather-icon icon-shopping-bag me-2"></i>
-                                            Perchase Now
-                                        </button>
-                                    </a>
-                                @endif
-
+                                <a href="{{ route('subscriptions.sale_now', $subscription->id) }}" class="">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="feather-icon icon-shopping-bag me-2"></i>
+                                        Sale Subscription Now
+                                    </button>
+                                </a>
                             </div>
                             <div class="col-md-4 col-4">
                                 <!-- btn -->
@@ -156,7 +90,7 @@
                         <hr class="my-6" />
                         <div>
                             <!-- table -->
-                            <table class="table table-borderless mb-0">
+                            {{-- <table class="table table-borderless mb-0">
                                 <tbody>
                                     <tr>
                                         <td>Product Code:</td>
@@ -186,7 +120,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> --}}
                         </div>
                         <div class="mt-8">
                             <!-- dropdown -->
@@ -290,14 +224,14 @@
                                     </p>
                                 </div>
                                 <!-- content -->
-                                <div class="mb-5">
+                                {{-- <div class="mb-5">
                                     <h5 class="mb-1">Unit</h5>
                                     <p class="mb-0">{{ $product->stock }}</p>
                                 </div>
                                 <div class="mb-5">
                                     <h5 class="mb-1">Brand</h5>
                                     <p class="mb-0">{{ $product->brand->name }}</p>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <!-- tab pane -->

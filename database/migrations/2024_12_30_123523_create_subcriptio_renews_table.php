@@ -18,6 +18,12 @@ return new class extends Migration
             $table->string('payment_status')->default('pending'); 
             $table->decimal('renewal_amount', 8, 2); 
             $table->string('remarks');
+            $table->unsignedBigInteger('subscription_id');
+            $table->foreign('subscription_id')
+            ->references('id')
+                ->on('subscriptions')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('payment_method')->nullable();
             $table->timestamps(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

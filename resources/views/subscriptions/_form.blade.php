@@ -38,3 +38,14 @@
     <label for="admin_profit" class="form-label">Admin Profit</label>
     <input type="number" step="0.01" class="form-control" id="admin_profit" name="admin_profit" value="{{ $subscription->admin_profit ?? old('admin_profit') }}" required>
 </div>
+
+<div class="mb-3">
+    <label for="Image" class="form-label">Image</label>
+    <input type="file" class="form-control" id="image" name="image">
+     @if (isset($subscription) && $subscription->image)
+        <img src="{{ asset('storage/' . $subscription->image) }}" alt="Subscription Image" class="img-thumbnail mt-2" style="max-width: 150px;">
+    @endif
+    @error('image')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>

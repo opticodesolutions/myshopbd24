@@ -167,6 +167,11 @@
             <a class="sidebar-link" href="{{ route('subcription-renew.index') }}">
                 <i class="fas fa-sync-alt"></i> Subcriptions Renew</a>
         </li> 
+        {{-- Subcription Renew --}}
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('subscription-sales') }}">
+                <i class="fas fa-sync-alt"></i> Subcriptions Sales</a>
+        </li> 
         {{-- incentive_income --}}
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ url('/queue-job') }}">
@@ -288,9 +293,13 @@
                     </li>
                 </ul>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('subscription-sale-list') }}">
+                <i class="fas fa-sync-alt"></i> Subcriptions Sales</a>
+            </li> 
 
             <li class="sidebar-item">
-                <a class='sidebar-link' href='https://wa.me/+8801757760650'>Support</a>
+                <a class='sidebar-link' href="#">Support</a>
             </li>
 
             {{-- <li class="sidebar-item">

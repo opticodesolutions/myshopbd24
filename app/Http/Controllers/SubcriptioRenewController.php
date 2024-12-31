@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helpers;
 use App\Models\SubcriptioRenew;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Customer;
+use App\Models\Subscription;
+use Illuminate\Container\Attributes\Auth;
 
 class SubcriptioRenewController extends Controller
 {
+    private $Helpers;
+
+    public function __construct(Helpers $helpers)
+    {
+        $this->Helpers = $helpers;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -33,7 +44,8 @@ class SubcriptioRenewController extends Controller
      */
     public function create()
     {
-        return view('subcription-renewal.create');
+        $subscriptions = Subscription::all();
+        return view('subcription-renewal.create', compact('subscriptions'));
     }
 
     /**
@@ -46,11 +58,12 @@ class SubcriptioRenewController extends Controller
             $validatedData = $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'renewal_date' => 'required|date',
-                'renewal_amount' => 'required|numeric',
+                'subscription_id' => 'required|numeric',
                 'payment_method' => 'required|string',
                 'remarks' => 'nullable|string',
             ]);
 
+            $validatedData['renewal_amount'] = Subscription::find($validatedData['subscription_id'])->amount;
             // Insert the data using Eloquent
             SubcriptioRenew::create([
                 'user_id' => $validatedData['user_id'],
@@ -58,6 +71,7 @@ class SubcriptioRenewController extends Controller
                 'renewal_amount' => $validatedData['renewal_amount'],
                 'payment_method' => $validatedData['payment_method'],
                 'remarks' => $validatedData['remarks'],
+                'subscription_id' => $validatedData['subscription_id'],
             ]);
 
             return redirect()->back()->with('success', 'Subcription Renewal request Successfully.');
@@ -97,10 +111,10 @@ class SubcriptioRenewController extends Controller
                 'renewal_date' => 'required|date',
                 'payment_method' => 'required|string',
                 'remarks' => 'nullable|string',
-                'status' => 'required|in:pending,approved',
+                'status' => 'required',
             ]);
 
-            $renewal = SubcriptioRenew::findOrFail($id);
+            $renewal = SubcriptioRenew::with('subscription')->findOrFail($id);
             $renewal->update([
                 'remarks' => $request->remark,
                 'payment_status' => $request->status,
@@ -112,13 +126,58 @@ class SubcriptioRenewController extends Controller
                 $renewal->customer->subscription_end_date = $renewalDate->copy()->addMonth();
                 $renewal->customer->save();
             }
-            Transaction::create([
-                'user_id' => $renewal->user_id,
-                'amount' => $renewal->renewal_amount,
-                'payment_method' => $request->payment_method,
-                'payment_status' => $request->status,
-                'transaction_type' => 'subscription_renewal',
-            ]);
+
+            $this->Transections($renewal->customer->user_id, $renewal->renewal_amount, 'renewal_amount');
+
+            $allchildUser = $this->Helpers->getAllChildUsersIdsForRoot($renewal->customer->refer_code);
+
+            if (!empty($allchildUser)) {
+                // Retrieve refer_by, user_id, and refer_code for the child users
+                $childParentUsers = Customer::whereIn('user_id', $allchildUser)
+                ->get(['user_id', 'refer_by', 'refer_code']);
+                $filteredChildParentUsers = $childParentUsers->filter(function ($user) {
+                    return !empty($user->refer_by);
+                });
+            }
+
+            $totalAmount = $renewal->renewal_amount;
+            $perchildAmount = $renewal->subscription->per_child_amount;
+            $perPerentAmount = $renewal->subscription->per_person;
+            foreach ($filteredChildParentUsers as $childParentUser) {
+                if($totalAmount > 0){
+                    $totalAmount = $totalAmount - $perPerentAmount;
+                    $this->Transections($childParentUser->user_id, $perPerentAmount, 'Insective_Subcription_Income');
+                    $user = Customer::where('user_id', $childParentUser->user_id)->first();
+                    $user->wallet_balance = $user->wallet_balance + $perPerentAmount;
+                    $user->save();
+                }
+                if ($totalAmount <= 0) {
+                    break;
+                }
+            }
+
+            foreach ($allchildUser as $childuser) {
+                if($totalAmount > 0){
+                    $totalAmount = $totalAmount - $perchildAmount;
+                    $this->Transections($childuser, $perchildAmount, 'Bonus_form_Subcription_Income');
+                    $user = Customer::where('user_id', $childuser)->first();
+                    $user->wallet_balance = $user->wallet_balance + $perchildAmount;
+                    $user->save();
+                }
+                if ($totalAmount <= 0) {
+                    break;
+                }
+            }
+            if ($totalAmount > 0) {
+                // Admin profit transaction
+                $transection = $this->Transections(auth()->user()->id, $totalAmount, 'Admin_Profit_from_Subscription');
+                Account::create([
+                    'amount' => $totalAmount,
+                    'type' => 'debit',
+                    'tran_id' => $transection,
+                    'approved_by' => auth()->user()->id
+                ]);
+            }
             DB::commit();
             return redirect()->back()->with('success', 'Subcription Renewal request Successfully.');
         } catch (\Exception $e) {
@@ -127,6 +186,14 @@ class SubcriptioRenewController extends Controller
         }
     }
 
+    private function Transections($user_id, $amount, $type){
+       $transection = Transaction::create([
+            'user_id' => $user_id,
+            'amount' => $amount,
+            'transaction_type' => $type
+        ]);
+        return $transection->id;
+    }
     /**
      * Remove the specified resource from storage.
      */

@@ -90,6 +90,17 @@ Route::get('total/commission', [TransactionController::class, 'total_commission'
 
 Route::resource('subcription-renew', SubcriptioRenewController::class);
 Route::resource('subscriptions', SubscriptionController::class)->middleware('role:super-admin');
+
+Route::get('subscriptions/details/{id}', [SubscriptionController::class, 'details'])->name('subscriptions.details');
+Route::get('subscriptions/sale-now/{id}', [SubscriptionController::class, 'sale_now'])->name('subscriptions.sale_now');
+Route::post('subscriptions/sale-now', [SubscriptionController::class, 'sale_now_store'])->name('subscriptions.sale_now_store');
+
+Route::get('subscription-sales', [SubscriptionController::class, 'subscription_sales'])->middleware('role:super-admin');
+Route::post('subscription-sales-update-status/{id}', [SubscriptionController::class, 'subscription_sales_status'])->name('subscription_sales.updateStatus')->middleware('role:super-admin');
+
+
+Route::get('subscription-sale-list', [SubscriptionController::class, 'subscriptionSaleList']);
+
 // User Routes
 Route::group(['middleware' => ['role:user']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');

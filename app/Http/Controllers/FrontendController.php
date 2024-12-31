@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\IncentiveIncome;
 use App\Models\Sale;
+use App\Models\Subscription;
 
 class FrontendController extends Controller
 {
@@ -30,7 +31,9 @@ class FrontendController extends Controller
         $packages = Product::with(['category', 'brand'])->whereHas('category', function($query)
         {$query->where('name', 'package');})
         ->get();
-        return view('frontend.pages.index', compact('categories','products','packages'));
+
+        $subscriptions = Subscription::get();
+        return view('frontend.pages.index', compact('categories','products','packages', 'subscriptions'));
     }
 
     public function joining_job(){

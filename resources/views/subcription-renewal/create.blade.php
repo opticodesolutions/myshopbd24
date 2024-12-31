@@ -59,7 +59,12 @@
                         <!-- Renewal Amount -->
                         <div class="mb-3">
                             <label for="renewal_amount" class="form-label">Renewal Amount</label>
-                            <input type="number" step="0.01" class="form-control" id="renewal_amount" name="renewal_amount" value="1300" readonly required>
+                            <select class="form-select" id="subscription_id" name="subscription_id" required>
+                                <option value="" disabled selected>Select Subscription Package</option>
+                                @foreach ($subscriptions as $subscription)
+                                    <option value="{{ $subscription->id }}">{{ $subscription->name }} ({{ $subscription->amount }} BDT)</option>
+                                @endforeach
+                            </select>
                         </div>
                         {{-- Payment Method --}}
                         <div class="mb-3">

@@ -15,7 +15,8 @@ class SubcriptioRenew extends Model
         'payment_status',
         'renewal_amount',
         'remarks',
-        'payment_method'
+        'payment_method',
+        'subscription_id',
     ];
     public function user()
     {
@@ -25,5 +26,10 @@ class SubcriptioRenew extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'user_id', 'user_id');
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class, 'subscription_id', 'id');
     }
 }
