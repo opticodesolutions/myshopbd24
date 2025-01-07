@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helpers;
+use App\Helpers\NinePercentCommision;
 use App\Models\SubcriptioRenew;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
@@ -146,9 +147,11 @@ class SubcriptioRenewController extends Controller
             foreach ($filteredChildParentUsers as $childParentUser) {
                 if($totalAmount > 0){
                     $totalAmount = $totalAmount - $perPerentAmount;
-                    $this->Transections($childParentUser->user_id, $perPerentAmount, 'Insective_Subcription_Income');
+                    NinePercentCommision::AmdinCommistion($perPerentAmount);
+                    $amount = NinePercentCommision::CustomerCommistion($perPerentAmount);
+                    $this->Transections($childParentUser->user_id, $amount, 'Insective_Subcription_Income');
                     $user = Customer::where('user_id', $childParentUser->user_id)->first();
-                    $user->wallet_balance = $user->wallet_balance + $perPerentAmount;
+                    $user->wallet_balance = $user->wallet_balance + $amount;
                     $user->save();
                 }
                 if ($totalAmount <= 0) {
@@ -159,9 +162,11 @@ class SubcriptioRenewController extends Controller
             foreach ($allchildUser as $childuser) {
                 if($totalAmount > 0){
                     $totalAmount = $totalAmount - $perchildAmount;
-                    $this->Transections($childuser, $perchildAmount, 'Bonus_form_Subcription_Income');
+                    NinePercentCommision::AmdinCommistion($perchildAmount);
+                    $amount = NinePercentCommision::CustomerCommistion($perchildAmount);
+                    $this->Transections($childuser, $amount, 'Bonus_form_Subcription_Income');
                     $user = Customer::where('user_id', $childuser)->first();
-                    $user->wallet_balance = $user->wallet_balance + $perchildAmount;
+                    $user->wallet_balance = $user->wallet_balance + $amount;
                     $user->save();
                 }
                 if ($totalAmount <= 0) {

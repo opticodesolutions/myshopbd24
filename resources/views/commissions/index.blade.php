@@ -4,21 +4,15 @@
 @section('content')
 <main class="content">
     <div class="container-fluid p-0">
-
-        <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Commission's </h1>
-        </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Commission</h5>
-                        <h6 class="card-subtitle text-muted">List</h6>
+                       <h1 class="h3 d-inline align-middle">List of Transection </h1>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-border-style table-responsive">
                         <table id="datatables-multi" class="table table-striped" style="width:100%">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>SL</th>
                                     <th>TRX ID</th>
@@ -87,7 +81,7 @@
                                             ID: {{ $commissions->sale->user->id }}<br>
                                             Refer Code: {{ $commissions->sale->user->customer->refer_code }}
                                         </td> --}}
-                                        <td>{{ $commissions->created_at->format('Y-m-d H:i') }}</td>
+                                        <td>{{ $commissions->created_at->diffForHumans()}}</td>
 
                                         @auth
                                             @if (auth()->user()->hasRole('super-admin'))

@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\Helpers;
+use App\Helpers\NinePercentCommision;
 use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Subscription;
@@ -52,9 +53,11 @@ class SubscriptionService
         $totalQualified = count($qualifiedUsers);
         if ($totalQualified === 0) return; // Exit if no users qualify
 
-        $amount = $TotalAmount / $totalQualified;
+        $amountn = $TotalAmount / $totalQualified;
         // Update wallet balances and handle transactions
         foreach ($qualifiedUsers as $userId) {
+            NinePercentCommision::AmdinCommistion($amountn);
+            $amount = NinePercentCommision::CustomerCommistion($amountn);
             $currentBalance = Customer::where('user_id', $userId)->value('wallet_balance');
             Customer::where('user_id', $userId)->update(['wallet_balance' => $currentBalance + $amount]);
             $this->handleTransaction($userId, $amount, 'insective_income');
@@ -63,8 +66,10 @@ class SubscriptionService
 
     private function DailyBonus($sales){
         $totalUser = $this->GetAllUsers()->count();
-        $amount = $sales->subscription->daily_bonus / $totalUser;
+        $amountn = $sales->subscription->daily_bonus / $totalUser;
         foreach ($this->GetAllUsers() as $user) {
+            NinePercentCommision::AmdinCommistion($amountn);
+            $amount = NinePercentCommision::CustomerCommistion($amountn);
             $currentBalance = Customer::where('user_id', $user)->value('wallet_balance');
             Customer::where('user_id', $user)->update(['wallet_balance' => $currentBalance + $amount]);
             $this->handleTransaction($user, $amount, 'daily_bonus');
@@ -88,7 +93,9 @@ class SubscriptionService
             'approved_by' => Auth::id()
         ]);
     }
-    private function RefferCommission($user_id, $amount){
+    private function RefferCommission($user_id, $amountn){
+        NinePercentCommision::AmdinCommistion($amountn);
+        $amount = NinePercentCommision::CustomerCommistion($amountn);
         $user = Customer::where('user_id', $user_id)->first();
         $user->wallet_balance = $user->wallet_balance + $amount;
         $user->save();

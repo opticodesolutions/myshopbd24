@@ -12,7 +12,9 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         if ($user->hasRole('super-admin')) {
-            $all = Transaction::with('user', 'sale.product')->paginate(10);
+            $all = Transaction::with('user', 'sale.product')
+            ->orderby('id', 'desc')
+            ->paginate(20);
             return view('commissions.index', compact('all'));
 
         }else{

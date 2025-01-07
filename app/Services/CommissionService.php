@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\DailyBonusDistibutte;
+use App\Helpers\NinePercentCommision;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
@@ -60,10 +61,11 @@ class CommissionService
             'transaction_type' => 'purchase_commission',
         ]);
 
-
+        NinePercentCommision::AmdinCommistion($product->purchase_commission);
+        $amount = NinePercentCommision::CustomerCommistion($product->purchase_commission);
         // Update the customer's wallet balance
         $purchase_customer = Customer::where('user_id', $sale->customer_id)->first();
-        $purchase_customer->wallet_balance += $product->purchase_commission;
+        $purchase_customer->wallet_balance += $amount;
         $purchase_customer->save();
 
 
@@ -97,7 +99,9 @@ class CommissionService
      */
     private function distributeDirectBonus(Sale $sale)
     {
-        $directBonus = 1000;
+        $directBonusold = 1000;
+        NinePercentCommision::AmdinCommistion($directBonusold);
+        $directBonus = NinePercentCommision::CustomerCommistion($directBonusold);
         $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
 
         if (!$user || !$user->customer) {
@@ -137,10 +141,13 @@ class CommissionService
     private function distributeDownlineBonus(Sale $sale)
     {
         $downlineBonus = 1500;
-        $remainingBonus = $downlineBonus;
+        $remainingBonusold = $downlineBonus;
+        NinePercentCommision::AmdinCommistion($remainingBonusold);
+        $remainingBonus = NinePercentCommision::CustomerCommistion($remainingBonusold);
         $childCommission = 250;
         $matchingLevels = 11;
         $levelsCovered = 0;
+
 
         $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
 
