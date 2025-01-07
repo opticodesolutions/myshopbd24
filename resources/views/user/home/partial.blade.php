@@ -3,8 +3,10 @@
     $startDate = \Carbon\Carbon::parse($item->subscription_start_date);
     $endDate = \Carbon\Carbon::parse($item->subscription_end_date);
     // Get the current date
-    $currentDate = \Carbon\Carbon::now();
+    $currentDate = \Carbon\Carbon::now()->subDays(env('EXPIRY_WARNING_DAYS', 3));
 
+    // Get current date to check for expiring soon
+    $currentDatenot = \Carbon\Carbon::now();
     // Calculate the difference in months and days
     $diffInMonths = $startDate->diffInMonths($endDate);
     $diffInDays = $startDate->diffInDays($endDate->copy()->subMonths($diffInMonths));
@@ -12,8 +14,11 @@
     // Check if the subscription has expired
     $isExpired = $currentDate->greaterThanOrEqualTo($endDate);
 
-    // Check if the subscription is expiring soon (within 7 days)
-    $isExpiringSoon = !$isExpired && $currentDate->diffInDays($endDate) <= 7;
+    // Calculate the days remaining for expiry
+    $daysRemaining = floor(abs($currentDatenot->diffInDays($endDate)));
+
+    // Check if the subscription is expiring soon (within expiry warning days)
+    $isExpiringSoon = !$isExpired && $daysRemaining <= env('EXPIRY_WARNING_DAYS', 3);
 @endphp
 
 <style>
@@ -41,9 +46,9 @@
         <span class="text-white">Your subscription has expired. Please renew.</span>
     @elseif ($isExpiringSoon)
         <span class="badge bg-warning badge-pill ps-4 pe-4">Expiring Soon</span>
-        <span class="text-warning">Your subscription is expiring in less than 7 days. Renew now!</span>
+        <span class="text-warning">Your subscription is expiring in {{ $daysRemaining }} days. Renew now!</span>
     @else
-        <span class="badge bg-primary badge-pill ps-4 pe-4">{{ number_format($diffInMonths,2) }} months</span>
+        <span class="badge bg-primary badge-pill ps-4 pe-4">{{ number_format($diffInMonths, 2) }} months</span>
     @endif
 </li>
 
@@ -59,7 +64,7 @@
                 @if ($isExpired)
                     Your subscription has expired. Please renew it as soon as possible to continue enjoying our services.
                 @elseif ($isExpiringSoon)
-                    Your subscription is expiring in less than 7 days. Renew now to avoid interruption.
+                    Your subscription is expiring in {{ $daysRemaining }} days. Renew now to avoid interruption.
                 @endif
             </div>
             <div class="modal-footer">
@@ -73,6 +78,7 @@
     // Set flag to show the modal if the subscription has expired or is expiring soon
     $shouldShowModal = $isExpired || $isExpiringSoon;
 @endphp
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>

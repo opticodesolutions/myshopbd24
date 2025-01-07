@@ -141,8 +141,8 @@ class SubcriptioRenewController extends Controller
             }
 
             $totalAmount = $renewal->renewal_amount;
-            $perchildAmount = $renewal->subscription->per_child_amount;
-            $perPerentAmount = $renewal->subscription->per_person;
+            $perchildAmount = $renewal->subscription->per_child_amount; // per child amount
+            $perPerentAmount = $renewal->subscription->per_person; // per person amount Parent
             foreach ($filteredChildParentUsers as $childParentUser) {
                 if($totalAmount > 0){
                     $totalAmount = $totalAmount - $perPerentAmount;
