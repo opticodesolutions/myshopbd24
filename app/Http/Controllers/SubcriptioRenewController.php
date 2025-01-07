@@ -54,6 +54,7 @@ class SubcriptioRenewController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->all();
         try {
             // Validate the incoming request data
             $validatedData = $request->validate([
@@ -62,16 +63,18 @@ class SubcriptioRenewController extends Controller
                 'subscription_id' => 'required|numeric',
                 'payment_method' => 'required|string',
                 'remarks' => 'nullable|string',
+                'month' => 'required|numeric',
             ]);
 
-            $validatedData['renewal_amount'] = Subscription::find($validatedData['subscription_id'])->amount;
+            $renewal_amount = Subscription::find($validatedData['subscription_id'])->amount * $validatedData['month'];
             // Insert the data using Eloquent
             SubcriptioRenew::create([
                 'user_id' => $validatedData['user_id'],
                 'renewal_date' => $validatedData['renewal_date'],
-                'renewal_amount' => $validatedData['renewal_amount'],
+                'renewal_amount' => $renewal_amount,
                 'payment_method' => $validatedData['payment_method'],
                 'remarks' => $validatedData['remarks'],
+                'month' => $validatedData['month'],
                 'subscription_id' => $validatedData['subscription_id'],
             ]);
 

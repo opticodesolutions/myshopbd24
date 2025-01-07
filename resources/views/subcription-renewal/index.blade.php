@@ -33,6 +33,7 @@
                                         <th>User ID</th>
                                         <th>Renewal Date</th>
                                         <th>Renewal Amount</th>
+                                        <th>Month</th>
                                         <th>Payment Method</th>
                                         <th>Remark</th>
                                         <th>Status</th>
@@ -46,6 +47,7 @@
                                             <td>{{ $renewal->user_id }}</td>
                                             <td>{{ $renewal->renewal_date }}</td>
                                             <td>{{ $renewal->renewal_amount }}</td>
+                                            <td>{{ $renewal->month }}</td>
                                             <td>{{ $renewal->payment_method }}</td>
                                             <td>{{ $renewal->remarks ?? 'No remarks' }}</td>
                                             <td>

@@ -17,6 +17,7 @@ class SubcriptioRenew extends Model
         'remarks',
         'payment_method',
         'subscription_id',
+        'month',
     ];
     public function user()
     {
