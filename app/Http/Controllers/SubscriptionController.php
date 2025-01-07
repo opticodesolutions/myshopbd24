@@ -205,6 +205,7 @@ class SubscriptionController extends Controller
            $subscriptionSale->update(['status' => 'approved']);
            Customer::where('id', $subscriptionSale->customer_id)
             ->update([
+                'wallet_balance' => 0,
                 'subscription_start_date' => now(), 
                 'subscription_end_date' => now()->addMonth()
             ]);
