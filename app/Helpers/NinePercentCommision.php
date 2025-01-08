@@ -18,7 +18,7 @@ class NinePercentCommision // Nine mins Eight Percent Commition
             'user_id' => env('ADMIN_ID'),
             'sale_id' => null,
             'amount' => $finalAmount,
-            'transaction_type' => 'Admin 8% Commission',
+            'transaction_type' => 'Admin_8%_Commission',
         ]);
         Account::create([
             'tran_id' => $trancsaction->id,
@@ -33,4 +33,20 @@ class NinePercentCommision // Nine mins Eight Percent Commition
         $finalAmount = ($total * 92) / 100;
         return $finalAmount;
     }
+
+    public static function UserDeactive($amount){
+        $trancsaction = Transaction::create([
+            'user_id' => env('ADMIN_ID'),
+            'sale_id' => null,
+            'amount' => $amount,
+            'transaction_type' => 'User_Deactive_Commission',
+        ]);
+        Account::create([
+            'tran_id' => $trancsaction->id,
+            'amount' => $amount,
+            'type' => 'debit',
+            'approved_by' => env('ADMIN_ID')
+        ]);
+    }
+
 }

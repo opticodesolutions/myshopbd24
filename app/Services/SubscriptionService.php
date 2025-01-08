@@ -45,7 +45,7 @@ class SubscriptionService
         $qualifiedUsers = [];
         // Filter users with more than 4 total referred users
         foreach ($this->GetAllUsers() as $user) {
-            if ($this->Helpers->getTotalUsersForRoot(Customer::where('user_id', $user)->value('refer_code')) > 4) {
+            if ($this->Helpers->getTotalUsersForRoot(Customer::where('user_id', $user)->where('subscription_end_date', '>', now())->value('refer_code')) > 4) {
                 $qualifiedUsers[] = $user;
             }
         }
@@ -96,10 +96,16 @@ class SubscriptionService
     private function RefferCommission($user_id, $amountn){
         NinePercentCommision::AmdinCommistion($amountn);
         $amount = NinePercentCommision::CustomerCommistion($amountn);
-        $user = Customer::where('user_id', $user_id)->first();
-        $user->wallet_balance = $user->wallet_balance + $amount;
-        $user->save();
-        $this->handleTransaction($user_id, $amount, 'reffer_commission');
+        $user = Customer::where('user_id', $user_id)
+        ->where('subscription_end_date', '>', now())
+        ->first();
+        if ($user){
+            $user->wallet_balance = $user->wallet_balance + $amount;
+            $user->save();
+            $this->handleTransaction($user_id, $amount, 'reffer_commission');
+        }else{
+            NinePercentCommision::UserDeactive($amount);
+        }
     }
 
     private function handleTransaction($user_id, $amount, $transaction_type){

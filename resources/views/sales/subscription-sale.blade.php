@@ -92,7 +92,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label class="form-label">Position</label>
                                     <select class="form-select @error('position') is-invalid @enderror" name="position">
                                         <option value="left" {{ old('position') === 'left' ? 'selected' : '' }}>Left</option>
@@ -115,7 +115,7 @@
                                     @error('level')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
                             </div>
 
                             
@@ -131,7 +131,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Purchase</button>
+                                <button type="submit" class="btn btn-primary">Sale Subscription</button>
                             </div>
                         </form>
                     </div>

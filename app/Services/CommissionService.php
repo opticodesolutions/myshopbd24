@@ -64,11 +64,15 @@ class CommissionService
         NinePercentCommision::AmdinCommistion($product->purchase_commission);
         $amount = NinePercentCommision::CustomerCommistion($product->purchase_commission);
         // Update the customer's wallet balance
-        $purchase_customer = Customer::where('user_id', $sale->customer_id)->first();
-        $purchase_customer->wallet_balance += $amount;
-        $purchase_customer->save();
-
-
+        $purchase_customer = Customer::where('user_id', $sale->customer_id)
+        ->where('subscription_end_date', '>', now())
+        ->first();
+        if (!$purchase_customer) {
+            NinePercentCommision::UserDeactive($amount);
+        }else{
+            $purchase_customer->wallet_balance += $amount;
+            $purchase_customer->save();
+        }
         // Create a transaction for the new sale
         Transaction::create([
             'user_id' => $sale->user_id,  // Admin or the seller, depending on the logic
@@ -247,6 +251,8 @@ class CommissionService
      */
     private function getParent(Customer $customer)
     {
-        return $customer->parent; // Assuming a 'parent' relationship is defined in the Customer model.
+        return $customer
+        ->where('subscription_end_date', '>', now())
+        ->parent; // Assuming a 'parent' relationship is defined in the Customer model.
     }
 }

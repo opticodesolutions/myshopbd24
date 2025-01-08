@@ -144,8 +144,13 @@ class SubscriptionController extends Controller
             ]);
             $user->assignRole("user");
             // Fetch Refer By Customer
-            $referByCustomer = Customer::where('refer_code', $request->refer_code)->first();
+            $referByCustomer = Customer::where('refer_code', $request->refer_code)
+            ->where('subscription_end_date', '>', now())
+            ->first();
 
+            if (!$referByCustomer) {
+                throw new \Exception('Your Account is not active. Please Renew Your Account.');
+            }
             // Create Customer
             $customer = Customer::create([
                 'user_id' => $user->id,
@@ -160,6 +165,7 @@ class SubscriptionController extends Controller
                 'wallet_balance' => -$subscription->amount,
                 'subscription_start_date' => now(),
                 'subscription_end_date' => now(),
+                'type' => 'subscription_user',
             ]);
 
             if (!$customer) {
