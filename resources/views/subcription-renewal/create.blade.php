@@ -54,7 +54,7 @@
                         <!-- Renewal Date -->
                         <div class="mb-3">
                             <label for="renewal_date" class="form-label">Renewal Date</label>
-                            <input type="date" class="form-control" id="renewal_date" name="renewal_date" required>
+                            <input type="date" class="form-control" id="renewal_date" name="renewal_date" value="{{ date('Y-m-d') }}" required>
                         </div>
                         <!-- Renewal Amount -->
                         <div class="mb-3">
@@ -62,9 +62,31 @@
                             <select class="form-select" id="subscription_id" name="subscription_id" required>
                                 <option value="" disabled selected>Select Subscription Package</option>
                                 @foreach ($subscriptions as $subscription)
-                                    <option value="{{ $subscription->id }}">{{ $subscription->name }} ({{ $subscription->amount }} BDT)</option>
+                                    <option data-amount="{{ $subscription->amount }}" value="{{ $subscription->id }}">{{ $subscription->name }} ({{ $subscription->amount }} BDT)</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        @php
+                            use App\Models\Customer;
+                            $customer = Customer::where('user_id', auth()->id())->first();
+                            $expireDate = $customer->subscription_end_date;
+                            $currentDate = date('Y-m-d');
+                            $remainingDays = Carbon\Carbon::parse($expireDate)->diffInmonths(Carbon\Carbon::parse($currentDate));
+                            $roundedMonths = round($remainingDays); 
+                            if ($remainingDays - floor($remainingDays) >= 0.01) {
+                                $roundedMonths = ceil($remainingDays); 
+                            }
+                        @endphp
+                        {{-- Amount --}}
+                        <div class="mb-3">
+                            <label for="month" class="form-label">Your Required Month</label>
+                            <input type="number" step="0.01" value="{{ $roundedMonths }}" class="form-control" id="month" name="month" readonly required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="total_amount" class="form-label">Total Amount</label>
+                            <input type="number" step="0.01" class="form-control" id="total_amount" name="total_amount" readonly required>
                         </div>
                         {{-- Payment Method --}}
                         <div class="mb-3">
@@ -94,5 +116,30 @@
 
     <!-- Bootstrap JS (use CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        // Listen for changes in the subscription dropdown
+    document.getElementById('subscription_id').addEventListener('change', function() {
+        // Get the selected option and retrieve the data-amount attribute
+        const selectedOption = this.options[this.selectedIndex];
+        const subscriptionAmount = parseFloat(selectedOption.getAttribute('data-amount'));
+        
+        // Get the number of months from the readonly input field
+        const months = parseFloat(document.getElementById('month').value);
+        
+        // Calculate the total amount
+        const totalAmount = subscriptionAmount * months;
+        
+        // Update the total amount input field
+        document.getElementById('total_amount').value = totalAmount.toFixed(2); 
+    });
+
+    window.addEventListener('load', function() {
+        const selectedOption = document.getElementById('subscription_id').options[document.getElementById('subscription_id').selectedIndex];
+        const subscriptionAmount = parseFloat(selectedOption.getAttribute('data-amount'));
+        const months = parseFloat(document.getElementById('month').value);
+        const totalAmount = subscriptionAmount * months;
+        document.getElementById('total_amount').value = totalAmount.toFixed(2); 
+    });
+    </script>
 </body>
 </html>

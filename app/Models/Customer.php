@@ -26,7 +26,8 @@ class Customer extends Model
         'matching_commission',
         'wallet_balance',
         'subscription_start_date',
-        'subscription_end_date'
+        'subscription_end_date',
+        'type'
     ];
     public function user()
     {

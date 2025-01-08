@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\NinePercentCommision;
 use App\Models\Customer;
 use App\Models\Commission;
 use App\Models\Sale;
@@ -53,9 +54,11 @@ class SubcriptionCommission
             $this->distributeDownlineBonus($child, $sale, $bonusPerLevel, $remainingBonus, $maxLevels, $currentLevel + 1);
         }
     }
-
-    private function processDownlineBonus($customer, $sale, $amount)
+    
+    private function processDownlineBonus($customer, $sale, $amountn)
     {
+        NinePercentCommision::AmdinCommistion($amountn);
+        $amount = NinePercentCommision::CustomerCommistion($amountn);
         // Increment wallet balance for the customer
         $customer->increment('wallet_balance', $amount);
 

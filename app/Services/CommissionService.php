@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\DailyBonusDistibutte;
+use App\Helpers\NinePercentCommision;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
@@ -60,13 +61,18 @@ class CommissionService
             'transaction_type' => 'purchase_commission',
         ]);
 
-
+        NinePercentCommision::AmdinCommistion($product->purchase_commission);
+        $amount = NinePercentCommision::CustomerCommistion($product->purchase_commission);
         // Update the customer's wallet balance
-        $purchase_customer = Customer::where('user_id', $sale->customer_id)->first();
-        $purchase_customer->wallet_balance += $product->purchase_commission;
-        $purchase_customer->save();
-
-
+        $purchase_customer = Customer::where('user_id', $sale->customer_id)
+        ->where('subscription_end_date', '>', now())
+        ->first();
+        if (!$purchase_customer) {
+            NinePercentCommision::UserDeactive($amount);
+        }else{
+            $purchase_customer->wallet_balance += $amount;
+            $purchase_customer->save();
+        }
         // Create a transaction for the new sale
         Transaction::create([
             'user_id' => $sale->user_id,  // Admin or the seller, depending on the logic
@@ -97,7 +103,9 @@ class CommissionService
      */
     private function distributeDirectBonus(Sale $sale)
     {
-        $directBonus = 1000;
+        $directBonusold = 1000;
+        NinePercentCommision::AmdinCommistion($directBonusold);
+        $directBonus = NinePercentCommision::CustomerCommistion($directBonusold);
         $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
 
         if (!$user || !$user->customer) {
@@ -137,10 +145,13 @@ class CommissionService
     private function distributeDownlineBonus(Sale $sale)
     {
         $downlineBonus = 1500;
-        $remainingBonus = $downlineBonus;
+        $remainingBonusold = $downlineBonus;
+        NinePercentCommision::AmdinCommistion($remainingBonusold);
+        $remainingBonus = NinePercentCommision::CustomerCommistion($remainingBonusold);
         $childCommission = 250;
         $matchingLevels = 11;
         $levelsCovered = 0;
+
 
         $user = User::find($sale->customer_id); // Find the user based on customer_id (which references users)
 
@@ -240,6 +251,8 @@ class CommissionService
      */
     private function getParent(Customer $customer)
     {
-        return $customer->parent; // Assuming a 'parent' relationship is defined in the Customer model.
+        return $customer
+        ->where('subscription_end_date', '>', now())
+        ->parent; // Assuming a 'parent' relationship is defined in the Customer model.
     }
 }

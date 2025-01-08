@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\DailyBonusDistibutte;
+use App\Helpers\NinePercentCommision;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -30,15 +31,18 @@ class DailyBounusListener implements ShouldQueue
         DB::beginTransaction();
         try {
             Customer::where('refer_code', '!=', null)
+            ->where('subscription_end_date' , '>=', now())
             ->where('created_at', '>=', $saleDateTime)
             ->chunk(500, function ($users) use ($distributeAmount, $sale) {
                 foreach ($users as $user) {
                     if ($user) {
-                        $user->wallet_balance += $distributeAmount; //User == Customers
+                        NinePercentCommision::AmdinCommistion($distributeAmount);
+                        $amount = NinePercentCommision::CustomerCommistion($distributeAmount);
+                        $user->wallet_balance += $amount; //User == Customers
                         Transaction::create([
                             'user_id' => $user->user_id,
                             'sale_id' => $sale->id,
-                            'amount' => $distributeAmount,
+                            'amount' => $amount,
                             'transaction_type' => 'daily_commission',
                         ]);
                     }

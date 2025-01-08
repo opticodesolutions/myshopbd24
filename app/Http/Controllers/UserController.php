@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helpers;
+use App\Helpers\SubGenerationHelper;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Sale;
@@ -26,6 +27,11 @@ class UserController extends Controller
         $user = auth()->user();
         $customer = Customer::where('user_id', $user->id)->first();
         $total_users = $this->tree->getTotalUsersForRoot($customer->refer_code);
+        
+        $levelUsers = SubGenerationHelper::getLevelWiseUsers($customer->refer_code);
+
+        // return response()->json(['data' => $levelUsers]);
+
         $designation = $this->tree->GetDesignation($total_users);
         $totalReferIncome = Transaction::where('user_id', $user->id)->where('transaction_type', 'direct_bonus')->sum('amount');
         // return $total_users;
@@ -118,7 +124,8 @@ class UserController extends Controller
             'totalReferIncome',
             'purchase_inc',
             'sale_inc',
-            'Total_inc'
+            'Total_inc',
+            'levelUsers'
             // 'top_earner',
             // 'purchase_inc', 'sale_inc', 'refer_inc', 
         ));

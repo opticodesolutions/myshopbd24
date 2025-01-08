@@ -18,6 +18,7 @@
                                         <th>Renewal Date</th>
                                         <th>Renewal Amount</th>
                                         <th>Payment Method</th>
+                                        <th>Month</th>
                                         <th>Remark</th>
                                         <th>Status</th>
                                         <th>Created At</th>
@@ -30,6 +31,7 @@
                                             <td>{{ $renewal->renewal_date }}</td>
                                             <td>{{ $renewal->renewal_amount }}</td>
                                             <td>{{ $renewal->payment_method }}</td>
+                                            <td>{{ $renewal->month }}</td>
                                             <td>{{ $renewal->remarks ?? 'No remarks' }}</td>
                                             <td>
                                                 <span class="badge bg-{{ $renewal->payment_status === 'approved' ? 'success' : ($renewal->payment_status === 'pending' ? 'warning' : 'danger') }}">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NinePercentCommision;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\Purchase;
@@ -56,7 +57,9 @@ class PurchaseController extends Controller
         if ($request->payment_method == "Cash") {
             $purchase_commission = $request->purchase_commission;
             // $customer->Total_purchase_commission += $request->purchase_commission; Nedd to make Total_purchase_commission feld in customer
-            $customer->wallet_balance += $request->purchase_commission;
+            NinePercentCommision::AmdinCommistion($purchase_commission);
+            $amount = NinePercentCommision::CustomerCommistion($purchase_commission);
+            $customer->wallet_balance += $amount;
             $customer->save();
         return redirect()->route('purchase.commission')->with('success', 'Purchase commission added successfully');
 

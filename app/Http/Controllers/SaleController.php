@@ -84,8 +84,13 @@ class SaleController extends Controller
 
 
             // Create Customer
-            $referByCustomer = Customer::where('refer_code', $request->refer_code)->first(); //parent
+            $referByCustomer = Customer::where('refer_code', $request->refer_code)
+            ->where('subscription_end_date', '>', now())
+            ->first(); //parent
 
+            if (!$referByCustomer) {
+                throw new \Exception('Your Account is not active. Please Renew Your Account.');
+            }
 
             $customer = Customer::create([
                 'user_id' => $user->id,
