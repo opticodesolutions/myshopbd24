@@ -33,7 +33,7 @@
                                 <label class="form-label">Price</label>
                                 <input type="text" class="form-control" name="price" value="{{ $subscription->amount }}" readonly>
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="form-label">Daily Bonus</label>
                                 <input type="text" class="form-control" name="daily_bonus" value="{{ $subscription->daily_bonus }}" readonly>
                             </div>
@@ -44,7 +44,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Incentive Income</label>
                                 <input type="text" class="form-control" name="incentive_income" value="{{ $subscription->insective_income }}" readonly>
-                            </div>
+                            </div> --}}
 
                             <!-- User Registration Section -->
                             <div class="mb-3">

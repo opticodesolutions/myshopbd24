@@ -249,8 +249,8 @@
                     <i class="fas fa-users"></i> <span class="align-middle">Team Information</span>
                 </a>
                 <ul id="Team" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#Team">
-                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations.tree') }}'>Team Tree List</a></li>
-                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations') }}'>Genaration List</a></li>
+                    {{-- <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations.tree') }}'>Team Tree List</a></li>
+                    <li class="sidebar-item"><a class='sidebar-link' href='{{ route('users.generations') }}'>Genaration List</a></li> --}}
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='{{ route('refer.info') }}'>Rafael Information</a>
                     </li>

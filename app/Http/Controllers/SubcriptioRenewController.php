@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helpers;
 use App\Helpers\NinePercentCommision;
+use App\Helpers\SubGenerationHelper;
 use App\Models\SubcriptioRenew;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
@@ -120,7 +121,7 @@ class SubcriptioRenewController extends Controller
 
             $renewal = SubcriptioRenew::with('subscription')->findOrFail($id);
             $renewal->update([
-                'remarks' => $request->remark,
+                'remarks' => $request->remark, 
                 'payment_status' => $request->status,
             ]);
 
@@ -133,29 +134,47 @@ class SubcriptioRenewController extends Controller
 
             $this->Transections($renewal->customer->user_id, $renewal->renewal_amount, 'renewal_amount');
 
-            $allchildUser = $this->Helpers->getAllChildUsersIdsForRoot($renewal->customer->refer_code);
+            // $allchildUser = $this->Helpers->getAllChildUsersIdsForRoot($renewal->customer->refer_code);
 
-            if (!empty($allchildUser)) {
+            // if (!empty($allchildUser)) {
+            //     // Retrieve refer_by, user_id, and refer_code for the child users
+            //     $childParentUsers = Customer::whereIn('user_id', $allchildUser)
+            //     ->get(['user_id', 'refer_by', 'refer_code']);
+            //     $filteredChildParentUsers = $childParentUsers->filter(function ($user) {
+            //         return !empty($user->refer_by);
+            //     });
+            // }
+            $allchildUser = SubGenerationHelper::getAllChildUsersIdsForRoot($renewal->customer->refer_code);
+
+            if (!empty($childs)) {
                 // Retrieve refer_by, user_id, and refer_code for the child users
-                $childParentUsers = Customer::whereIn('user_id', $allchildUser)
+                $childParentUsers = Customer::whereIn('user_id', $childs)
                 ->get(['user_id', 'refer_by', 'refer_code']);
                 $filteredChildParentUsers = $childParentUsers->filter(function ($user) {
                     return !empty($user->refer_by);
                 });
             }
-
+            // return $PrenetUsers;
             $totalAmount = $renewal->renewal_amount;
-            $perchildAmount = $renewal->subscription->per_child_amount; // per child amount
-            $perPerentAmount = $renewal->subscription->per_person; // per person amount Parent
+            $perchildAmount = $renewal->subscription->per_child_amount; 
+            $perPerentAmount = $renewal->subscription->per_person; 
             foreach ($filteredChildParentUsers as $childParentUser) {
                 if($totalAmount > 0){
                     $totalAmount = $totalAmount - $perPerentAmount;
                     NinePercentCommision::AmdinCommistion($perPerentAmount);
                     $amount = NinePercentCommision::CustomerCommistion($perPerentAmount);
                     $this->Transections($childParentUser->user_id, $amount, 'Insective_Subcription_Income');
-                    $user = Customer::where('user_id', $childParentUser->user_id)->first();
-                    $user->wallet_balance = $user->wallet_balance + $amount;
-                    $user->save();
+                    $user = Customer::where('user_id', $childParentUser->user_id)
+                    ->where('subscription_end_date', '>', now())
+                    ->first();
+                    if ($user) {
+                        $user->wallet_balance = $user->wallet_balance + $amount;
+                        $user->save();
+                    }else{
+                        continue;
+                    }
+                    // $user->wallet_balance = $user->wallet_balance + $amount;
+                    // $user->save();
                 }
                 if ($totalAmount <= 0) {
                     break;
@@ -168,9 +187,17 @@ class SubcriptioRenewController extends Controller
                     NinePercentCommision::AmdinCommistion($perchildAmount);
                     $amount = NinePercentCommision::CustomerCommistion($perchildAmount);
                     $this->Transections($childuser, $amount, 'Bonus_form_Subcription_Income');
-                    $user = Customer::where('user_id', $childuser)->first();
-                    $user->wallet_balance = $user->wallet_balance + $amount;
-                    $user->save();
+                    $user = Customer::where('user_id', $childuser)
+                    ->where('subscription_end_date', '>', now())
+                    ->first();
+                    if ($user) {
+                        $user->wallet_balance = $user->wallet_balance + $amount;
+                        $user->save();
+                    }else{
+                        continue;
+                    }
+                    // $user->wallet_balance = $user->wallet_balance + $amount;
+                    // $user->save();
                 }
                 if ($totalAmount <= 0) {
                     break;

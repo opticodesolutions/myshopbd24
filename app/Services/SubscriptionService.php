@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Helpers\Helpers;
 use App\Helpers\NinePercentCommision;
+use App\Helpers\SubGenerationHelper;
 use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Subscription;
@@ -45,7 +46,7 @@ class SubscriptionService
         $qualifiedUsers = [];
         // Filter users with more than 4 total referred users
         foreach ($this->GetAllUsers() as $user) {
-            if ($this->Helpers->getTotalUsersForRoot(Customer::where('user_id', $user)->where('subscription_end_date', '>', now())->value('refer_code')) > 4) {
+            if (SubGenerationHelper::getTotalUsersForRoot(Customer::where('user_id', $user)->where('subscription_end_date', '>', now())->value('refer_code')) > 4) {
                 $qualifiedUsers[] = $user;
             }
         }
@@ -70,7 +71,9 @@ class SubscriptionService
         foreach ($this->GetAllUsers() as $user) {
             NinePercentCommision::AmdinCommistion($amountn);
             $amount = NinePercentCommision::CustomerCommistion($amountn);
-            $currentBalance = Customer::where('user_id', $user)->value('wallet_balance');
+            $currentBalance = Customer::where('user_id', $user)
+            ->where('subscription_end_date', '>', now())
+            ->value('wallet_balance');
             Customer::where('user_id', $user)->update(['wallet_balance' => $currentBalance + $amount]);
             $this->handleTransaction($user, $amount, 'daily_bonus');
         }
