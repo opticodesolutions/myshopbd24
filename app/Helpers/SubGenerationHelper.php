@@ -1,47 +1,79 @@
-<?php 
+<?php
 
 namespace App\Helpers;
+
 use App\Models\Customer;
+
 class SubGenerationHelper
 {
     // Function to get users by refer_code and order them by joining date
     public static function getUsersByReferCode($referCode)
     {
         return Customer::where('refer_by', $referCode)
-        ->orderBy('created_at', 'asc')  // Sort by joining date
-        ->where('type', 'subscription_user')
-        ->get();
+            ->orderBy('created_at', 'asc')  // Sort by joining date
+            ->where('type', 'subscription_user')
+            ->get();
     }
 
     public static function getLevelWiseUsers($referCode, $maxLevels = 12)
     {
         $levelUsers = [];
-        $levelMaxUsers = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]; // Max users per level
-        $currentLevelUsers = [$referCode];  // Starting point (root user refer_code)
+        $levelMaxUsers = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]; // প্রতিটি লেভেলে প্রয়োজনীয় ইউজারের সংখ্যা
+        $currentLevelUsers = [$referCode];  // রুট ইউজারের রেফার কোড
+
+        $globalPool = [];  // সমস্ত ইউজারদের গ্লোবাল পুল
 
         for ($level = 0; $level < $maxLevels; $level++) {
-            $levelUsers[$level] = []; // Initialize this level's users
-            $fetchedUsers = []; // Temporary storage for fetched users at this level
+            $fetchedUsers = []; // এই লেভেলের জন্য ফেচ করা ইউজারদের অস্থায়ী স্টোরেজ
 
+            // এই লেভেলের জন্য ইউজার ফেচ করা
             foreach ($currentLevelUsers as $currentReferCode) {
-                $usersAtLevel = self::getUsersByReferCode($currentReferCode); // Fetch users referred by current user
+                $usersAtLevel = self::getUsersByReferCode($currentReferCode); // এই ইউজারের রেফার করা ইউজার ফেচ করা
                 $fetchedUsers = array_merge($fetchedUsers, $usersAtLevel->toArray());
             }
 
-            // Sort fetched users by created_at
-            usort($fetchedUsers, function ($a, $b) {
+            // গ্লোবাল পুলে সমস্ত ইউজার যোগ করা
+            $globalPool = array_merge($globalPool, $fetchedUsers);
+
+            // গ্লোবাল পুলকে created_at অনুযায়ী সর্ট করা
+            usort($globalPool, function ($a, $b) {
                 return strtotime($a['created_at']) - strtotime($b['created_at']);
             });
 
-            // Add users up to the maximum allowed for this level
-            $levelUsers[$level] = array_slice($fetchedUsers, 0, $levelMaxUsers[$level]);
+            // এই লেভেল পূরণ করার জন্য প্রয়োজনীয় ইউজার নেয়া
+            $levelUsers[$level] = array_splice($globalPool, 0, $levelMaxUsers[$level]);
 
-            // Prepare the refer codes for the next level
+            // যদি লেভেল পূর্ণ না হয়, তাহলে পরবর্তী লেভেল থেকে ইউজার আনা
+            while (count($levelUsers[$level]) < $levelMaxUsers[$level] && !empty($globalPool)) {
+                $needed = $levelMaxUsers[$level] - count($levelUsers[$level]);
+                $additionalUsers = array_splice($globalPool, 0, $needed);
+                $levelUsers[$level] = array_merge($levelUsers[$level], $additionalUsers);
+            }
+
+            // পরবর্তী লেভেলের জন্য রেফার কোড প্রস্তুত করা
             $currentLevelUsers = array_column($levelUsers[$level], 'refer_code');
+        }
+
+        // পুনরায় লেভেল পূরণ করা, যদি লেভেলের পরিমাণ কম থাকে
+        for ($level = 0; $level < $maxLevels; $level++) {
+            if (count($levelUsers[$level]) < $levelMaxUsers[$level]) {
+                for ($nextLevel = $level + 1; $nextLevel < $maxLevels; $nextLevel++) {
+                    if (isset($levelUsers[$nextLevel]) && !empty($levelUsers[$nextLevel])) {
+                        $needed = $levelMaxUsers[$level] - count($levelUsers[$level]);
+                        $surplusUsers = array_splice($levelUsers[$nextLevel], 0, $needed);
+                        $levelUsers[$level] = array_merge($levelUsers[$level], $surplusUsers);
+
+                        if (count($levelUsers[$level]) === $levelMaxUsers[$level]) {
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         return $levelUsers;
     }
+
 
 
     public static function getTree($referCode, $currentLevel = 1, $maxLevel = 12)
@@ -65,7 +97,8 @@ class SubGenerationHelper
         ];
     }
 
-    public static function getAllChildUsersIdsForRoot($referCode, $maxLevel = 12) {
+    public static function getAllChildUsersIdsForRoot($referCode, $maxLevel = 12)
+    {
         $userIds = [];
         self::collectUserIdsByLevel($referCode, 1, $maxLevel, $userIds);
         return $userIds;
@@ -108,7 +141,8 @@ class SubGenerationHelper
         }
 
         // Fetch the root customer
-        $customer = Customer::where('refer_code',
+        $customer = Customer::where(
+            'refer_code',
             $referCode
         )->first();
 
@@ -117,9 +151,10 @@ class SubGenerationHelper
         }
 
         // Count children recursively
-        $childCount = Customer::where('refer_by',
-                $referCode
-            )->count();
+        $childCount = Customer::where(
+            'refer_by',
+            $referCode
+        )->count();
 
         $totalCount = 1; // Count the current user
 
