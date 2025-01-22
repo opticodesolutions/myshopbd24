@@ -22,7 +22,10 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesIncomeController;
 use App\Http\Controllers\SubcriptioRenewController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 Route::get('/link', function () {
     try {
@@ -175,6 +178,23 @@ Route::get('/job/{id}', [FrontendController::class, 'job_show'])->name('join.job
     // Queue Job Routes
     Route::get('/queue-job', [SuperAdminController::class, 'QueueJob'])->name('queue.job');
     Route::post('/queue-job', [SuperAdminController::class, 'QueueJobPOST'])->name('queue.job.post');
+    // Password Reset
+    Route::get('password/reset', function () {
+        return view('super-admin.password');
+    })->name('password.reset');
+
+    Route::post('/password-update', function (Request $request) {
+        // Find the user by the selected ID
+        $user = User::find($request->user_id);
+
+        // Update the password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Return with a success message
+        return redirect()->back()->with('success', 'Password updated successfully.');
+    })->name('password.update');
+
 });
 
 // Admin Routes
